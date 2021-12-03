@@ -20,7 +20,7 @@ const lazyLoad = (children) => {
 const routes = [
     {
         path: "/",
-        element: lazyLoad( <Header /> ),
+        element: lazyLoad(<Header />),
         children: [
             {
                 path: "/",
