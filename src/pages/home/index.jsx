@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useLocation, useHistory, useNavigate } from 'react-router-dom';
 
-const Home = () => {
+const Home = (props) => {
+    const location = useLocation()
+    const channel = useMemo(() => location.state?.current ?? '首页', [location.state]) 
     return (
         <div>
-            首页
-        </div>
+            {channel}
+        </div>  
     );
 };
 
