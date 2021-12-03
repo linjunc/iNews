@@ -30,6 +30,24 @@ export default memo(function CalendarHotGraph() {
     };
   });
 
+  // 用户鼠标经过颜色格子的时候显示颜色对应的范围
+  const handleShowNumScope = index => {
+    switch (index) {
+      case 0:
+        return '0 min'
+      case 1:
+        return '0 ~ 20 min'
+      case 2:
+        return '20 ~ 60 min'
+      case 3:
+        return '60 ~ 120 min'
+      case 4:
+        return '超过120 min'
+      default:
+        return '0 min'
+    }
+  }
+
   return (
     <CalendarWrapper>
       <TitleWrapper>
@@ -64,9 +82,6 @@ export default memo(function CalendarHotGraph() {
           };
         }}
         showWeekdayLabels={true}
-        onClick={(value) =>
-          alert(`Clicked on value with count: ${value.count}`)
-        } // 点击方块会有的回调
       />
       <ButtonWrapper>
         <div className="statistics">
@@ -77,16 +92,18 @@ export default memo(function CalendarHotGraph() {
         <div className="color-show-box">
           少
           <div className="color-box">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+            {
+              [1, 2, 3, 4, 5].map((item, index) => {
+                return <div key={index} data-for="showScope" data-tip={handleShowNumScope(index)}></div>
+              })
+            }
           </div>
           多
         </div>
       </ButtonWrapper>
       <ReactTooltip />
+      {/* 给ReactTooltip组件设置的id属性是为了让其能根据data-for属性找到对应的触发元素 */}
+      <ReactTooltip id="showScope" />
     </CalendarWrapper>
   );
 })
