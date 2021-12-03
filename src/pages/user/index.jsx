@@ -1,12 +1,11 @@
-// 个人主页
-import React from 'react';
+import React, { memo } from 'react'
 
-const User = () => {
+import CalendarHotGraph from './c-cpns/calendar'
+
+export default memo(function DCCUserCenter() {
     return (
         <div>
-            个人主页
+            <CalendarHotGraph />
         </div>
-    );
-};
-
-export default User;
+    )
+})
