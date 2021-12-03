@@ -29,10 +29,11 @@ export const CalendarWrapper = styled.div`
     font-size: 5px;
   }
 
- rect {
+  rect {
       cursor: pointer;
       stroke: #fff !important;
       fill-opacity: .7;
+      outline: none;
 
       &:hover {
         fill-opacity: 1;
@@ -86,6 +87,7 @@ export const ButtonWrapper = styled.div`
         width: 14px;
         height: 14px;
         border-radius: 3px;
+        cursor: pointer;
       }
 
       & > div:nth-child(1) {
