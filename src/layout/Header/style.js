@@ -1,5 +1,15 @@
 import styled from "styled-components";
 
+export const FixedContainer = styled.header`
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: all .3s;
+    border: 1px solid #f1f1f1;
+    transform: translate3d(0, -100%, 0);
+`
 export const MenuWrapper = styled.div`
     width: 1300px;
     height: 64px;
@@ -7,7 +17,7 @@ export const MenuWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background-color: skyblue; */
+    
     .layout-logo {
         height: 50px;
         padding: 0px 16px;
