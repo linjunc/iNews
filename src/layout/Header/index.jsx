@@ -50,7 +50,6 @@ const Header = () => {
     }, 200)
     // 初始化滚动事件
     useEffect(() => {
-        console.log('执行');
         window.addEventListener('scroll', bindHandleScroll)
         return () => {
             window.removeEventListener('scroll', bindHandleScroll)
@@ -89,6 +88,12 @@ const Header = () => {
                             <Menu.Item key="international">
                                 国际
                             </Menu.Item>
+                            <Menu.Item key="play">
+                                娱乐
+                            </Menu.Item>
+                            <Menu.Item key="live">
+                                直播
+                            </Menu.Item>
                             <Menu.Item key="sport">
                                 体育
                             </Menu.Item>
@@ -110,8 +115,8 @@ const Header = () => {
             {/* 占去头部的 64px */}
             <div style={{ height: "64px" }}></div>
             <Outlet />
-           
-            <div style={{ height: "1400px", backgroundColor: "skyblue" }}> ddd</div>
+
+            {/* <div style={{ height: "1400px", backgroundColor: "skyblue" }}> ddd</div> */}
         </div >
     );
 };
