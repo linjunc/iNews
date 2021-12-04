@@ -12,11 +12,13 @@ const LoveButton = ({ size, done, type, number, handleClick }) => {
         type: 0,
         number: null,
     }
+    
     const enumType = [
         <HeartFilled style={{ ...defaultProps }} />,
         <MessageOutlined style={{ ...defaultProps }} />,
         <StarFilled style={{ ...defaultProps }} />
     ]
+
     return (
         <ButtonBox onClick={handleClick}>
             <LikeBtn type='link'>

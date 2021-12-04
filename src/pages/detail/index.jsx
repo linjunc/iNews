@@ -23,13 +23,7 @@ const Detail = memo(() => {
         commentNum: 0,
         collectNum: 0
     })
-    // let numberGroup = useMemo(() => {
-    //     return {
-    //         loveNum: 0,
-    //         commentNum: 0,
-    //         collectNum: 333
-    //     }
-    // }, [])
+
     useEffect(() => {
         const getArticle = async () => {
             console.log('调用');
@@ -51,14 +45,14 @@ const Detail = memo(() => {
 
 
     const handleLove = () => {
-        setNumGroup({ ...numGroup, loveNum: ++numGroup.loveNum })
-        console.log(numGroup.loveNum);
-        setLoveDone(true)
+        setNumGroup({ ...numGroup, loveNum: loveDone ? --numGroup.loveNum : ++numGroup.loveNum })
+        setLoveDone(!loveDone)
     }
     const handleCollect = () => {
-        setNumGroup({ ...numGroup, collectNum: ++numGroup.collectNum })
-        setCollect(true)
+        setNumGroup({ ...numGroup, collectNum: collect ? --numGroup.collectNum : ++numGroup.collectNum })
+        setCollect(!collect)
     }
+
     return (
         <DetailWrapper>
             <div className="left-sidebar">
