@@ -105,7 +105,6 @@ const Detail = memo(() => {
     }
     // 语音播放
     const handleSpeak = () => {
-        console.log('函数');
         speak(article.content).speak()
         if (isSpeak) {
             speak().pause()
@@ -166,10 +165,10 @@ const Detail = memo(() => {
                     </div>
                 </div>
                 {/* 文章内容 */}
-                <div className="main" style={isImmerse ? { minWidth: "1230px", fontSize: size } : { fontSize: size }} >
+                <div className="main" style={isImmerse ? { minWidth: "1230px", fontSize: size, textAlign: "center" } : { fontSize: size }} >
                     <div className="article-container">
                         <h1 dangerouslySetInnerHTML={{ __html: article.title }} />
-                        <div className="article-meta">
+                        <div className="article-meta" style={isImmerse ? { justifyContent: "center" } : {}} >
                             <div className="article-type">原创</div>
                             <div className="article-time">{article.publish_time}</div>
                             <div className="article-author">{article?.media_user?.media_name} </div>
@@ -278,7 +277,7 @@ const Detail = memo(() => {
                     </div>
                 </div>
             </Skeleton>
-        </DetailWrapper>
+        </DetailWrapper >
     );
 })
 
