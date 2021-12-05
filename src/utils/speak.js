@@ -13,11 +13,19 @@ export const speak = (content) => {
     const pause = (e) => {
         msg.text = e;
         msg.lang = 'zh-CN'
+        synth.pause(msg)
+    }
+    const resume = () => {
+        synth.resume()
+    }
+    const cancel = () => {
         synth.cancel(msg)
     }
     return {
         speak,
-        pause
+        pause,
+        resume,
+        cancel
     }
 }
 

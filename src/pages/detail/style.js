@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const DetailWrapper = styled.main`
     position: relative;
     width: 1000px;
-    margin: 40px auto 0;
+    margin: 40px auto 0px;
     padding: 0 18px 0px 18px;
     display: flex;
     transition: all .5s;
@@ -87,6 +87,15 @@ export const DetailWrapper = styled.main`
             section > img {
                 width: 80% !important;
             }
+        }
+    }
+    .comment-container {
+        display: block;
+        margin: 50px 0;
+        padding: 50px 0;
+        background-color: skyblue;
+        .comment-content {
+            height: 1000px;
         }
     }
     .right-sidebar {

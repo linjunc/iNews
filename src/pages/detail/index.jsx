@@ -69,6 +69,9 @@ const Detail = memo(() => {
             setArtLoading(false)
         }
         getArticle()
+        return () => {
+            speak().cancel()
+        }
     }, [id])
 
     // 初始化沉浸模式状态
@@ -77,6 +80,9 @@ const Detail = memo(() => {
         const localSize = JSON.parse(localStorage.getItem('fontSize')) ?? 16
         setIsImmerse(localImmerse)
         setSize(localSize)
+        // return () => {
+        //     speak().cancel()
+        // }
     }, [])
     // 处理点赞事件
     const handleLove = () => {
@@ -88,17 +94,24 @@ const Detail = memo(() => {
         setNumGroup({ ...numGroup, collectNum: collect ? --numGroup.collectNum : ++numGroup.collectNum })
         setCollect(!collect)
     }
+    // 跳转评论区
+    const handleComment = () => {
+        const anchorElement = document.getElementById('comment')
+        anchorElement.scrollIntoView({ block: "start", behavior: "smooth" })
+    }
     // 侧边栏文章详情跳转
     const getSideDetail = (id) => {
         navigate(`/detail/${id}`)
     }
     // 语音播放
     const handleSpeak = () => {
+        console.log('函数');
+        speak(article.content).speak()
         if (isSpeak) {
             speak().pause()
             setIsSpeak(false)
         } else {
-            speak(article.content).speak()
+            speak().resume()
             setIsSpeak(true)
         }
     }
@@ -142,7 +155,7 @@ const Detail = memo(() => {
                         <div className='left-clear'></div>
                         <div className='left-container'>
                             <LoveButton handleClick={handleLove} done={loveDone} key="love" content="点赞" type={0} number={numGroup.loveNum} />
-                            <LoveButton handleClick={handleLove} key="comment" content="评论区" type={1} number={numGroup.commentNum} />
+                            <LoveButton handleClick={handleComment} key="comment" content="评论区" type={1} number={numGroup.commentNum} />
                             <LoveButton handleClick={handleCollect} done={collect} key="collect" content="收藏文章" type={2} number={numGroup.collectNum} />
                             <QrCode />
                             <div className='size-controller'>
@@ -163,8 +176,10 @@ const Detail = memo(() => {
                         </div>
                         <article dangerouslySetInnerHTML={{ __html: article.content }} />
                     </div>
-                    <div className="comment-container">
-                        这里是评论区
+                    <div id='comment' className="comment-container">
+                        <div className='comment-content'>
+                            这里是评论区
+                        </div>
                     </div>
                 </div>
                 {/* 右侧侧边栏 */}
