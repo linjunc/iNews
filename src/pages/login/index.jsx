@@ -43,7 +43,7 @@ const Login = () => {
             /* 获取到axios的数据 */
             res => {
               console.log("get res:",res);
-              /* 登录成功 */
+              /* 登录成功 1*/
               if(res.data.msg === "账号或密码错误"){
                 alert("账号或密码错误")
               }else{
