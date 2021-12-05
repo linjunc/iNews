@@ -7,14 +7,17 @@ export const DetailWrapper = styled.main`
     padding: 0 18px 0px 18px;
     display: flex;
     transition: all .5s;
+    font-size: 16px;
+
     div {
         display: inline-block;
         vertical-align: top;
     }
     .left-sidebar {
-        float: left;
+        display: flow-root;
         margin-left: -48px;
         width: 50px;
+        transition: all .5s;
         .left-box {
             display: block;
             .left-clear {
@@ -27,6 +30,21 @@ export const DetailWrapper = styled.main`
                 top: 160px;
                 z-index: 100;
                 transform: translateX(-60px);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                height: 380px;
+                .size-controller {
+                    display: flex;
+                    /* display: inline-block; */
+                    width: 50px;
+                    .controller-title {
+                        width: 20px;
+                        font-size: 12px;
+                        line-height: 14px;
+                    }
+                }
                 div {
                     display: block;
                 }
@@ -63,7 +81,6 @@ export const DetailWrapper = styled.main`
             }
             p {
                 line-height: 1.8;
-                font-size: 16px;
                 /* text-indent: 2em; */
                 margin: 15px 0;
             }
@@ -202,6 +219,28 @@ export const DetailWrapper = styled.main`
         .show {
             opacity: 1 !important;
             z-index: 1 !important;
+        }
+    }
+    .right-button {
+        display: flow-root;
+        width: 50px;
+        margin-right: 500px;
+        .right-end-box {
+            display: block;
+            .right-clear {
+                display: block;
+                width: 0;
+                height: 0;
+            }
+            .right-container {
+                position: fixed;
+                top: 400px;
+                transform: translateX(80px);
+                z-index: 100;
+                div {
+                    display: block;
+                }
+            }
         }
     }
 `
