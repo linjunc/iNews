@@ -9,3 +9,11 @@ export const getArticleDetail = (options) => {
         params: options
     })
 }
+
+export const getArticleList = (options) => {
+    return instance ({
+        url: "/article_list",
+        method: "GET",
+        params: options
+    })
+}

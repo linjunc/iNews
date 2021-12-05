@@ -8,7 +8,7 @@ const LoveButton = ({ size, done, type, number, handleClick }) => {
     // 通过 props 传入 fontSize 和 color
     const defaultProps = {
         fontSize: size ?? "20px",
-        color: done ? '#E7273F' : "#8a93a0",
+        color: done ? '#E7273F' : "#999999",
         type: 0,
         number: null,
     }
@@ -37,12 +37,18 @@ const LoveButton = ({ size, done, type, number, handleClick }) => {
 const ButtonBox = styled.div`
     width: 50px;
     height: 70px;
+    color: #999999;
+    transition: all .5s;
+    :hover {
+        color:#000 !important;
+    }
 `
 
 // 数量
 const Num = styled.div`
     font-size: 12px;
     text-align: center;
+    /* color:#999999; */
 `
 
 // 按钮外形
