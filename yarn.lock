@@ -6494,8 +6494,8 @@
   "version" "2.1.0"
 
 "husky@^7.0.4":
-  "integrity" "sha1-JCBIJF3EnI+xvwzHz7mN1yJTFTU="
-  "resolved" "https://registry.npmmirror.com/husky/download/husky-7.0.4.tgz"
+  "integrity" "sha512-vbaCKN2QLtP/vD4yvs6iz6hBEo6wkSzs8HpRah1Z6aGmF2KW5PdYuAd7uX5a+OyBZHBhd+TFLqgjUgytQr4RvQ=="
+  "resolved" "https://registry.npmjs.org/husky/-/husky-7.0.4.tgz"
   "version" "7.0.4"
 
 "iconv-lite@0.4.24":

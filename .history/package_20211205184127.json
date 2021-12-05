@@ -27,7 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
   },
   "eslintConfig": {
     "extends": [
@@ -41,9 +41,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 我要提交代码啦",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "echo 我要推送代码啦"
+      "pre-commit": "lint-staged"
     }
   },
   "browserslist": {
