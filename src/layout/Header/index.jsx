@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Menu, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Outlet, useNavigate } from 'react-router';
 import { throttle } from 'lodash'
 
+import { getScrollTop } from '../../utils/scrollHeight';
 import logoSrc from '../../assets/logo/logo_text.png'
 import { MenuWrapper, FixedContainer } from './style'
 
@@ -22,18 +23,6 @@ const Header = () => {
         navigate(`/`, { state: { current: e.key } })
     };
 
-
-    // 获取距离顶部的距离
-    const getScrollTop = () => {
-        let scrollTop = 0;
-        if (document?.documentElement && document?.documentElement?.scrollTop) {
-            scrollTop = document?.documentElement.scrollTop;
-        }
-        else if (document?.body) {
-            scrollTop = document?.body.scrollTop;
-        }
-        return scrollTop;
-    }
     // 获取距离顶部的距离
     const bindHandleScroll = throttle(() => {
         scrollTop = getScrollTop();
@@ -64,6 +53,7 @@ const Header = () => {
     const toHome = () => {
         navigate('/')
     }
+    
     return (
         <div>
             <FixedContainer style={{ transform: (show) && "translateZ(0)" }}>

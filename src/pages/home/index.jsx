@@ -13,7 +13,7 @@ const Home = (props) => {
     }
 
     const toDetail = () => {
-        navigate('/detail/7037433142361195039') // id
+        navigate('/detail/61ac4f70e29f9028ebd05b7b') // id
     }
 
     return (

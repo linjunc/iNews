@@ -1,13 +1,17 @@
 // 文章详情
-import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
 import 'dayjs/locale/zh-cn'
-import { Skeleton, Button } from 'antd'
+import { Skeleton, Button, Slider } from 'antd'
 import { throttle } from 'lodash';
-import { getArticleDetail, getArticleList } from '../../services/detail'
 
+import { getArticleDetail, getArticleList } from '../../services/detail'
+import { speak } from '../../utils/speak';
+import { getScrollTop } from '../../utils/scrollHeight';
+import BackToTop from './components/BackToTop';
+import QrCode from './components/QrCode';
 import LoveButton from '../../components/LoveButton'
 import logo from '../../assets/logo/logo.png'
 import {
@@ -31,12 +35,14 @@ const Detail = memo(() => {
     const [article, setArticle] = useState({})         // 文章数据
     const [articleList, setArticleList] = useState([]) // 文章列表数据
     const [show, setShow] = useState(false)              // 侧边栏固定状态
+    const [isImmerse, setIsImmerse] = useState(false) // 沉浸模式
+    const [size, setSize] = useState(16) // 文章字体大小
+    const [isSpeak, setIsSpeak] = useState(false)
     const [numGroup, setNumGroup] = useState({
         loveNum: 0,
         commentNum: 0,
         collectNum: 0
     })
-
     // 初始化文章数据
     useEffect(() => {
         const getArticle = async () => {
@@ -63,9 +69,22 @@ const Detail = memo(() => {
             setArtLoading(false)
         }
         getArticle()
+        return () => {
+            speak().cancel()
+        }
     }, [id])
 
-    // 处理点击事件
+    // 初始化沉浸模式状态
+    useEffect(() => {
+        const localImmerse = JSON.parse(localStorage.getItem('isImmerse')) ?? false
+        const localSize = JSON.parse(localStorage.getItem('fontSize')) ?? 16
+        setIsImmerse(localImmerse)
+        setSize(localSize)
+        // return () => {
+        //     speak().cancel()
+        // }
+    }, [])
+    // 处理点赞事件
     const handleLove = () => {
         setNumGroup({ ...numGroup, loveNum: loveDone ? --numGroup.loveNum : ++numGroup.loveNum })
         setLoveDone(!loveDone)
@@ -75,26 +94,38 @@ const Detail = memo(() => {
         setNumGroup({ ...numGroup, collectNum: collect ? --numGroup.collectNum : ++numGroup.collectNum })
         setCollect(!collect)
     }
-
+    // 跳转评论区
+    const handleComment = () => {
+        const anchorElement = document.getElementById('comment')
+        anchorElement.scrollIntoView({ block: "start", behavior: "smooth" })
+    }
+    // 侧边栏文章详情跳转
     const getSideDetail = (id) => {
         navigate(`/detail/${id}`)
     }
-
-    // 处理侧边栏定位
-    // 判断滚动方向
-    let scrollTop = 0
-
-    // 获取距离顶部的距离
-    const getScrollTop = () => {
-        let scrollTop = 0;
-        if (document?.documentElement && document?.documentElement?.scrollTop) {
-            scrollTop = document?.documentElement.scrollTop;
+    // 语音播放
+    const handleSpeak = () => {
+        speak(article.content).speak()
+        if (isSpeak) {
+            speak().pause()
+            setIsSpeak(false)
+        } else {
+            speak().resume()
+            setIsSpeak(true)
         }
-        else if (document?.body) {
-            scrollTop = document?.body.scrollTop;
-        }
-        return scrollTop;
     }
+    // 沉浸模式
+    const handleImmerse = () => {
+        localStorage.setItem("isImmerse", !isImmerse)
+        setIsImmerse(!isImmerse)
+    }
+    // 切换字体大小
+    const handleSize = (value) => {
+        setSize(value)
+        localStorage.setItem('fontSize', value)
+    }
+    // 处理侧边栏定位
+    let scrollTop = 0
     // 获取距离顶部的距离
     const bindHandleScroll = throttle(() => {
         scrollTop = getScrollTop();
@@ -112,35 +143,46 @@ const Detail = memo(() => {
             window.removeEventListener('scroll', bindHandleScroll)
         }
     }, [])
+
     return (
-        <DetailWrapper>
+        <DetailWrapper style={isImmerse ? { minWidth: "1230px" } : {}} >
             {/* 骨架屏加载 */}
             <Skeleton active loading={artLoading} paragraph={{ rows: 16 }} round >
                 {/* 左侧交互按钮 */}
-                <div className="left-sidebar">
+                <div className="left-sidebar" >
                     <div className='left-box'>
                         <div className='left-clear'></div>
                         <div className='left-container'>
-                            <LoveButton handleClick={handleLove} done={loveDone} key="love" type={0} number={numGroup.loveNum} />
-                            <LoveButton handleClick={handleLove} key="comment" type={1} number={numGroup.commentNum} />
-                            <LoveButton handleClick={handleCollect} done={collect} key="collect" type={2} number={numGroup.collectNum} />
+                            <LoveButton handleClick={handleLove} done={loveDone} key="love" content="点赞" type={0} number={numGroup.loveNum} />
+                            <LoveButton handleClick={handleComment} key="comment" content="评论区" type={1} number={numGroup.commentNum} />
+                            <LoveButton handleClick={handleCollect} done={collect} key="collect" content="收藏文章" type={2} number={numGroup.collectNum} />
+                            <QrCode />
+                            <div className='size-controller'>
+                                <div className='controller-title'>字体大小</div>
+                                <Slider onChange={handleSize} min={12} max={24} vertical value={size} />
+                            </div>
                         </div>
                     </div>
                 </div>
                 {/* 文章内容 */}
-                <div className="main">
+                <div className="main" style={isImmerse ? { minWidth: "1230px", fontSize: size, textAlign: "center" } : { fontSize: size }} >
                     <div className="article-container">
                         <h1 dangerouslySetInnerHTML={{ __html: article.title }} />
-                        <div className="article-meta">
+                        <div className="article-meta" style={isImmerse ? { justifyContent: "center" } : {}} >
                             <div className="article-type">原创</div>
                             <div className="article-time">{article.publish_time}</div>
                             <div className="article-author">{article?.media_user?.media_name} </div>
                         </div>
                         <article dangerouslySetInnerHTML={{ __html: article.content }} />
                     </div>
+                    <div id='comment' className="comment-container">
+                        <div className='comment-content'>
+                            这里是评论区
+                        </div>
+                    </div>
                 </div>
                 {/* 右侧侧边栏 */}
-                <div className="right-sidebar">
+                <div className="right-sidebar" style={isImmerse ? { display: "none" } : {}} >
                     {/* 作者信息 */}
                     <div className="author-info">
                         <div className="author-head">
@@ -211,8 +253,31 @@ const Detail = memo(() => {
                     {/* 热榜 */}
                     <div className="hot-list"></div>
                 </div>
+                {/* 全屏右下角按钮 */}
+                <div className="right-button">
+                    <div className="right-end-box">
+                        <div className="right-clear"></div>
+                        <div className="right-container">
+                            <LoveButton
+                                handleClick={handleSpeak}
+                                done={isSpeak}
+                                key="speak"
+                                content={isSpeak ? '关闭' : "开启语音播放"}
+                                type={6}
+                            />
+                            <LoveButton
+                                handleClick={handleImmerse}
+                                done={isImmerse}
+                                key="immerse"
+                                content={isImmerse ? '关闭沉浸模式' : "开启沉浸模式"}
+                                type={3}
+                            />
+                            <BackToTop />
+                        </div>
+                    </div>
+                </div>
             </Skeleton>
-        </DetailWrapper>
+        </DetailWrapper >
     );
 })
 

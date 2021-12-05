@@ -1,10 +1,11 @@
-import React, { memo, useRef } from 'react';
-import { Button } from 'antd';
+import React from 'react';
+import { Button, Popover } from 'antd';
 import styled, { keyframes } from 'styled-components';
-import { HeartFilled, MessageOutlined, StarFilled } from '@ant-design/icons';
-// import 'animate.css'
+import { HeartFilled, MessageOutlined, SoundFilled, StarFilled, CrownFilled, CaretUpFilled, ShareAltOutlined } from '@ant-design/icons';
+
+// 这个组件封装的太愚蠢了
 // 注意传递的 done 是布尔类型
-const LoveButton = ({ size, done, type, number, handleClick }) => {
+const LoveButton = ({ size, done, type, number, handleClick, content }) => {
     // 通过 props 传入 fontSize 和 color
     const defaultProps = {
         fontSize: size ?? "20px",
@@ -12,20 +13,27 @@ const LoveButton = ({ size, done, type, number, handleClick }) => {
         type: 0,
         number: null,
     }
-    
+
     const enumType = [
         <HeartFilled style={{ ...defaultProps }} />,
         <MessageOutlined style={{ ...defaultProps }} />,
-        <StarFilled style={{ ...defaultProps }} />
+        <StarFilled style={{ ...defaultProps }} />,
+        <CrownFilled style={{ ...defaultProps }} />,
+        <CaretUpFilled style={{ ...defaultProps }} />,
+        <ShareAltOutlined style={{ ...defaultProps }} />,
+        <SoundFilled style={{ ...defaultProps }} />
     ]
 
     return (
         <ButtonBox onClick={handleClick}>
             <LikeBtn type='link'>
                 <Container>
-                    {
-                        enumType[type]
-                    }
+                    <Popover content={content}  >
+                        {
+                            enumType[type] || enumType[0]
+                        }
+                    </Popover>
+
                 </Container>
             </LikeBtn>
             <Num>{number}</Num>
