@@ -233,7 +233,8 @@ export const DetailWrapper = styled.main`
     .right-button {
         display: flow-root;
         width: 50px;
-        margin-right: 500px;
+        height: 100vh;
+        margin-right: 100px;
         .right-end-box {
             display: block;
             .right-clear {
@@ -243,8 +244,8 @@ export const DetailWrapper = styled.main`
             }
             .right-container {
                 position: fixed;
-                top: 400px;
-                transform: translateX(80px);
+                bottom: 10px;
+                transform: translateX(35px);
                 z-index: 100;
                 div {
                     display: block;

@@ -1,11 +1,14 @@
 // 文章详情
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
 import 'dayjs/locale/zh-cn'
-import { Skeleton, Button, Slider } from 'antd'
+import { Skeleton, Button, Slider, message } from 'antd'
 import { throttle } from 'lodash';
+import { PhotoProvider, PhotoConsumer, PhotoSlider } from 'react-photo-view';
+import 'react-photo-view/dist/index.css';
+
 
 import { getArticleDetail, getArticleList } from '../../services/detail'
 import { speak } from '../../utils/speak';
@@ -25,6 +28,29 @@ dayjs.extend(relativeTime)
 
 // 采用 memo 对子组件重新渲染造成的影响进行控制
 
+
+// 测试数据
+const imgData = [
+    {
+        "url": "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/a8db2b900fe44d84ad8a110dbe65ed1f",
+        "width": 640,
+        "height": 360
+    },
+    {
+        "url": "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/6703e6dd00f0433185d1d2b6ea76bbc6",
+        "width": 1200,
+        "height": 675
+    },
+    {
+        "url": "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/b2b9f02855794552b979a5793704a3b9",
+        "width": 1200,
+        "height": 675
+    },
+    {
+        "url": "https://p3.toutiaoimg.com/large/pgc-image/afecbcb501794693bc57d3d42fa06fdc"
+    }
+]
+
 const Detail = memo(() => {
     // 状态定义
     const { id } = useParams() || { id: "7037433142361195039" }
@@ -37,44 +63,69 @@ const Detail = memo(() => {
     const [show, setShow] = useState(false)              // 侧边栏固定状态
     const [isImmerse, setIsImmerse] = useState(false) // 沉浸模式
     const [size, setSize] = useState(16) // 文章字体大小
-    const [isSpeak, setIsSpeak] = useState(false)
+    const [isSpeak, setIsSpeak] = useState(false) // 语音播报的状态
+    const [visible, setVisible] = useState(false) // 预览开启
+    const [photoIndex, setPhotoIndex] = useState(0); //当前预览的第几张
     const [numGroup, setNumGroup] = useState({
         loveNum: 0,
         commentNum: 0,
         collectNum: 0
     })
+
     // 初始化文章数据
     useEffect(() => {
+        let startTime = 0
+        let tag = ''
         const getArticle = async () => {
             setArtLoading(true)
-            const res = await getArticleDetail({ item_id: id })
-            const { article } = res.data
-            // 存储文章点赞数据
-            setNumGroup({
-                loveNum: article.digg_count,
-                commentNum: article.comment_count,
-                collectNum: article.like_count
-            })
-            // 处理时间
-            article.publish_time = dayjs.unix(article.publish_time).format('YYYY-MM-DD HH:mm')
-            setArticle(article)
-            const userArticle = await getArticleList({ tag: "news_society", n: "5", skip: "0" })
-            const articleList = userArticle.data.article_list
-            // 计算到当前时间的距离
-            articleList.forEach(article => {
-                article.publish_time = dayjs(parseInt(article.publish_time + '000')).fromNow()
-            })
-
-            setArticleList(articleList)
-            setArtLoading(false)
+            try {
+                const res = await getArticleDetail({ item_id: id })
+                const { article } = res.data
+                // 存储文章点赞数据
+                setNumGroup({
+                    loveNum: article.digg_count,
+                    commentNum: article.comment_count,
+                    collectNum: article.like_count
+                })
+                // 处理时间
+                article.publish_time = dayjs.unix(article.publish_time).format('YYYY-MM-DD HH:mm')
+                setArticle(article)
+                // 获取用户热门文章
+                const userArticle = await getArticleList({ tag: "news_society", n: "5", skip: "0" })
+                // 热门文章数据
+                const articleList = userArticle.data.article_list
+                // 计算到当前时间的距离
+                articleList.forEach(article => {
+                    article.publish_time = dayjs(parseInt(article.publish_time + '000')).fromNow()
+                })
+                // 添加文章列表数据
+                setArticleList(articleList)
+                // 成功获取文章后，打开计时器
+                startTime = dayjs().valueOf()
+                tag = article.tag
+            } catch (error) {
+                // 获取失败直接返回首页
+                message.error('加载失败，请重试')
+                navigate('/')
+            } finally { 
+                setArtLoading(false)
+            }
         }
         getArticle()
         return () => {
-            speak().cancel()
+        // 组件卸载，停止播放
+            speak().cancel();
+            // 计算本次阅读时间
+            const timing = dayjs().valueOf() - startTime
+            // 发送数据给后台
+            
+            // 记录单次阅读时间
+            const lastTime = JSON.parse(sessionStorage.getItem('timing')) ?? 0
+            sessionStorage.setItem('timing',timing + lastTime)
         }
     }, [id])
 
-    // 初始化沉浸模式状态
+    // 初始化沉浸模式状态 
     useEffect(() => {
         const localImmerse = JSON.parse(localStorage.getItem('isImmerse')) ?? false
         const localSize = JSON.parse(localStorage.getItem('fontSize')) ?? 16
@@ -124,6 +175,15 @@ const Detail = memo(() => {
         setSize(value)
         localStorage.setItem('fontSize', value)
     }
+    // 图片预览
+    const previewImage = (e) => {
+        if (e.target.tagName === 'IMG') {
+            setVisible(true)
+            const index = imgData.findIndex(item => item.url === e.target.src)
+            const currentIndex = index === -1 ? 0 : index
+            setPhotoIndex(currentIndex)
+        }
+    }
     // 处理侧边栏定位
     let scrollTop = 0
     // 获取距离顶部的距离
@@ -145,7 +205,7 @@ const Detail = memo(() => {
     }, [])
 
     return (
-        <DetailWrapper style={isImmerse ? { minWidth: "1230px" } : {}} >
+        <DetailWrapper style={isImmerse ? { minWidth: "1200px" } : {}} >
             {/* 骨架屏加载 */}
             <Skeleton active loading={artLoading} paragraph={{ rows: 16 }} round >
                 {/* 左侧交互按钮 */}
@@ -165,7 +225,7 @@ const Detail = memo(() => {
                     </div>
                 </div>
                 {/* 文章内容 */}
-                <div className="main" style={isImmerse ? { minWidth: "1230px", fontSize: size, textAlign: "center" } : { fontSize: size }} >
+                <div className="main" style={isImmerse ? { minWidth: "1200px", fontSize: size, textAlign: "center" } : { fontSize: size }} >
                     <div className="article-container">
                         <h1 dangerouslySetInnerHTML={{ __html: article.title }} />
                         <div className="article-meta" style={isImmerse ? { justifyContent: "center" } : {}} >
@@ -173,7 +233,17 @@ const Detail = memo(() => {
                             <div className="article-time">{article.publish_time}</div>
                             <div className="article-author">{article?.media_user?.media_name} </div>
                         </div>
-                        <article dangerouslySetInnerHTML={{ __html: article.content }} />
+                        {/* 图片预览 */}
+                        <PhotoProvider>
+                            <PhotoSlider
+                                images={imgData.map((item) => ({ src: item.url }))}
+                                visible={visible}
+                                onClose={() => setVisible(false)}
+                                index={photoIndex}
+                                onIndexChange={setPhotoIndex}
+                            />
+                            <article onClick={previewImage} dangerouslySetInnerHTML={{ __html: article.content }} />
+                        </PhotoProvider>
                     </div>
                     <div id='comment' className="comment-container">
                         <div className='comment-content'>
