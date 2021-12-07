@@ -20,7 +20,7 @@ const lazyLoad = (children) => {
 const routes = [
     {
         path: "/",
-        element: lazyLoad( <Header /> ),
+        element: lazyLoad(<Header />),
         children: [
             {
                 path: "/",
@@ -29,12 +29,12 @@ const routes = [
             {
                 path: "/detail/:id",
                 element: lazyLoad(<Detail />)
+            },
+            {
+                path: "/user",
+                element: lazyLoad(<User />)
             }
         ]
-    },
-    {
-        path: "user",
-        element: lazyLoad(<User />)
     },
     {
         path: "login",

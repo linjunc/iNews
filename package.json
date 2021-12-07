@@ -9,6 +9,7 @@
     "antd": "^4.17.2",
     "axios": "^0.24.0",
     "dayjs": "^1.10.7",
+    "echarts": "^5.2.2",
     "loadsh": "^0.0.4",
     "lodash": "^4.17.21",
     "nanoid": "^3.1.30",
@@ -26,6 +27,7 @@
     "react-scripts": "4.0.3",
     "react-tooltip": "^4.2.21",
     "react-zmage": "^0.8.5-beta.37",
+    "react-transition-group": "^4.4.2",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.0.1"
   },
