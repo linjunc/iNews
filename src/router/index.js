@@ -11,12 +11,12 @@ const User = lazy(() => import("../pages/user"))
 
 // 解决懒加载白屏时间
 const lazyLoad = (children) => {
-    return <Suspense fallback={<Skeleton />}>
+    return <Suspense fallback={<Skeleton active />}>
         {children}
     </Suspense>
 }
 
-// 路由配置
+// 路由配置 
 const routes = [
     {
         path: "/",

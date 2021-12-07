@@ -31,6 +31,7 @@ export const GlobalStyle = createGlobalStyle`
         line-height: 1;
         min-width: 1200px;
         margin: 0 auto;
+        background-color: #f4f5f5;
     }
     ol, ul {
         list-style: none;

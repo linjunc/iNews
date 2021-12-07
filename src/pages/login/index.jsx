@@ -10,6 +10,7 @@ import qs from 'qs';
 import logo from '../../assets/logo/logo.png'
 import slogan from '../../assets/login/slogan.png'
 import logoCol from '../../assets/login/logo-col.png'
+import { post_values } from '../../services/login';
 import {
     LoginContainer,
     LoginForm,
@@ -20,42 +21,11 @@ import {
 } from './style'
 
 const Login = () => {
-        /* 发起 post 请求 */
     const navigate = useNavigate()
     const calRef = useRef(null);
-    /* 获取表单数据 */
     const onFinish = async (values) => {
-        /* 禁止刷新 */
-        const data = {
-            "account": "",
-            "password": ""
-        }
-        //定义一个data对象
-        data['account'] = values.username
-        data['password'] = values.password
-        console.log('data:', data);
-        const res = await axios({
-            method:'post',
-            headers:{"content-type":"application/json"},
-            url: 'https://qctm8y.api.cloudendpoint.cn/user_login',
-            data: data
-        }).then(
-            /* 获取到axios的数据 */
-            res => {
-              console.log("get res:",res);
-              /* 登录成功 */
-              if(res.data.msg === "账号或密码错误"){
-                alert("账号或密码错误")
-              }else{
-                 /* 保存token信息到本地 */
-                 window.localStorage.setItem('token',res.data.token)
-                navigate('/');
-                console.log("登录成功")
-              }
-           },error => {
-              console.log("get request failed:",error);
-           }
-         );
+        const res = await post_values(values)
+        if(res)navigate('/')
       };
     return (
         <LoginContainer>
@@ -102,36 +72,26 @@ const Login = () => {
                             onFinish = {onFinish}
                         >
                             <Form.Item
-                                name="username"
-                                rules={[{ required: true, message: 'Please input your Username!' }]}
+                                name="account"
+                                rules={[{ required: true, message: 'Please input your account!' }]}
                             >
-                                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="account" />
                             </Form.Item>
                             <Form.Item
                                 name="password"
                                 rules={[{ required: true, message: 'Please input your Password!' }]}
                             >
-                                <Input
+                                <Input.Password
                                     prefix={<LockOutlined className="site-form-item-icon" />}
                                     type="password"
                                     placeholder="Password"
                                 />
-                            </Form.Item>
-                            <Form.Item>
-                                <Form.Item name="remember" valuePropName="checked" noStyle>
-                                    <Checkbox>Remember me</Checkbox>
-                                </Form.Item>
-
-                                <a className="login-form-forgot" href="">
-                                    Forgot password
-                                </a>
                             </Form.Item>
 
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">
                                     Log in
                                 </Button>
-                                Or <a href="">register now!</a>
                             </Form.Item>
                         </Form>
                     </div>

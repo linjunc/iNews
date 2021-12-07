@@ -1,13 +1,25 @@
 import styled from "styled-components";
 
+export const FixedContainer = styled.header`
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: all .3s;
+    border: 1px solid #f1f1f1;
+    transform: translate3d(0, -100%, 0);
+    background-color: #fff;
+    z-index: 300;
+`
 export const MenuWrapper = styled.div`
     width: 1300px;
     height: 64px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    /* background-color: skyblue; */
+    
     .layout-logo {
         height: 50px;
         padding: 0px 16px;
@@ -17,21 +29,21 @@ export const MenuWrapper = styled.div`
         }
     }
     .layout-nav {
-        width: 600px;
+        width: 700px;
         min-width: 530px;
-        margin: 0 40px;
+        /* margin: 0 20px; */
         padding-bottom: 0;
         .layout-menu {
             display: flex;
             align-items: flex-end;
-            background: transparent;
+            /* background: transparent; */
             border: none;
-            font-size: 20px;
+            font-size: 18px;
         }
     }
     .layout-search-box {
         position: relative;
-        width: 390px;
+        width: 330px;
         height: 36px;
         .layout-search {
             height: 100%;
