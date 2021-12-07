@@ -6,7 +6,8 @@ export const HotLine = styled.div`
     font-weight: 500;
     color: #222222;
     text-align: center;
-    margin: 10px 0;
+    margin: 15px 0;
+    width: 100%;
     span {
         background-color: #f2f2f2;
         padding: 0px 10px;

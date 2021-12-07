@@ -13,7 +13,7 @@ const ArticleSide = ({ articleList }) => {
         <ArticleContainer> 
             {
                 articleList?.map(article =>
-                    <div key={nanoid()} className="author-article" onClick={() => getSideDetail(article?.item_id)} >
+                    <div key={nanoid()} className="author-article" onClick={() => getSideDetail(article?.article_id)} >
                         <div className="article-list-img">
                             <img src={article?.image_url} alt="" />
                         </div>

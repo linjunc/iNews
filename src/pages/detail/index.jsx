@@ -77,7 +77,6 @@ const Detail = memo(() => {
                 // 处理时间
                 article.publish_time = dayjs.unix(article.publish_time).format('YYYY-MM-DD HH:mm')
                 setArticle(article)
-                console.log(article);
                 // 获取用户热门文章
                 const userArticle = await getArticleList({ user_id: article.media_id, n: "5", skip: "0" })
                 // 获取标签相关的文章
@@ -94,7 +93,6 @@ const Detail = memo(() => {
                 tagArticleList.forEach(article => {
                     article.publish_time = dayjs(parseInt(article.publish_time + '000')).fromNow()
                 })
-                console.log(articleList, tagArticleList);
                 // 添加文章列表数据
                 setArticleList([articleList, tagArticleList])
                 // 成功获取文章后，打开计时器
@@ -291,6 +289,8 @@ const Detail = memo(() => {
                                 <div className="our-info">欢迎加入我们</div>
                             </div>
                         </div>
+                        <CenterLine title="相关推荐" />
+                        <ArticleSide articleList={articleList[1]} />
                     </div>
                     {/* 热榜 */}
                     <div className="hot-list"></div>

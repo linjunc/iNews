@@ -8,7 +8,6 @@ export const DetailWrapper = styled.main`
     display: flex;
     transition: all .5s;
     font-size: 16px;
-
     div {
         display: inline-block;
         vertical-align: top;
@@ -165,7 +164,7 @@ export const DetailWrapper = styled.main`
             width: 278px;
             transition: all .2s;
             z-index: -1;
-            top: 0px;
+            top: 60px;
         }
         .show {
             opacity: 1 !important;
