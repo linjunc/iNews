@@ -1,14 +1,23 @@
 import React from 'react';
 import { Button, Popover } from 'antd';
 import styled, { keyframes } from 'styled-components';
-import { HeartFilled, MessageOutlined, SoundFilled, StarFilled, CrownFilled, CaretUpFilled, ShareAltOutlined } from '@ant-design/icons';
+import {
+    HeartFilled,
+    MessageOutlined,
+    SoundFilled,
+    StarFilled,
+    CrownFilled,
+    CaretUpFilled,
+    ShareAltOutlined,
+    TagFilled
+} from '@ant-design/icons';
 
 // 这个组件封装的太愚蠢了
 // 注意传递的 done 是布尔类型
 const LoveButton = ({ size, done, type, number, handleClick, content }) => {
     // 通过 props 传入 fontSize 和 color
     const defaultProps = {
-        fontSize: size ?? "20px",
+        fontSize: size ?? "16px",
         color: done ? '#E7273F' : "#999999",
         type: 0,
         number: null,
@@ -21,7 +30,8 @@ const LoveButton = ({ size, done, type, number, handleClick, content }) => {
         <CrownFilled style={{ ...defaultProps }} />,
         <CaretUpFilled style={{ ...defaultProps }} />,
         <ShareAltOutlined style={{ ...defaultProps }} />,
-        <SoundFilled style={{ ...defaultProps }} />
+        <SoundFilled style={{ ...defaultProps }} />,
+        <TagFilled style={{ ...defaultProps }} />
     ]
 
     return (
@@ -43,8 +53,8 @@ const LoveButton = ({ size, done, type, number, handleClick, content }) => {
 
 // ButtonBox 
 const ButtonBox = styled.div`
-    width: 50px;
-    height: 70px;
+    width: 40px;
+    height: 50px;
     color: #999999;
     transition: all .5s;
     :hover {
@@ -61,8 +71,8 @@ const Num = styled.div`
 
 // 按钮外形
 const LikeBtn = styled(Button)`
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background-color: #fff;
     box-shadow: .4rem .4rem .8rem #c8d0e7, -0.4rem -0.4rem .8rem #fff;;
     border-radius: 50%;

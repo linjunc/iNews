@@ -11,10 +11,11 @@ const instance = axios.create({
 instance.interceptors.request.use(
     config => {
         // JWT 认证
+        // localStorage.setItem("token",JSON.stringify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWM3OTAzNDVjMzZkYjZhM2JjY2JlNiIsImFjY291bnQiOiIxMjMiLCJwYXNzd29yZCI6IjEyMyIsImlhdCI6MTYzODg3NTY4MywiZXhwIjoxNjQ0MDU5NjgzfQ.XSmNHJYiIDXIKRr1YokVQPivYiydtlIYb5xmEBiLisw"))
         if (localStorage.getItem("token")) {
-            const token = JSON.parse(localStorage.getItem("token")).token
-            instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        } else {
+            const token = JSON.parse(localStorage.getItem("token"))
+            instance.defaults.headers.common["Authorization"] = `${token}`;
+        } else { 
             delete instance.defaults.headers.common["Authorization"];
         }
         console.log('请求拦截器 成功');
