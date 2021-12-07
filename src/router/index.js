@@ -29,12 +29,12 @@ const routes = [
             {
                 path: "/detail/:id",
                 element: lazyLoad(<Detail />)
+            },
+            {
+                path: "/user",
+                element: lazyLoad(<User />)
             }
         ]
-    },
-    {
-        path: "user",
-        element: lazyLoad(<User />)
     },
     {
         path: "login",
