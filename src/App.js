@@ -17,7 +17,7 @@ const AppWrapper = () => {
   const initRef = useRef([])
   const [article, dispatch] = useReducer(Article, [])
   useEffect(() => {
-    initRef.current = JSON.parse(localStorage.getItem('articleLater'))
+    initRef.current = JSON.parse(localStorage.getItem('articleLater')) ?? []
     dispatch({
       type: INIT_ARTICLE,
       articleData: initRef.current
