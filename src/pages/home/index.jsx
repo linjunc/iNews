@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { Button } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { HomeContainer } from './style';
 
 const Home = (props) => {
     const navigate = useNavigate()
     const location = useLocation()
     const channel = useMemo(() => location.state?.current ?? '首页', [location.state])
-
     // 路由跳转
     const toUser = () => {
         navigate('/user')
@@ -17,12 +17,15 @@ const Home = (props) => {
     }
 
     return (
-        <div>
+        <HomeContainer>
+            <div className="test1"></div>
             {channel}
             <Button onClick={toUser}> 测试个人主页 </Button>
             <Button onClick={toDetail}> 测试详情 </Button>
-        </div>
+        </HomeContainer>
     );
 };
 
 export default Home;
+
+

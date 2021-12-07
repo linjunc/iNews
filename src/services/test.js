@@ -7,3 +7,11 @@ export const getData = (options) => {
         params: options
     })
 }
+
+export const userLogin =(options) => {
+    return instance({
+        url: "/user_login",
+        method: "POST",
+        data: options,
+    })
+}

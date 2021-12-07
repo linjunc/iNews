@@ -6,32 +6,32 @@ import { message, Button } from 'antd';
 import { Router } from 'react-router';
 import { Link } from 'react-router-dom';
 export async function post_values(values) {
-    //定义一个data对象
-    const res = await axios({
-        method:'post',
-        headers:{"content-type":"application/json"},
-        url: url + 'user_login',  //登录连接
-        data: values
-    }).then(
-        /* 获取到axios的数据 */
-        res => {
-          console.log("get res:",values);
-          /* 登录成功 */
-          if(res.data.error === "账号或密码错误"){
-            message.info('账号或密码错误');
-            return false
-          }else{
-             /* 保存token信息到本地 */
-             //如果用户选择记住的话，就进行存储
-            if(values.remenber){
-                window.localStorage.setItem('token',res.data.token)
-            }
-            message.info('登录成功');
-            return true
-          }
-       },error => {
-          console.log("get request failed:",error);
-       }
-     );
-    return res
+  //定义一个data对象
+  const res = await axios({
+    method: 'post',
+    headers: { "content-type": "application/json" },
+    url: url + 'user_login',  //登录连接
+    data: values
+  }).then(
+    /* 获取到axios的数据 */
+    res => {
+      console.log("get res:", values);
+      /* 登录成功 */
+      if (res.data.error === "账号或密码错误") {
+        message.info('账号或密码错误');
+        return false
+      } else {
+        /* 保存token信息到本地 */
+        //如果用户选择记住的话，就进行存储
+        if (values.remenber) {
+          window.localStorage.setItem('token', JSON.stringify(res.data.token))
+        }
+        message.info('登录成功');
+        return true
+      }
+    }, error => {
+      console.log("get request failed:", error);
+    }
+  );
+  return res
 }
