@@ -1,25 +1,26 @@
 // 文章详情
-import React, { memo, useEffect, useState, useMemo } from 'react';
+import React, { memo, useEffect, useState, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
 import 'dayjs/locale/zh-cn'
 import { Skeleton, Button, Slider, message } from 'antd'
 import { throttle } from 'lodash';
-import { PhotoProvider, PhotoConsumer, PhotoSlider } from 'react-photo-view';
+import { PhotoProvider, PhotoSlider } from 'react-photo-view';
 import 'react-photo-view/dist/index.css';
 
 
-import { getArticleDetail, getArticleList } from '../../services/detail'
+import { getArticleByTag, getArticleDetail, getArticleList } from '../../services/detail'
 import { speak } from '../../utils/speak';
 import { getScrollTop } from '../../utils/scrollHeight';
 import BackToTop from './components/BackToTop';
 import QrCode from './components/QrCode';
+import ArticleSide from './components/ArticleSide'
+import CenterLine from './components/CenterLine'
 import LoveButton from '../../components/LoveButton'
 import logo from '../../assets/logo/logo.png'
 import {
     DetailWrapper,
-
 } from './style'
 
 // dayjs 配置
@@ -31,24 +32,10 @@ dayjs.extend(relativeTime)
 
 // 测试数据
 const imgData = [
-    {
-        "url": "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/a8db2b900fe44d84ad8a110dbe65ed1f",
-        "width": 640,
-        "height": 360
-    },
-    {
-        "url": "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/6703e6dd00f0433185d1d2b6ea76bbc6",
-        "width": 1200,
-        "height": 675
-    },
-    {
-        "url": "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/b2b9f02855794552b979a5793704a3b9",
-        "width": 1200,
-        "height": 675
-    },
-    {
-        "url": "https://p3.toutiaoimg.com/large/pgc-image/afecbcb501794693bc57d3d42fa06fdc"
-    }
+    "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/a8db2b900fe44d84ad8a110dbe65ed1f",
+    "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/6703e6dd00f0433185d1d2b6ea76bbc6",
+    "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/b2b9f02855794552b979a5793704a3b9",
+    "https://p3.toutiaoimg.com/large/pgc-image/afecbcb501794693bc57d3d42fa06fdc"
 ]
 
 const Detail = memo(() => {
@@ -90,16 +77,26 @@ const Detail = memo(() => {
                 // 处理时间
                 article.publish_time = dayjs.unix(article.publish_time).format('YYYY-MM-DD HH:mm')
                 setArticle(article)
+                console.log(article);
                 // 获取用户热门文章
-                const userArticle = await getArticleList({ tag: "news_society", n: "5", skip: "0" })
+                const userArticle = await getArticleList({ user_id: article.media_id, n: "5", skip: "0" })
+                // 获取标签相关的文章
+                const tagArticle = await getArticleByTag({ tag: article.tag, n: "5", skip: "0" })
                 // 热门文章数据
                 const articleList = userArticle.data.article_list
+                // 标签文章数据
+                const tagArticleList = tagArticle.data.article_list
                 // 计算到当前时间的距离
                 articleList.forEach(article => {
                     article.publish_time = dayjs(parseInt(article.publish_time + '000')).fromNow()
                 })
+                // 计算到当前时间的距离
+                tagArticleList.forEach(article => {
+                    article.publish_time = dayjs(parseInt(article.publish_time + '000')).fromNow()
+                })
+                console.log(articleList, tagArticleList);
                 // 添加文章列表数据
-                setArticleList(articleList)
+                setArticleList([articleList, tagArticleList])
                 // 成功获取文章后，打开计时器
                 startTime = dayjs().valueOf()
                 tag = article.tag
@@ -107,23 +104,23 @@ const Detail = memo(() => {
                 // 获取失败直接返回首页
                 message.error('加载失败，请重试')
                 navigate('/')
-            } finally { 
+            } finally {
                 setArtLoading(false)
             }
         }
         getArticle()
         return () => {
-        // 组件卸载，停止播放
+            // 组件卸载，停止播放
             speak().cancel();
             // 计算本次阅读时间
             const timing = dayjs().valueOf() - startTime
             // 发送数据给后台
-            
+            console.log(tag);
             // 记录单次阅读时间
             const lastTime = JSON.parse(sessionStorage.getItem('timing')) ?? 0
-            sessionStorage.setItem('timing',timing + lastTime)
+            sessionStorage.setItem('timing', timing + lastTime)
         }
-    }, [id])
+    }, [id, navigate])
 
     // 初始化沉浸模式状态 
     useEffect(() => {
@@ -131,9 +128,6 @@ const Detail = memo(() => {
         const localSize = JSON.parse(localStorage.getItem('fontSize')) ?? 16
         setIsImmerse(localImmerse)
         setSize(localSize)
-        // return () => {
-        //     speak().cancel()
-        // }
     }, [])
     // 处理点赞事件
     const handleLove = () => {
@@ -149,10 +143,6 @@ const Detail = memo(() => {
     const handleComment = () => {
         const anchorElement = document.getElementById('comment')
         anchorElement.scrollIntoView({ block: "start", behavior: "smooth" })
-    }
-    // 侧边栏文章详情跳转
-    const getSideDetail = (id) => {
-        navigate(`/detail/${id}`)
     }
     // 语音播放
     const handleSpeak = () => {
@@ -179,7 +169,7 @@ const Detail = memo(() => {
     const previewImage = (e) => {
         if (e.target.tagName === 'IMG') {
             setVisible(true)
-            const index = imgData.findIndex(item => item.url === e.target.src)
+            const index = article.image_list.indexOf(e.target.src)
             const currentIndex = index === -1 ? 0 : index
             setPhotoIndex(currentIndex)
         }
@@ -236,7 +226,7 @@ const Detail = memo(() => {
                         {/* 图片预览 */}
                         <PhotoProvider>
                             <PhotoSlider
-                                images={imgData.map((item) => ({ src: item.url }))}
+                                images={article.image_list?.map(item => ({ src: item })) ?? []}
                                 visible={visible}
                                 onClose={() => setVisible(false)}
                                 index={photoIndex}
@@ -263,29 +253,11 @@ const Detail = memo(() => {
                         <Button type="primary" className='author-love'>+ 关注</Button>
                     </div>
                     {/* 虚线 */}
-                    <div className="hot-line">
-                        <span>作者热门文章</span>
-                    </div>
-
+                    <CenterLine title="作者热门文章" />
                     {/* 作者热门文章 */}
-                    <div className="author-box">
-                        {
-                            articleList.map(article =>
-                                <div key={article?.item_id} className="author-article" onClick={() => getSideDetail(article?.item_id)} >
-                                    <div className="article-list-img">
-                                        <img src={article?.image_url} alt="" />
-                                    </div>
-                                    <div className="article-list-right">
-                                        <div className="article-list-title">{article?.title}</div>
-                                        <div className="article-list-num">
-                                            <div className="article-read">{article?.like_count} 阅读</div>
-                                            <div className="article-time">{article?.publish_time}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        }
-                    </div>
+                    <ArticleSide articleList={articleList[0]} />
+                    <CenterLine title="相关推荐" />
+                    <ArticleSide articleList={articleList[1]} />
                     {/* 广告 */}
                     <div className="hot-advertise">
                         <div className="our-logo">
