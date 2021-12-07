@@ -4,19 +4,25 @@ import { useNavigate, useParams } from 'react-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
 import 'dayjs/locale/zh-cn'
-import { Skeleton, Button, Slider } from 'antd'
+import { Skeleton, Button, Slider, message } from 'antd'
 import { throttle } from 'lodash';
+import { PhotoProvider, PhotoSlider } from 'react-photo-view';
+import 'react-photo-view/dist/index.css';
 
-import { getArticleDetail, getArticleList } from '../../services/detail'
+
+import { collectArticle, digArticle, getArticleByTag, getArticleDetail, getArticleList } from '../../services/detail'
 import { speak } from '../../utils/speak';
 import { getScrollTop } from '../../utils/scrollHeight';
 import BackToTop from './components/BackToTop';
 import QrCode from './components/QrCode';
+import ArticleSide from './components/ArticleSide'
+import CenterLine from './components/CenterLine'
+import AfterLook from './components/AfterLook/'
+import SpeakArticle from './components/SpeakArticle'
 import LoveButton from '../../components/LoveButton'
 import logo from '../../assets/logo/logo.png'
 import {
     DetailWrapper,
-
 } from './style'
 
 // dayjs 配置
@@ -27,7 +33,7 @@ dayjs.extend(relativeTime)
 
 const Detail = memo(() => {
     // 状态定义
-    const { id } = useParams() || { id: "7037433142361195039" }
+    const { id } = useParams()
     const navigate = useNavigate()
     const [artLoading, setArtLoading] = useState(false) // 骨架屏显示
     const [loveDone, setLoveDone] = useState(false)    // 按钮点击状态
@@ -36,72 +42,101 @@ const Detail = memo(() => {
     const [articleList, setArticleList] = useState([]) // 文章列表数据
     const [show, setShow] = useState(false)              // 侧边栏固定状态
     const [isImmerse, setIsImmerse] = useState(false) // 沉浸模式
-    const [size, setSize] = useState(16) // 文章字体大小
-    const [isSpeak, setIsSpeak] = useState(false)
+    const [isAfter, setIsAfter] = useState(false)
+    const [size, setSize] = useState(16) // 文章字体大小，默认16
+    const [isSpeak, setIsSpeak] = useState(false) // 语音播报的状态
+    const [visible, setVisible] = useState(false) // 预览开启
+    const [photoIndex, setPhotoIndex] = useState(0); //当前预览的第几张
     const [numGroup, setNumGroup] = useState({
         loveNum: 0,
         commentNum: 0,
         collectNum: 0
     })
+
     // 初始化文章数据
     useEffect(() => {
+        let startTime = 0
+        let tag = ''
         const getArticle = async () => {
             setArtLoading(true)
-            const res = await getArticleDetail({ item_id: id })
-            const { article } = res.data
-            // 存储文章点赞数据
-            setNumGroup({
-                loveNum: article.digg_count,
-                commentNum: article.comment_count,
-                collectNum: article.like_count
-            })
-            // 处理时间
-            article.publish_time = dayjs.unix(article.publish_time).format('YYYY-MM-DD HH:mm')
-            setArticle(article)
-            const userArticle = await getArticleList({ tag: "news_society", n: "5", skip: "0" })
-            const articleList = userArticle.data.article_list
-            // 计算到当前时间的距离
-            articleList.forEach(article => {
-                article.publish_time = dayjs(parseInt(article.publish_time + '000')).fromNow()
-            })
-
-            setArticleList(articleList)
-            setArtLoading(false)
+            try {
+                const res = await getArticleDetail({ item_id: id })
+                const { article } = res.data
+                // 存储文章点赞数据
+                setNumGroup({
+                    loveNum: article.digg_count,
+                    commentNum: article.comment_count,
+                    collectNum: article.like_count
+                })
+                // 处理时间
+                article.publish_time = dayjs.unix(article.publish_time).format('YYYY-MM-DD HH:mm')
+                setArticle(article)
+                // 获取用户热门文章
+                const userArticle = await getArticleList({ user_id: article.media_id, n: "5", skip: "0" })
+                // 获取标签相关的文章
+                const tagArticle = await getArticleByTag({ tag: article.tag, n: "5", skip: "0" })
+                // 热门文章数据
+                const articleList = userArticle.data.article_list
+                // 标签文章数据
+                const tagArticleList = tagArticle.data.article_list
+                // 计算到当前时间的距离
+                articleList.forEach(article => {
+                    article.publish_time = dayjs(parseInt(article.publish_time + '000')).fromNow()
+                })
+                // 计算到当前时间的距离
+                tagArticleList.forEach(article => {
+                    article.publish_time = dayjs(parseInt(article.publish_time + '000')).fromNow()
+                })
+                // 添加文章列表数据
+                setArticleList([articleList, tagArticleList])
+                // 成功获取文章后，打开计时器
+                startTime = dayjs().valueOf()
+                tag = article.tag
+            } catch (error) {
+                // 获取失败直接返回首页
+                message.error('加载失败，请重试')
+                navigate('/')
+            } finally {
+                setArtLoading(false)
+            }
         }
         getArticle()
         return () => {
-            speak().cancel()
+            // 组件卸载，停止播放
+            speak().cancel();
+            // 计算本次阅读时间
+            const timing = dayjs().valueOf() - startTime
+            // 发送数据给后台
+            console.log(tag);
+            // 记录单次阅读时间
+            const lastTime = JSON.parse(sessionStorage.getItem('timing')) ?? 0
+            sessionStorage.setItem('timing', timing + lastTime)
         }
-    }, [id])
+    }, [id, navigate])
 
-    // 初始化沉浸模式状态
+    // 初始化沉浸模式状态 
     useEffect(() => {
         const localImmerse = JSON.parse(localStorage.getItem('isImmerse')) ?? false
         const localSize = JSON.parse(localStorage.getItem('fontSize')) ?? 16
         setIsImmerse(localImmerse)
         setSize(localSize)
-        // return () => {
-        //     speak().cancel()
-        // }
     }, [])
     // 处理点赞事件
     const handleLove = () => {
         setNumGroup({ ...numGroup, loveNum: loveDone ? --numGroup.loveNum : ++numGroup.loveNum })
         setLoveDone(!loveDone)
+        digArticle({ article_id: article.item_id })
     }
     // 处理收藏事件
-    const handleCollect = () => {
+    const handleCollect = async () => {
         setNumGroup({ ...numGroup, collectNum: collect ? --numGroup.collectNum : ++numGroup.collectNum })
         setCollect(!collect)
+        await collectArticle({ article_id: article.item_id })
     }
     // 跳转评论区
     const handleComment = () => {
         const anchorElement = document.getElementById('comment')
         anchorElement.scrollIntoView({ block: "start", behavior: "smooth" })
-    }
-    // 侧边栏文章详情跳转
-    const getSideDetail = (id) => {
-        navigate(`/detail/${id}`)
     }
     // 语音播放
     const handleSpeak = () => {
@@ -124,6 +159,15 @@ const Detail = memo(() => {
         setSize(value)
         localStorage.setItem('fontSize', value)
     }
+    // 图片预览
+    const previewImage = (e) => {
+        if (e.target.tagName === 'IMG') {
+            setVisible(true)
+            const index = article.image_list.indexOf(e.target.src)
+            const currentIndex = index === -1 ? 0 : index
+            setPhotoIndex(currentIndex)
+        }
+    }
     // 处理侧边栏定位
     let scrollTop = 0
     // 获取距离顶部的距离
@@ -145,7 +189,7 @@ const Detail = memo(() => {
     }, [])
 
     return (
-        <DetailWrapper style={isImmerse ? { minWidth: "1230px" } : {}} >
+        <DetailWrapper style={isImmerse ? { minWidth: "1200px" } : {}} >
             {/* 骨架屏加载 */}
             <Skeleton active loading={artLoading} paragraph={{ rows: 16 }} round >
                 {/* 左侧交互按钮 */}
@@ -165,7 +209,7 @@ const Detail = memo(() => {
                     </div>
                 </div>
                 {/* 文章内容 */}
-                <div className="main" style={isImmerse ? { minWidth: "1230px", fontSize: size, textAlign: "center" } : { fontSize: size }} >
+                <div className="main" style={isImmerse ? { minWidth: "1200px", fontSize: size, textAlign: "center" } : { fontSize: size }} >
                     <div className="article-container">
                         <h1 dangerouslySetInnerHTML={{ __html: article.title }} />
                         <div className="article-meta" style={isImmerse ? { justifyContent: "center" } : {}} >
@@ -173,7 +217,17 @@ const Detail = memo(() => {
                             <div className="article-time">{article.publish_time}</div>
                             <div className="article-author">{article?.media_user?.media_name} </div>
                         </div>
-                        <article dangerouslySetInnerHTML={{ __html: article.content }} />
+                        {/* 图片预览 */}
+                        <PhotoProvider>
+                            <PhotoSlider
+                                images={article.image_list?.map(item => ({ src: item })) ?? []}
+                                visible={visible}
+                                onClose={() => setVisible(false)}
+                                index={photoIndex}
+                                onIndexChange={setPhotoIndex}
+                            />
+                            <article onClick={previewImage} dangerouslySetInnerHTML={{ __html: article.content }} />
+                        </PhotoProvider>
                     </div>
                     <div id='comment' className="comment-container">
                         <div className='comment-content'>
@@ -193,29 +247,11 @@ const Detail = memo(() => {
                         <Button type="primary" className='author-love'>+ 关注</Button>
                     </div>
                     {/* 虚线 */}
-                    <div className="hot-line">
-                        <span>作者热门文章</span>
-                    </div>
-
+                    <CenterLine title="作者热门文章" />
                     {/* 作者热门文章 */}
-                    <div className="author-box">
-                        {
-                            articleList.map(article =>
-                                <div key={article?.item_id} className="author-article" onClick={() => getSideDetail(article?.item_id)} >
-                                    <div className="article-list-img">
-                                        <img src={article?.image_url} alt="" />
-                                    </div>
-                                    <div className="article-list-right">
-                                        <div className="article-list-title">{article?.title}</div>
-                                        <div className="article-list-num">
-                                            <div className="article-read">{article?.like_count} 阅读</div>
-                                            <div className="article-time">{article?.publish_time}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        }
-                    </div>
+                    <ArticleSide articleList={articleList[0]} />
+                    <CenterLine title="相关推荐" />
+                    <ArticleSide articleList={articleList[1]} />
                     {/* 广告 */}
                     <div className="hot-advertise">
                         <div className="our-logo">
@@ -249,6 +285,8 @@ const Detail = memo(() => {
                                 <div className="our-info">欢迎加入我们</div>
                             </div>
                         </div>
+                        <CenterLine title="相关推荐" />
+                        <ArticleSide articleList={articleList[1]} />
                     </div>
                     {/* 热榜 */}
                     <div className="hot-list"></div>
@@ -258,13 +296,9 @@ const Detail = memo(() => {
                     <div className="right-end-box">
                         <div className="right-clear"></div>
                         <div className="right-container">
-                            <LoveButton
-                                handleClick={handleSpeak}
-                                done={isSpeak}
-                                key="speak"
-                                content={isSpeak ? '关闭' : "开启语音播放"}
-                                type={6}
-                            />
+                            {/* 稍后再看 */}
+                            <AfterLook isAfter={isAfter} setIsAfter={setIsAfter} article={article} />
+                            <SpeakArticle isSpeak={isSpeak} handleSpeak={handleSpeak} />
                             <LoveButton
                                 handleClick={handleImmerse}
                                 done={isImmerse}

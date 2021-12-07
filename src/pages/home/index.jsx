@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Button } from 'antd';
-import { useLocation, useHistory, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Home = (props) => {
     const navigate = useNavigate()
@@ -13,7 +13,7 @@ const Home = (props) => {
     }
 
     const toDetail = () => {
-        navigate('/detail/61ac4f70e29f9028ebd05b7b') // id
+        navigate('/detail/61aef05d96a6ccbc6f9c4b15') // id
     }
 
     return (

@@ -8,7 +8,6 @@ export const DetailWrapper = styled.main`
     display: flex;
     transition: all .5s;
     font-size: 16px;
-
     div {
         display: inline-block;
         vertical-align: top;
@@ -34,7 +33,7 @@ export const DetailWrapper = styled.main`
                 flex-direction: column;
                 align-items: center;
                 justify-content: space-between;
-                height: 380px;
+                height: 350px;
                 .size-controller {
                     display: flex;
                     /* display: inline-block; */
@@ -131,64 +130,6 @@ export const DetailWrapper = styled.main`
                 margin: 4px 0;
             }
         }
-        /* 热门文章的线 */
-        .hot-line {
-            position: relative;
-            font-size: 14px;
-            font-weight: 500;
-            color: #222222;
-            text-align: center;
-            span {
-                background-color: #f2f2f2;
-                padding: 0px 10px;
-                user-select: none;
-            }
-            ::before {
-                display: block;
-                content: '';
-                position: absolute;
-                top: 50%;
-                z-index: -2;
-                width: 100%;
-                height: 1px;
-                background-color: #d9d9d9;
-            }
-        }
-        .author-article {
-            display: flex;
-            margin: 20px 0;
-            cursor: pointer;
-            .article-list-img {
-                margin-right: 10px;
-                img {
-                    width: 94px;
-                    height: 70px;
-                }
-            }
-            .article-list-right {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                .article-list-title {
-                    max-height: 48px;
-                    font-size: 16px;
-                    line-height: 24px;
-                    color: #222;
-                    display: -webkit-box;
-                    overflow: hidden;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    text-overflow: ellipsis;
-                }
-                .article-list-num {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    font-size: 12px;
-                    color: #999999;
-                }
-            }
-        } 
         .hot-advertise {
             display: flex;
             background-color: white;
@@ -223,7 +164,7 @@ export const DetailWrapper = styled.main`
             width: 278px;
             transition: all .2s;
             z-index: -1;
-            top: 0px;
+            top: 60px;
         }
         .show {
             opacity: 1 !important;
@@ -233,7 +174,8 @@ export const DetailWrapper = styled.main`
     .right-button {
         display: flow-root;
         width: 50px;
-        margin-right: 500px;
+        height: 100vh;
+        margin-right: 100px;
         .right-end-box {
             display: block;
             .right-clear {
@@ -242,9 +184,9 @@ export const DetailWrapper = styled.main`
                 height: 0;
             }
             .right-container {
-                position: fixed;
-                top: 400px;
-                transform: translateX(80px);
+                position: fixed; 
+                bottom: 50px;
+                transform: translateX(35px);
                 z-index: 100;
                 div {
                     display: block;
