@@ -25,7 +25,7 @@ const Login = () => {
     const calRef = useRef(null);
     const onFinish = async (values) => {
         const res = await post_values(values)
-        if(res)navigate('/')
+        if(res)navigate('/ ')
       };
     return (
         <LoginContainer>
