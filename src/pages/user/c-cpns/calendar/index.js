@@ -29,6 +29,7 @@ export default memo(function CalendarHotGraph() {
       count: getRandomInt(0, 180)
     };
   });
+  console.log(randomValues);
 
   // 用户鼠标经过颜色格子的时候显示颜色对应的范围
   const handleShowNumScope = index => {
