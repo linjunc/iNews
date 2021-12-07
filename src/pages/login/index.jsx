@@ -24,8 +24,42 @@ const Login = () => {
     const navigate = useNavigate()
     const calRef = useRef(null);
     const onFinish = async (values) => {
+<<<<<<< HEAD
         const res = await post_values(values)
         if(res)navigate('/ ')
+=======
+        /* 禁止刷新 */
+        const data = {
+            "account": "",
+            "password": ""
+        }
+        //定义一个data对象
+        data['account'] = values.username
+        data['password'] = values.password
+        console.log('data:', data);
+        const res = await axios({
+            method:'post',
+            headers:{"content-type":"application/json"},
+            url: 'https://qctm8y.api.cloudendpoint.cn/user_login',
+            data: data
+        }).then(
+            /* 获取到axios的数据 */
+            res => {
+              console.log("get res:",res);
+              /* 登录成功 1*/
+              if(res.data.msg === "账号或密码错误"){
+                alert("账号或密码错误")
+              }else{
+                 /* 保存token信息到本地 */
+                 window.localStorage.setItem('token',res.data.token)
+                navigate('/');
+                console.log("登录成功")
+              }
+           },error => {
+              console.log("get request failed:",error);
+           }
+         );
+>>>>>>> b3ed3f3102268fa6bbfe7874e54a2d22d0c09c78
       };
     return (
         <LoginContainer>
