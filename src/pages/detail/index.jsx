@@ -17,6 +17,8 @@ import BackToTop from './components/BackToTop';
 import QrCode from './components/QrCode';
 import ArticleSide from './components/ArticleSide'
 import CenterLine from './components/CenterLine'
+import AfterLook from './components/AfterLook/'
+import SpeakArticle from './components/SpeakArticle'
 import LoveButton from '../../components/LoveButton'
 import logo from '../../assets/logo/logo.png'
 import {
@@ -49,6 +51,7 @@ const Detail = memo(() => {
     const [articleList, setArticleList] = useState([]) // 文章列表数据
     const [show, setShow] = useState(false)              // 侧边栏固定状态
     const [isImmerse, setIsImmerse] = useState(false) // 沉浸模式
+    const [isAfter, setIsAfter] = useState(false)
     const [size, setSize] = useState(16) // 文章字体大小
     const [isSpeak, setIsSpeak] = useState(false) // 语音播报的状态
     const [visible, setVisible] = useState(false) // 预览开启
@@ -300,13 +303,9 @@ const Detail = memo(() => {
                     <div className="right-end-box">
                         <div className="right-clear"></div>
                         <div className="right-container">
-                            <LoveButton
-                                handleClick={handleSpeak}
-                                done={isSpeak}
-                                key="speak"
-                                content={isSpeak ? '关闭' : "开启语音播放"}
-                                type={6}
-                            />
+                            {/* 稍后再看 */}
+                            <AfterLook isAfter={isAfter} setIsAfter={setIsAfter} article={article} />
+                            <SpeakArticle isSpeak={isSpeak} handleSpeak={handleSpeak} />
                             <LoveButton
                                 handleClick={handleImmerse}
                                 done={isImmerse}

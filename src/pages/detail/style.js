@@ -33,7 +33,7 @@ export const DetailWrapper = styled.main`
                 flex-direction: column;
                 align-items: center;
                 justify-content: space-between;
-                height: 380px;
+                height: 350px;
                 .size-controller {
                     display: flex;
                     /* display: inline-block; */
@@ -184,8 +184,8 @@ export const DetailWrapper = styled.main`
                 height: 0;
             }
             .right-container {
-                position: fixed;
-                bottom: 10px;
+                position: fixed; 
+                bottom: 50px;
                 transform: translateX(35px);
                 z-index: 100;
                 div {
