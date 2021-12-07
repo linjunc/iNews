@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router';
 import { ArticleContainer } from './style'
 import { nanoid } from 'nanoid';
@@ -9,7 +9,6 @@ const ArticleSide = ({ articleList }) => {
     const getSideDetail = (id) => {
         navigate(`/detail/${id}`)
     }
-
     return (
         <ArticleContainer>
             {

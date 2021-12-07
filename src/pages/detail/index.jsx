@@ -1,5 +1,5 @@
 // 文章详情
-import React, { memo, useEffect, useState, useLayoutEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
@@ -10,7 +10,7 @@ import { PhotoProvider, PhotoSlider } from 'react-photo-view';
 import 'react-photo-view/dist/index.css';
 
 
-import { getArticleByTag, getArticleDetail, getArticleList } from '../../services/detail'
+import { collectArticle, digArticle, getArticleByTag, getArticleDetail, getArticleList } from '../../services/detail'
 import { speak } from '../../utils/speak';
 import { getScrollTop } from '../../utils/scrollHeight';
 import BackToTop from './components/BackToTop';
@@ -31,18 +31,9 @@ dayjs.extend(relativeTime)
 
 // 采用 memo 对子组件重新渲染造成的影响进行控制
 
-
-// 测试数据
-const imgData = [
-    "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/a8db2b900fe44d84ad8a110dbe65ed1f",
-    "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/6703e6dd00f0433185d1d2b6ea76bbc6",
-    "https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/b2b9f02855794552b979a5793704a3b9",
-    "https://p3.toutiaoimg.com/large/pgc-image/afecbcb501794693bc57d3d42fa06fdc"
-]
-
 const Detail = memo(() => {
     // 状态定义
-    const { id } = useParams() || { id: "7037433142361195039" }
+    const { id } = useParams()
     const navigate = useNavigate()
     const [artLoading, setArtLoading] = useState(false) // 骨架屏显示
     const [loveDone, setLoveDone] = useState(false)    // 按钮点击状态
@@ -52,7 +43,7 @@ const Detail = memo(() => {
     const [show, setShow] = useState(false)              // 侧边栏固定状态
     const [isImmerse, setIsImmerse] = useState(false) // 沉浸模式
     const [isAfter, setIsAfter] = useState(false)
-    const [size, setSize] = useState(16) // 文章字体大小
+    const [size, setSize] = useState(16) // 文章字体大小，默认16
     const [isSpeak, setIsSpeak] = useState(false) // 语音播报的状态
     const [visible, setVisible] = useState(false) // 预览开启
     const [photoIndex, setPhotoIndex] = useState(0); //当前预览的第几张
@@ -134,11 +125,13 @@ const Detail = memo(() => {
     const handleLove = () => {
         setNumGroup({ ...numGroup, loveNum: loveDone ? --numGroup.loveNum : ++numGroup.loveNum })
         setLoveDone(!loveDone)
+        digArticle({ article_id: article.item_id })
     }
     // 处理收藏事件
-    const handleCollect = () => {
+    const handleCollect = async () => {
         setNumGroup({ ...numGroup, collectNum: collect ? --numGroup.collectNum : ++numGroup.collectNum })
         setCollect(!collect)
+        await collectArticle({ article_id: article.item_id })
     }
     // 跳转评论区
     const handleComment = () => {

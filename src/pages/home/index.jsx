@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Button } from 'antd';
-import { useLocation, useHistory, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Home = (props) => {
     const navigate = useNavigate()
