@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Button } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { HomeContainer } from './style'
+import Article from './components/Article'
 
 const Home = (props) => {
   const navigate = useNavigate()
@@ -20,7 +21,7 @@ const Home = (props) => {
 
   return (
     <HomeContainer>
-      <div className="test1"></div>
+      <Article data="nihao" />
       {channel}
       <Button onClick={toUser}> 测试个人主页 </Button>
       <Button onClick={toDetail}> 测试详情 </Button>
