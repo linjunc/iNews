@@ -232,7 +232,7 @@ const Detail = memo(() => {
   const previewImage = (e) => {
     if (e.target.tagName === 'IMG') {
       setVisible(true)
-      const index = article.image_list.indexOf(e.target.src)
+      const index = article.image_list?.indexOf(e.target.src)
       const currentIndex = index === -1 ? 0 : index
       setPhotoIndex(currentIndex)
     }
