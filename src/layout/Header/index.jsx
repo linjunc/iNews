@@ -18,9 +18,6 @@ const Header = () => {
   const { userInfo, userDispatch } = useContext(userContext)
   const navigate = useNavigate()
   // 设置头像
-  useEffect(() => {
-    console.log(userInfo)
-  })
 
   // 判断滚动方向
   let scrollTop = 0
@@ -81,11 +78,11 @@ const Header = () => {
 
   // 下拉菜单
   const menu = (
-    <Menu>
+    <Menu style={{ width: '110px', textAlign: 'center' }}>
       <Menu.Item key="0">
         <span
           onClick={() => {
-            navigate('/user')
+            navigate(`/user/${userInfo.user_id}`)
           }}
         >
           个人中心
