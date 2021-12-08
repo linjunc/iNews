@@ -6,6 +6,7 @@ export const ReadingReportWrapper = styled.div`
   overflow: hidden;
   border: 1px solid #ccc;
   background-color: #fff;
+  /* margin-top: 500px; */
 
   .main-content {
     height: 100%;

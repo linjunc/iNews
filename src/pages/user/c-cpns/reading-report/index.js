@@ -54,26 +54,22 @@ export default function ReadingReport() {
     },
   ])
 
-  const ref = useRef()
+  const reportRef = useRef()
 
   const downLoad = () => {
-    console.log(ref)
-    html2canvas(ref.current).then(function (canvas) {
-      console.log(canvas)
-      // const imgUrl = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'); // 获取生成的图片的url
+    html2canvas(reportRef.current).then(function (canvas) {
+      // 返回的canvas对象中有这么一个属性，里面的toDataURL方法可以将canvas转成图片地址
       const imgUrl = canvas.toDataURL('image/png')
-      console.log(imgUrl)
       // 生成一个a元素
       const a = document.createElement('a')
-      // 建一个单击事件
+      // 生成一个单击事件
       const event = new MouseEvent('click')
-      // 将a的download属性设置为我们想要下载的图片名称，若name不存在则使用‘下载图片名称’作为默认名称
-      a.download = 'iNews年度报告总结'
+      // 将a的download属性设置为我们想要下载的图片名称
+      a.download = 'iNews年度报告总结.png'
       // 将生成的URL设置为a.href属性
       a.href = imgUrl
       // 触发a的单击事件
-      a.dispatchEvent(event)
-      // document.body.appendChild(canvas);
+      a.dispatchEvent(event) // 这样点击了之后就会在本地下载链接上对应的了
     })
   }
 
@@ -81,7 +77,7 @@ export default function ReadingReport() {
     <TransitionWrapper>
       <Button onClick={downLoad}>下载图片</Button>
       <CSSTransition in={true} classNames="report" timeout={1000} appear={true}>
-        <ReadingReportWrapper ref={ref}>
+        <ReadingReportWrapper ref={reportRef}>
           <div className="main-content">
             <img
               src={require('../../../../assets/user-center/report.png').default}

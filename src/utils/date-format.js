@@ -51,6 +51,7 @@ export const getWhatDay = (dateStr) => {
 // 该函数用于返回一年中阅读时间最长周末的起始日期、结束日期以及阅读时间总和
 export const getLongestWeek = (yearlyArr) => {
   // 获取该年中第一天是星期几
+  if (!yearlyArr.length) return
   const dayNum = getWhatDay(yearlyArr[0].date.slice(0, 10))
 
   // 判断该年的第一天是否为周一
