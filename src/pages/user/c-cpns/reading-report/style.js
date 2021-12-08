@@ -15,10 +15,6 @@ export const ReadingReportWrapper = styled.div`
     .title-img {
       width: 740px;
       height: 524px;
-      background: url(${require('../../../../assets/user-center/report.png')
-          .default})
-        no-repeat;
-      background-size: cover;
     }
 
     .report-img {

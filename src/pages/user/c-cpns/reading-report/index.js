@@ -83,7 +83,10 @@ export default function ReadingReport() {
       <CSSTransition in={true} classNames="report" timeout={1000} appear={true}>
         <ReadingReportWrapper ref={ref}>
           <div className="main-content">
-            <div className="title-img"></div>
+            <img
+              src={require('../../../../assets/user-center/report.png').default}
+              className="title-img"
+            />
             <PieChart />
             <InstrumentChart />
             <BarChart />
