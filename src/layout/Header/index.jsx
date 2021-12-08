@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Menu, Input } from 'antd'
+import React, { useState, useEffect, useContext } from 'react'
+import { Button, Menu, Input, Dropdown, Avatar, message, Modal } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 import { throttle } from 'lodash'
 
 import { getScrollTop } from '../../utils/scrollHeight'
 import logoSrc from '../../assets/logo/logo_text.png'
 import { MenuWrapper, FixedContainer } from './style'
+import { userContext } from '../../models/context'
+import { DELETE_INFO } from '../../models/constant'
 
 const { SubMenu } = Menu
 
 const Header = () => {
   const [current, setCurrent] = useState('mail')
   const [show, setShow] = useState(true) // show 的改变导致了组件的重新渲染，怎么解决呢
+  const { userInfo, userDispatch } = useContext(userContext)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
   // 判断滚动方向
   let scrollTop = 0
   let topValue = 0
@@ -24,16 +28,25 @@ const Header = () => {
   }
 
   // 获取距离顶部的距离
-  const bindHandleScroll = throttle(() => {
+  const bindHandleScroll = throttle((pathname) => {
     scrollTop = getScrollTop()
-    //
-    // 大于一定距离并且上滚了，头部出现
-    if (scrollTop >= 500 && scrollTop >= topValue) {
-      setShow(false)
-    }
-    // 下滚了
-    if (scrollTop <= topValue) {
-      setShow(true)
+
+    // 如果在首页时，头部在一定距离内是不会呈现的
+    if (pathname === '/') {
+      if (scrollTop <= 1000) {
+        setShow(false)
+      } else {
+        setShow(true)
+      }
+    } else {
+      // 大于一定距离并且上滚了，头部出现
+      if (scrollTop >= 700 && scrollTop >= topValue) {
+        setShow(false)
+      }
+      // 上滚
+      if (scrollTop <= topValue) {
+        setShow(true)
+      }
     }
     setTimeout(function () {
       topValue = scrollTop
@@ -41,13 +54,22 @@ const Header = () => {
   }, 200)
   // 初始化滚动事件
   useEffect(() => {
-    window.addEventListener('scroll', bindHandleScroll)
-    return () => {
-      window.removeEventListener('scroll', bindHandleScroll)
+    window.addEventListener('scroll', () => {
+      bindHandleScroll(pathname)
+    })
+    // 如果是在首页默认不显示
+    if (pathname === '/') {
+      setShow(false)
     }
-  }, [])
+    return () => {
+      window.removeEventListener('scroll', () => {
+        bindHandleScroll(pathname)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
-  // 路由跳转
+  // 路由跳转，click
   const toLogin = () => {
     navigate('/login')
   }
@@ -55,7 +77,40 @@ const Header = () => {
   const toHome = () => {
     navigate('/')
   }
-  // 验证token
+  // 退出登录
+  const logout = () => {
+    Modal.confirm({
+      title: '你确定要退出账号吗？退出后有些服务无法享受噢~',
+      onOk: () => {
+        navigate('/login')
+        localStorage.removeItem('token')
+        localStorage.removeItem('userInfo')
+        message.success('退出成功')
+        // 更新context 中的数据
+        userDispatch({
+          type: DELETE_INFO,
+        })
+      },
+    })
+  }
+
+  // 下拉菜单
+  const menu = (
+    <Menu style={{ width: '110px', textAlign: 'center' }}>
+      <Menu.Item key="0">
+        <span
+          onClick={() => {
+            navigate(`/user/${userInfo.user_id}`)
+          }}
+        >
+          个人中心
+        </span>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <span onClick={logout}>退出登录</span>
+      </Menu.Item>
+    </Menu>
+  )
 
   return (
     <div>
@@ -97,10 +152,17 @@ const Header = () => {
               <SearchOutlined />
             </button>
           </div>
-          {}
-          <Button type="primary" onClick={toLogin} className="login-button">
-            登录
-          </Button>
+          {userInfo ? (
+            <>
+              <Dropdown arrow={true} overlay={menu} placement="bottomCenter">
+                <Avatar style={{ cursor: 'pointer' }} src={userInfo.avatar} />
+              </Dropdown>
+            </>
+          ) : (
+            <Button type="primary" onClick={toLogin} className="login-button">
+              登录
+            </Button>
+          )}
         </MenuWrapper>
       </FixedContainer>
       {/* 占去头部的 64px */}

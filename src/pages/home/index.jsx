@@ -12,9 +12,6 @@ const Home = (props) => {
     [location.state],
   )
   // 路由跳转
-  const toUser = () => {
-    navigate('/user')
-  }
   const toDetail = () => {
     navigate('/detail/61aef05d96a6ccbc6f9c4b15') // id
   }
@@ -23,7 +20,7 @@ const Home = (props) => {
     <HomeContainer>
       <Article data="nihao" />
       {channel}
-      <Button onClick={toUser}> 测试个人主页 </Button>
+      <div style={{ height: '3000px' }}></div>
       <Button onClick={toDetail}> 测试详情 </Button>
     </HomeContainer>
   )
