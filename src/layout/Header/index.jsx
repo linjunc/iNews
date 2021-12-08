@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Button, Menu, Input, Dropdown, Avatar, message, Modal } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 import { throttle } from 'lodash'
 
 import { getScrollTop } from '../../utils/scrollHeight'
@@ -17,8 +17,7 @@ const Header = () => {
   const [show, setShow] = useState(true) // show 的改变导致了组件的重新渲染，怎么解决呢
   const { userInfo, userDispatch } = useContext(userContext)
   const navigate = useNavigate()
-  // 设置头像
-
+  const { pathname } = useLocation()
   // 判断滚动方向
   let scrollTop = 0
   let topValue = 0
@@ -29,8 +28,9 @@ const Header = () => {
   }
 
   // 获取距离顶部的距离
-  const bindHandleScroll = throttle(() => {
+  const bindHandleScroll = throttle((pathname) => {
     scrollTop = getScrollTop()
+    // 如果在首页时，头部在一定距离内是不会呈现的
     // 大于一定距离并且上滚了，头部出现
     if (scrollTop >= 500 && scrollTop >= topValue) {
       setShow(false)
@@ -39,17 +39,32 @@ const Header = () => {
     if (scrollTop <= topValue) {
       setShow(true)
     }
+    if (pathname === '/') {
+      if (scrollTop <= 1000) {
+        setShow(false)
+      } else {
+        setShow(true)
+      }
+    }
     setTimeout(function () {
       topValue = scrollTop
     }, 0)
   }, 200)
   // 初始化滚动事件
   useEffect(() => {
-    window.addEventListener('scroll', bindHandleScroll)
-    return () => {
-      window.removeEventListener('scroll', bindHandleScroll)
+    window.addEventListener('scroll', () => {
+      bindHandleScroll(pathname)
+    })
+    if (pathname === '/') {
+      setShow(false)
     }
-  }, [])
+    return () => {
+      window.removeEventListener('scroll', () => {
+        bindHandleScroll(pathname)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
   // 路由跳转，click
   const toLogin = () => {

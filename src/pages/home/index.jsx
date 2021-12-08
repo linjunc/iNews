@@ -19,6 +19,7 @@ const Home = (props) => {
     <HomeContainer>
       <div className="test1"></div>
       {channel}
+      <div style={{ height: '3000px' }}></div>
       <Button onClick={toDetail}> 测试详情 </Button>
     </HomeContainer>
   )
