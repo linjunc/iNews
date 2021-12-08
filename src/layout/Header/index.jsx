@@ -30,19 +30,21 @@ const Header = () => {
   // 获取距离顶部的距离
   const bindHandleScroll = throttle((pathname) => {
     scrollTop = getScrollTop()
+
     // 如果在首页时，头部在一定距离内是不会呈现的
-    // 大于一定距离并且上滚了，头部出现
-    if (scrollTop >= 500 && scrollTop >= topValue) {
-      setShow(false)
-    }
-    // 下滚了
-    if (scrollTop <= topValue) {
-      setShow(true)
-    }
     if (pathname === '/') {
       if (scrollTop <= 1000) {
         setShow(false)
       } else {
+        setShow(true)
+      }
+    } else {
+      // 大于一定距离并且上滚了，头部出现
+      if (scrollTop >= 700 && scrollTop >= topValue) {
+        setShow(false)
+      }
+      // 上滚
+      if (scrollTop <= topValue) {
         setShow(true)
       }
     }
@@ -55,6 +57,7 @@ const Header = () => {
     window.addEventListener('scroll', () => {
       bindHandleScroll(pathname)
     })
+    // 如果是在首页默认不显示
     if (pathname === '/') {
       setShow(false)
     }
