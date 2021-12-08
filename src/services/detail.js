@@ -4,7 +4,7 @@ import instance from '../utils/request'
 export const getArticleDetail = (options) => {
   console.log(options)
   return instance({
-    url: '/article_content_test',
+    url: '/article_content',
     method: 'GET',
     params: options,
   })
