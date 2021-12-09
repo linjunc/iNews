@@ -11,22 +11,22 @@ import AnalyseTitle from '../analyse-title'
 import { GraphWrapper, TextInfoWrapper } from './style'
 
 export default function BarChart() {
-  // 使用useRef创造出的实例获取折线图所对应的dom元素
+  // 使用useRef创造出的实例获取柱状图所对应的dom元素
   const graphRef = useRef()
 
   // 组件挂载到页面上时执行initChart函数
   useEffect(() => {
-    initChart()
+    randomValues && initChart()
   }, [])
 
   // 从本地获取到虚拟数据（后面会改为从服务器获取）并将数组反转方便后续操作
-  const randomValues = JSON.parse(
-    localStorage.getItem('randomValues'),
-  ).reverse()
+  const randomValues =
+    JSON.parse(localStorage.getItem('randomValues'))?.reverse() || []
   // 获取到最大阅读时间周末的起始日期、结束日期、阅读时间总和以及阅读时间数组
-  const { startDay, endDay, maxTime, dataArr } = getLongestWeek(randomValues)
+  const { startDay, endDay, maxTime, dataArr } =
+    getLongestWeek(randomValues) || {}
 
-  // 初始化折线图的信息以及进行相关配置
+  // 初始化柱状图的信息以及进行相关配置
   const initChart = () => {
     const myChart = echarts.init(graphRef.current)
     myChart.clear()
@@ -82,9 +82,10 @@ export default function BarChart() {
 
   // 获取最大阅读周的起始日期（几月几日）
   const { day: firstBeginDay, month: firstStartMonth } =
-    getMonthAndDay(startDay)
+    (startDay && getMonthAndDay(startDay)) || {}
   // 获取最大阅读周的结束日期（几月几日）
-  const { day: secondBeginDay, month: secondEndMonth } = getMonthAndDay(endDay)
+  const { day: secondBeginDay, month: secondEndMonth } =
+    (endDay && getMonthAndDay(endDay)) || {}
 
   return (
     <div>

@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
 
+import { throttleFn, lazyload } from '../../../../../../utils/optimize-fn'
+import { getScrollTop } from '../../../../../../utils/scrollHeight'
+
 import AnalyseTitle from '../analyse-title'
 
 import { GraphWrapper } from './style'
@@ -97,8 +100,25 @@ export default function PieChart() {
 
   // 等到dom渲染到页面之后再执行initChart操作
   useEffect(() => {
-    initChart()
+    window.addEventListener('scroll', lazyFn)
+    return () => {
+      window.removeEventListener('scroll', lazyFn)
+    }
   }, [])
+
+  const lazyload = () => {
+    // 可视区域高度
+    const h = window.innerHeight
+    //滚动区域高度
+    const s = getScrollTop()
+    //图片距离顶部的距离大于可视区域和滚动区域之和时懒加载
+    if (h + s > graphRef.current.offsetTop) {
+      initChart()
+      window.removeEventListener('scroll', lazyFn) // 执行了initChart函数后就可以取消监听事件了
+    }
+  }
+  // 将懒加载函数用节流函数包裹一层用于优化
+  const lazyFn = throttleFn(lazyload)
 
   return (
     <div>

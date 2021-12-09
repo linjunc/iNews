@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
 
+import { throttleFn, lazyload } from '../../../../../../utils/optimize-fn'
+
 import AnalyseTitle from '../analyse-title'
 
 import { InstrumentChartWrapper, ContentWrapper } from './style'
@@ -77,8 +79,11 @@ export default function InstrumentChart() {
 
   // 组件挂载到页面上时执行函数为图表配置相关信息
   useEffect(() => {
+    // window.addEventListener('scroll', lazyFn)
     initChart()
   }, [])
+
+  // const lazyFn = throttleFn(lazyload)
 
   return (
     <div>
