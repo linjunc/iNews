@@ -121,6 +121,12 @@ const Detail = memo(() => {
         })
         // 添加文章列表数据
         setArticleList([articleList, tagArticleList])
+        // 用户阅读时间过长提醒
+        const readLongTime = sessionStorage.getItem('timing')
+        // 一个小时
+        if (readLongTime > 3600000) {
+          message.warn('您本次阅读时间已经持续了一个小时，请稍作休息噢~')
+        }
         // 成功获取文章后，打开计时器
         startTime = dayjs().valueOf()
         tag = article.tag
