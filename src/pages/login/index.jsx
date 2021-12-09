@@ -29,8 +29,8 @@ const Login = () => {
     setLoginLoading(true)
     try {
       const data = await userLogin(values)
-      if (data.data.msg === '登录成功') {
-        message.success('登录成功')
+      if (data.data.code === 200) {
+        message.success(data.data.msg)
         localStorage.setItem('token', JSON.stringify(data.data.token))
         localStorage.setItem('userInfo', JSON.stringify(data.data.user_info))
         userDispatch({

@@ -10,6 +10,7 @@ const Home = (props) => {
     () => location.state?.current ?? '首页',
     [location.state],
   )
+  console.log(channel)
   // 路由跳转
   const toDetail = () => {
     navigate('/detail/61aef05d96a6ccbc6f9c4b15') // id
