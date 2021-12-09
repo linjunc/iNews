@@ -1,50 +1,64 @@
 import styled from 'styled-components'
 
 export const Artilecontainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 5px;
-  width: 680px;
-  background-color: #ffffff;
-  .left {
+  width: 100%;
+  .article-node {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    .article-top {
-      .article-title {
-        line-height: 30px;
-        font-size: 24px;
-        font-weight: 400;
-        cursor: pointer;
+    padding: 10px 5px;
+    /* width: 680px; */
+    width: 100%;
+    min-height: 150px;
+    background-color: #ffffff;
+    .left {
+      max-width: 630px;
+      padding-right: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .article-top {
+        .article-title {
+          /* line-height: 30px; */
+          line-height: 1.5;
+          font-size: 24px;
+          font-weight: 400;
+          cursor: pointer;
+        }
+        .article-title:hover {
+          color: #f04142;
+        }
       }
-      .article-title:hover {
-        color: #f04142;
+      .article-bottom {
+        color: #999;
+        .media_name {
+          cursor: pointer;
+          margin-right: 20px;
+        }
+        .comment_count {
+          cursor: pointer;
+          margin-right: 20px;
+        }
+        .media_name:hover {
+          color: #aaa;
+        }
+        .comment_count:hover {
+          color: #aaa;
+        }
+        .publish_time {
+        }
       }
     }
-    .article-bottom {
-      color: #999;
-      .media_name {
+    .right {
+      height: 100px;
+      overflow: hidden;
+      .article-img {
+        height: 100%;
         cursor: pointer;
-        margin-right: 20px;
+        transition: all 0.9s;
       }
-      .comment_count {
-        cursor: pointer;
-        margin-right: 20px;
+      .article-img:hover {
+        transform: scale(1.1);
       }
-      .media_name:hover {
-        color: #aaa;
-      }
-      .comment_count:hover {
-        color: #aaa;
-      }
-      .publish_time {
-      }
-    }
-  }
-  .right {
-    height: 120px;
-    .article-img {
-      height: 100%;
     }
   }
 `
