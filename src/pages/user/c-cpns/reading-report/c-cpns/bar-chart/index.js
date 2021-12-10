@@ -5,6 +5,8 @@ import {
   getMonthAndDay,
   getLongestWeek,
 } from '../../../../../../utils/date-format'
+import { lazyload } from '../../../../../../utils/optimize-fn'
+import { throttle } from 'lodash'
 
 import AnalyseTitle from '../analyse-title'
 
@@ -13,18 +15,6 @@ import { GraphWrapper, TextInfoWrapper } from './style'
 export default function BarChart() {
   // 使用useRef创造出的实例获取柱状图所对应的dom元素
   const graphRef = useRef()
-
-  // 组件挂载到页面上时执行initChart函数
-  useEffect(() => {
-    randomValues && initChart()
-  }, [])
-
-  // 从本地获取到虚拟数据（后面会改为从服务器获取）并将数组反转方便后续操作
-  const randomValues =
-    JSON.parse(localStorage.getItem('randomValues'))?.reverse() || []
-  // 获取到最大阅读时间周末的起始日期、结束日期、阅读时间总和以及阅读时间数组
-  const { startDay, endDay, maxTime, dataArr } =
-    getLongestWeek(randomValues) || {}
 
   // 初始化柱状图的信息以及进行相关配置
   const initChart = () => {
@@ -76,9 +66,27 @@ export default function BarChart() {
       ],
       color: '#37a2da',
     }
-
     option && myChart.setOption(option)
+    window.removeEventListener('scroll', lazyFn)
   }
+
+  // 将懒加载函数用节流函数包裹一层用于优化
+  const lazyFn = throttle(lazyload(graphRef, initChart), 200)
+
+  // 组件挂载到页面上时执行函数为图表配置相关信息
+  useEffect(() => {
+    window.addEventListener('scroll', lazyFn)
+    return () => {
+      window.removeEventListener('scroll', lazyFn)
+    }
+  }, [lazyFn])
+
+  // 从本地获取到虚拟数据（后面会改为从服务器获取）并将数组反转方便后续操作
+  const randomValues =
+    JSON.parse(localStorage.getItem('randomValues'))?.reverse() || []
+  // 获取到最大阅读时间周末的起始日期、结束日期、阅读时间总和以及阅读时间数组
+  const { startDay, endDay, maxTime, dataArr } =
+    getLongestWeek(randomValues) || {}
 
   // 获取最大阅读周的起始日期（几月几日）
   const { day: firstBeginDay, month: firstStartMonth } =

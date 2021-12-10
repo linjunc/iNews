@@ -8,6 +8,12 @@ const Home = lazy(() => import('../pages/home'))
 const Login = lazy(() => import('../pages/login'))
 const Detail = lazy(() => import('../pages/detail'))
 const User = lazy(() => import('../pages/user'))
+// 为个人中心中的组件配置懒加载
+const Posts = lazy(() => import('../pages/user/c-cpns/posts'))
+const Collect = lazy(() => import('../pages/user/c-cpns/collect'))
+const Likes = lazy(() => import('../pages/user/c-cpns/likes'))
+const Concern = lazy(() => import('../pages/user/c-cpns/concern'))
+const ReadingReport = lazy(() => import('../pages/user/c-cpns/reading-report'))
 
 // 解决懒加载白屏时间
 const lazyLoad = (children) => {
@@ -31,6 +37,32 @@ const routes = [
       {
         path: '/user/:id',
         element: lazyLoad(<User />),
+        children: [
+          {
+            path: '',
+            element: lazyLoad(<Posts />),
+          },
+          {
+            path: 'posts',
+            element: lazyLoad(<Posts />),
+          },
+          {
+            path: 'collect',
+            element: lazyLoad(<Collect />),
+          },
+          {
+            path: 'likes',
+            element: lazyLoad(<Likes />),
+          },
+          {
+            path: 'tags',
+            element: lazyLoad(<Concern />),
+          },
+          {
+            path: 'report',
+            element: lazyLoad(<ReadingReport />),
+          },
+        ],
       },
     ],
   },
