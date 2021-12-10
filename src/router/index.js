@@ -32,15 +32,15 @@ const routes = [
         path: '/user/:id',
         element: lazyLoad(<User />),
       },
+      {
+        path: 'covidMap',
+        element: lazyLoad(<CovidMap />),
+      },
     ],
   },
   {
     path: 'login',
     element: lazyLoad(<Login />),
-  },
-  {
-    path: 'covidMap',
-    element: lazyLoad(<CovidMap />),
   },
 ]
 
