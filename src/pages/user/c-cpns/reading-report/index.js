@@ -1,13 +1,17 @@
-import React, { memo, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
 import html2canvas from 'html2canvas'
 
-import { Button } from 'antd'
 import PieChart from './c-cpns/pie-chart'
 import InstrumentChart from './c-cpns/Instrument-chart'
 import BarChart from './c-cpns/bar-chart'
 
-import { ReadingReportWrapper, TransitionWrapper } from './style'
+import {
+  ReadingReportWrapper,
+  TransitionWrapper,
+  SecondTitleWrapper,
+  MyButton,
+} from './style'
 
 export default function ReadingReport() {
   // 用户年度总结阅读时间排行榜
@@ -75,13 +79,19 @@ export default function ReadingReport() {
 
   return (
     <TransitionWrapper>
-      <Button onClick={downLoad}>下载图片</Button>
+      <SecondTitleWrapper>
+        <span className="text">年度报告</span>
+        <MyButton onClick={downLoad} type="primary">
+          下载年度报告
+        </MyButton>
+      </SecondTitleWrapper>
       <CSSTransition in={true} classNames="report" timeout={1000} appear={true}>
         <ReadingReportWrapper ref={reportRef}>
           <div className="main-content">
             <img
               src={require('../../../../assets/user-center/report.png').default}
               className="title-img"
+              alt="年度报告"
             />
             <PieChart />
             <InstrumentChart />
