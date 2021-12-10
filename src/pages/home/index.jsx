@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Button } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { HomeContainer } from './style'
+import Parallax from './components/Parallax'
 
 const Home = (props) => {
   const navigate = useNavigate()
@@ -17,7 +18,7 @@ const Home = (props) => {
 
   return (
     <HomeContainer>
-      <div className="test1"></div>
+      <Parallax></Parallax>
       {channel}
       <div style={{ height: '3000px' }}></div>
       <Button onClick={toDetail}> 测试详情 </Button>

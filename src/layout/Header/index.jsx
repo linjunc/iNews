@@ -33,7 +33,7 @@ const Header = () => {
 
     // 如果在首页时，头部在一定距离内是不会呈现的
     if (pathname === '/') {
-      if (scrollTop <= 1000) {
+      if (scrollTop <= window.innerHeight * 0.8) {
         setShow(false)
       } else {
         setShow(true)
