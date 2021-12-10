@@ -3126,6 +3126,16 @@ balanced-match@^1.0.0:
   resolved "https://registry.npm.taobao.org/balanced-match/download/balanced-match-1.0.2.tgz"
   integrity sha1-6D46fj8wCzTLnYf2FfoMvzV2kO4=
 
+base64-arraybuffer@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.nlark.com/base64-arraybuffer/download/base64-arraybuffer-0.2.0.tgz?cache=0&sync_timestamp=1628588917496&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fbase64-arraybuffer%2Fdownload%2Fbase64-arraybuffer-0.2.0.tgz#4b944fac0191aa5907afe2d8c999ccc57ce80f45"
+  integrity sha1-S5RPrAGRqlkHr+LYyZnMxXzoD0U=
+
+base64-arraybuffer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.nlark.com/base64-arraybuffer/download/base64-arraybuffer-1.0.1.tgz?cache=0&sync_timestamp=1628588917496&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fbase64-arraybuffer%2Fdownload%2Fbase64-arraybuffer-1.0.1.tgz#87bd13525626db4a9838e00a508c2b73efcf348c"
+  integrity sha1-h70TUlYm20qYOOAKUIwrc+/PNIw=
+
 base64-js@^1.0.2:
   version "1.5.1"
   resolved "https://registry.nlark.com/base64-js/download/base64-js-1.5.1.tgz"
@@ -4182,6 +4192,13 @@ css-has-pseudo@^0.10.0:
     postcss "^7.0.6"
     postcss-selector-parser "^5.0.0-rc.4"
 
+css-line-break@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.nlark.com/css-line-break/download/css-line-break-2.0.1.tgz?cache=0&sync_timestamp=1628083455740&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcss-line-break%2Fdownload%2Fcss-line-break-2.0.1.tgz#3dc74c2ed5eb64211480281932475790243e7338"
+  integrity sha1-PcdMLtXrZCEUgCgZMkdXkCQ+czg=
+  dependencies:
+    base64-arraybuffer "^0.2.0"
+
 css-loader@4.3.0:
   version "4.3.0"
   resolved "https://registry.npmmirror.com/css-loader/download/css-loader-4.3.0.tgz?cache=0&sync_timestamp=1635967924209&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fcss-loader%2Fdownload%2Fcss-loader-4.3.0.tgz"
@@ -4456,7 +4473,7 @@ dayjs@1.x, dayjs@^1.10.7:
   resolved "https://registry.nlark.com/dayjs/download/dayjs-1.10.7.tgz"
   integrity sha1-LPX5Gt0oEWdIRAhmoKHSbzps5Gg=
 
-debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
+debug@2.6.9, debug@^2.1.3, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.npmmirror.com/debug/download/debug-2.6.9.tgz"
   integrity sha1-XRKFFd8TT/Mn6QpMk/Tgd6U2NB8=
@@ -4816,13 +4833,12 @@ earcut@^2.1.1:
   resolved "https://registry.nlark.com/earcut/download/earcut-2.2.3.tgz"
   integrity sha1-1EztL/WhiFlWjjJ92cfUaxb1XPQ=
 
-echarts@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.npmmirror.com/echarts/download/echarts-5.2.2.tgz#ec3c8b2a151cbba71ba3c2c7cf9b2f2047ce4370"
-  integrity sha1-7DyLKhUcu6cbo8LHz5svIEfOQ3A=
+echarts@4.9.0:
+  version "4.9.0"
+  resolved "https://registry.npmmirror.com/echarts/download/echarts-4.9.0.tgz#a9b9baa03f03a2a731e6340c55befb57a9e1347d"
+  integrity sha1-qbm6oD8Doqcx5jQMVb77V6nhNH0=
   dependencies:
-    tslib "2.3.0"
-    zrender "5.2.1"
+    zrender "4.3.2"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -6243,6 +6259,14 @@ html-webpack-plugin@4.5.0:
     tapable "^1.1.3"
     util.promisify "1.0.0"
 
+html2canvas@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.npmmirror.com/html2canvas/download/html2canvas-1.3.3.tgz#f01531f9bf7c73a771c5ee73b4a5cab6576bf876"
+  integrity sha512-nQi0ayEY1cMiUMbq/F5hRwMAqsRMo7NIP6VaCqaXnXO6b/FfZO49oSfIJjdyRha28EuY8D6FBCzQOXPQV0TCrA==
+  dependencies:
+    css-line-break "2.0.1"
+    text-segmentation "^1.0.2"
+
 htmlparser2@^6.1.0:
   version "6.1.0"
   resolved "https://registry.npmmirror.com/htmlparser2/download/htmlparser2-6.1.0.tgz"
@@ -7548,6 +7572,13 @@ jsonfile@^6.0.1:
     universalify "^2.0.0"
   optionalDependencies:
     graceful-fs "^4.1.6"
+
+jsonp@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.npmmirror.com/jsonp/download/jsonp-0.2.1.tgz#a65b4fa0f10bda719a05441ea7b94c55f3e15bae"
+  integrity sha1-pltPoPEL2nGaBUQep7lMVfPhW64=
+  dependencies:
+    debug "^2.1.3"
 
 jsonparse@^1.2.0:
   version "1.3.1"
@@ -10518,12 +10549,6 @@ react-tooltip@^4.2.21:
     prop-types "^15.7.2"
     uuid "^7.0.3"
 
-react-zmage@^0.8.5-beta.37:
-  version "0.8.5-beta.37"
-  resolved "https://registry.nlark.com/react-zmage/download/react-zmage-0.8.5-beta.37.tgz#a310a2ea273685021e098edd10505011b3f3b778"
-  integrity sha1-oxCi6ic2hQIeCY7dEFBQEbPzt3g=
-  dependencies:
-    classnames "^2.3.1"
 react-transition-group@^4.4.2:
   version "4.4.2"
   resolved "https://registry.nlark.com/react-transition-group/download/react-transition-group-4.4.2.tgz?cache=0&sync_timestamp=1622301030407&other_urls=https%3A%2F%2Fregistry.nlark.com%2Freact-transition-group%2Fdownload%2Freact-transition-group-4.4.2.tgz#8b59a56f09ced7b55cbd53c36768b922890d5470"
@@ -10533,6 +10558,13 @@ react-transition-group@^4.4.2:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+react-zmage@^0.8.5-beta.37:
+  version "0.8.5-beta.37"
+  resolved "https://registry.nlark.com/react-zmage/download/react-zmage-0.8.5-beta.37.tgz#a310a2ea273685021e098edd10505011b3f3b778"
+  integrity sha1-oxCi6ic2hQIeCY7dEFBQEbPzt3g=
+  dependencies:
+    classnames "^2.3.1"
 
 react@^17.0.2:
   version "17.0.2"
@@ -11987,6 +12019,13 @@ text-extensions@^1.0.0:
   resolved "https://registry.npmjs.org/text-extensions/-/text-extensions-1.9.0.tgz"
   integrity sha512-wiBrwC1EhBelW12Zy26JeOUkQ5mRu+5o8rpsJk5+2t+Y5vE7e842qtZDQ2g1NpX/29HdyFeJ4nSIhI47ENSxlQ==
 
+text-segmentation@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.nlark.com/text-segmentation/download/text-segmentation-1.0.2.tgz?cache=0&sync_timestamp=1628857855224&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftext-segmentation%2Fdownload%2Ftext-segmentation-1.0.2.tgz#1f828fa14aa101c114ded1bda35ba7dcc17c9858"
+  integrity sha1-H4KPoUqhAcEU3tG9o1un3MF8mFg=
+  dependencies:
+    utrie "^1.0.1"
+
 text-table@0.2.0, text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.nlark.com/text-table/download/text-table-0.2.0.tgz"
@@ -12150,11 +12189,6 @@ tsconfig-paths@^3.11.0:
     json5 "^1.0.1"
     minimist "^1.2.0"
     strip-bom "^3.0.0"
-
-tslib@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.nlark.com/tslib/download/tslib-2.3.0.tgz?cache=0&sync_timestamp=1628722556410&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
-  integrity sha1-gDuM2rPhK6WBpMpByIObuw2ssJ4=
 
 tslib@^1.8.1:
   version "1.14.1"
@@ -12479,6 +12513,13 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.nlark.com/utils-merge/download/utils-merge-1.0.1.tgz"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
+
+utrie@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.nlark.com/utrie/download/utrie-1.0.1.tgz?cache=0&sync_timestamp=1628857880301&other_urls=https%3A%2F%2Fregistry.nlark.com%2Futrie%2Fdownload%2Futrie-1.0.1.tgz#e155235ebcbddc89ae09261ab6e773ce61401b2f"
+  integrity sha1-4VUjXry93ImuCSYatudzzmFAGy8=
+  dependencies:
+    base64-arraybuffer "^1.0.1"
 
 uuid@^3.3.2, uuid@^3.4.0:
   version "3.4.0"
@@ -13123,9 +13164,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.nlark.com/yocto-queue/download/yocto-queue-0.1.0.tgz"
   integrity sha1-ApTrPe4FAo0x7hpfosVWpqrxChs=
 
-zrender@5.2.1:
-  version "5.2.1"
-  resolved "https://registry.nlark.com/zrender/download/zrender-5.2.1.tgz#5f4bbda915ba6d412b0b19dc2431beaad05417bb"
-  integrity sha1-X0u9qRW6bUErCxncJDG+qtBUF7s=
-  dependencies:
-    tslib "2.3.0"
+zrender@4.3.2:
+  version "4.3.2"
+  resolved "https://registry.nlark.com/zrender/download/zrender-4.3.2.tgz#ec7432f9415c82c73584b6b7b8c47e1b016209c6"
+  integrity sha1-7HQy+UFcgsc1hLa3uMR+GwFiCcY=
