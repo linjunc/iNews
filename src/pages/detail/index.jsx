@@ -127,7 +127,7 @@ const Detail = memo(() => {
         if (readLongTime > 3600000) {
           message.warn('您本次阅读时间已经持续了一个小时，请稍作休息噢~')
         }
-        // 成功获取文章后，打开计时器
+        // 成功获取文章后，记录当前的时间戳，以及文章的标签
         startTime = dayjs().valueOf()
         tag = article.tag
       } catch (error) {

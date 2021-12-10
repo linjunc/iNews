@@ -8,7 +8,7 @@ const Home = lazy(() => import('../pages/home'))
 const Login = lazy(() => import('../pages/login'))
 const Detail = lazy(() => import('../pages/detail'))
 const User = lazy(() => import('../pages/user'))
-
+const CovidMap = lazy(() => import('../pages/covidMap'))
 // 解决懒加载白屏时间
 const lazyLoad = (children) => {
   return <Suspense fallback={<Skeleton active />}>{children}</Suspense>
@@ -31,6 +31,10 @@ const routes = [
       {
         path: '/user/:id',
         element: lazyLoad(<User />),
+      },
+      {
+        path: 'covidMap',
+        element: lazyLoad(<CovidMap />),
       },
     ],
   },

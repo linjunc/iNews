@@ -13,7 +13,7 @@ import { DELETE_INFO } from '../../models/constant'
 const { SubMenu } = Menu
 
 const Header = () => {
-  const [current, setCurrent] = useState('mail')
+  const [current, setCurrent] = useState('app')
   const [show, setShow] = useState(true) // show 的改变导致了组件的重新渲染，怎么解决呢
   const { userInfo, userDispatch } = useContext(userContext)
   const navigate = useNavigate()
@@ -77,6 +77,9 @@ const Header = () => {
   const toHome = () => {
     navigate('/')
   }
+  const toCovid = () => {
+    navigate('/covidMap')
+  }
   // 退出登录
   const logout = () => {
     Modal.confirm({
@@ -108,6 +111,9 @@ const Header = () => {
       </Menu.Item>
       <Menu.Item key="1">
         <span onClick={logout}>退出登录</span>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <span onClick={toCovid}>肺炎地图</span>
       </Menu.Item>
     </Menu>
   )
