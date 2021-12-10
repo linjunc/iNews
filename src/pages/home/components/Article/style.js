@@ -5,27 +5,44 @@ export const Artilecontainer = styled.div`
   .article-node {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 10px 5px;
-    /* width: 680px; */
     width: 100%;
-    min-height: 150px;
+    min-height: 120px;
     background-color: #ffffff;
     .left {
-      max-width: 630px;
+      flex: 0.9;
+      width: 580px;
       padding-right: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       .article-top {
+        padding-bottom: 12px;
         .article-title {
-          /* line-height: 30px; */
           line-height: 1.5;
           font-size: 24px;
           font-weight: 400;
           cursor: pointer;
+          display: -webkit-box;
+          overflow: hidden;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
         }
         .article-title:hover {
           color: #f04142;
+          color: #1890ff;
+        }
+      }
+      .article-center {
+        padding-bottom: 12px;
+        .article-abstract {
+          display: -webkit-box;
+          overflow: hidden;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
         }
       }
       .article-bottom {
@@ -49,10 +66,13 @@ export const Artilecontainer = styled.div`
       }
     }
     .right {
-      height: 100px;
+      width: 158px;
+      height: 118px;
       overflow: hidden;
       .article-img {
         height: 100%;
+        width: 100%;
+        object-fit: cover;
         cursor: pointer;
         transition: all 0.9s;
       }
