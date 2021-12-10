@@ -1,50 +1,84 @@
 import styled from 'styled-components'
 
 export const Artilecontainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 5px;
-  width: 680px;
-  background-color: #ffffff;
-  .left {
+  width: 100%;
+  .article-node {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    .article-top {
-      .article-title {
-        line-height: 30px;
-        font-size: 24px;
-        font-weight: 400;
-        cursor: pointer;
+    align-items: center;
+    padding: 10px 5px;
+    width: 100%;
+    min-height: 120px;
+    background-color: #ffffff;
+    .left {
+      flex: 0.9;
+      width: 580px;
+      padding-right: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .article-top {
+        padding-bottom: 12px;
+        .article-title {
+          line-height: 1.5;
+          font-size: 24px;
+          font-weight: 400;
+          cursor: pointer;
+          display: -webkit-box;
+          overflow: hidden;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
+        }
+        .article-title:hover {
+          color: #f04142;
+          color: #1890ff;
+        }
       }
-      .article-title:hover {
-        color: #f04142;
+      .article-center {
+        padding-bottom: 12px;
+        .article-abstract {
+          display: -webkit-box;
+          overflow: hidden;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
+        }
+      }
+      .article-bottom {
+        color: #999;
+        .media_name {
+          cursor: pointer;
+          margin-right: 20px;
+        }
+        .comment_count {
+          cursor: pointer;
+          margin-right: 20px;
+        }
+        .media_name:hover {
+          color: #aaa;
+        }
+        .comment_count:hover {
+          color: #aaa;
+        }
+        .publish_time {
+        }
       }
     }
-    .article-bottom {
-      color: #999;
-      .media_name {
+    .right {
+      width: 158px;
+      height: 118px;
+      overflow: hidden;
+      .article-img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
         cursor: pointer;
-        margin-right: 20px;
+        transition: all 0.9s;
       }
-      .comment_count {
-        cursor: pointer;
-        margin-right: 20px;
+      .article-img:hover {
+        transform: scale(1.1);
       }
-      .media_name:hover {
-        color: #aaa;
-      }
-      .comment_count:hover {
-        color: #aaa;
-      }
-      .publish_time {
-      }
-    }
-  }
-  .right {
-    height: 120px;
-    .article-img {
-      height: 100%;
     }
   }
 `
