@@ -1,4 +1,5 @@
 import { PageHeaderWrapper } from './style'
+import Weather from '../Weather'
 
 const PageHeader = () => {
   return (
@@ -8,7 +9,7 @@ const PageHeader = () => {
           <div>关于</div>
         </div>
         <div className="right-box">
-          <div>天气</div>
+          <Weather></Weather>
           <div>登录</div>
         </div>
       </div>

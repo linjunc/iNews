@@ -12,6 +12,7 @@ export const PageHeaderWrapper = styled.div`
     width: 1200px;
     height: 60px;
     margin: auto;
+    user-select: none;
     .left-box,
     .right-box {
       display: flex;
@@ -19,11 +20,13 @@ export const PageHeaderWrapper = styled.div`
     .left-box {
       > div {
         margin-right: 60px;
+        cursor: pointer;
       }
     }
     .right-box {
       > div {
         margin-left: 60px;
+        cursor: pointer;
       }
     }
   }
