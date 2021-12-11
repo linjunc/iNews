@@ -1,8 +1,7 @@
 import { throttle } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
 import { ParallaxWrapper } from './style'
-import { getScrollTop } from '../../../../utils/scrollHeight'
-import Carousel from '../Carousel'
+import { getScrollTop } from '../../../../../../utils/scrollHeight'
 
 const Parallax = (props) => {
   // 视差部分的引用
@@ -38,17 +37,15 @@ const Parallax = (props) => {
 
   return (
     <ParallaxWrapper>
-      <main
+      <div
         ref={contentRef}
         className="parallax-content"
         style={{
           transform: `translateY(${contentTranslateY * 40}%)`,
         }}
       >
-        <Carousel></Carousel>
-      </main>
-
-      {props.children}
+        {props.children}
+      </div>
     </ParallaxWrapper>
   )
 }
