@@ -66,23 +66,23 @@ export default memo(function ListHeader(props) {
   const linkData = [
     {
       pathname: '',
-      title: '动态',
+      title: '个人主页',
     },
     {
       pathname: 'posts',
-      title: '文章',
+      title: '阅读历史',
     },
     {
       pathname: 'likes',
-      title: '点赞',
+      title: '点赞评论',
     },
     {
       pathname: 'collect',
-      title: '收藏',
+      title: '我的收藏',
     },
     {
       pathname: 'tags',
-      title: '关注',
+      title: '关注列表',
     },
     {
       pathname: 'report',

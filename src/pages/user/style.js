@@ -15,4 +15,5 @@ export const LeftContainerWrapper = styled.div`
 
 export const ContentWrapper = styled.div`
   background-color: #fff;
+  overflow: hidden;
 `
