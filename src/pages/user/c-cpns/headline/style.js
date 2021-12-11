@@ -36,7 +36,7 @@ export const ListHeaderWrapper = styled.div`
 
       & > a,
       & > img {
-        width: 78px;
+        width: 98px;
         height: 50px;
         justify-content: center;
         color: #31445b;
