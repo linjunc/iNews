@@ -18,13 +18,13 @@ export const PageHeaderWrapper = styled.div`
       display: flex;
     }
     .left-box {
-      > div {
+      > * {
         margin-right: 60px;
         cursor: pointer;
       }
     }
     .right-box {
-      > div {
+      > * {
         margin-left: 60px;
         cursor: pointer;
       }

@@ -40,6 +40,7 @@ const Search = () => {
         </div>
         <Triggers
           length={dataArray.length}
+          carouselNowIndex={carouselNowIndex}
           setCarouselNowIndex={setCarouselNowIndex}
         ></Triggers>
       </div>

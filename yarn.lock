@@ -9967,6 +9967,11 @@ quick-lru@^4.0.1:
   resolved "https://registry.npmjs.org/quick-lru/-/quick-lru-4.0.1.tgz"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
+qweather-icons@^1.1.0:
+  version "1.1.0"
+  resolved "https://mirrors.cloud.tencent.com/npm/qweather-icons/-/qweather-icons-1.1.0.tgz#38b5336cb3dcee53bbc6cdd2174685c4f1d85c08"
+  integrity sha512-8AqL5oKLlCGxqHLZBusB6mHiRJxOxSpv7lnLWQmVjGSEITVP6gv56y/TFRnNNqo9nz1d0UaZvDSsP7W3o5Encw==
+
 raf-manager@^0.3.0:
   version "0.3.0"
   resolved "https://registry.nlark.com/raf-manager/download/raf-manager-0.3.0.tgz#ec9a659e8a50534e4d64200b7a39ce9905f10e9c"

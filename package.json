@@ -19,6 +19,7 @@
     "particles-bg": "^2.5.5",
     "qrcode.react": "^1.0.1",
     "qs": "^6.10.1",
+    "qweather-icons": "^1.1.0",
     "rc-texty": "^0.2.0",
     "rc-tween-one": "^3.0.3",
     "react": "^17.0.2",
