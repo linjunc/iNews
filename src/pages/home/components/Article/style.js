@@ -11,8 +11,9 @@ export const Artilecontainer = styled.div`
     min-height: 120px;
     background-color: #ffffff;
     .left {
-      flex: 0.9;
-      width: 580px;
+      /* flex: 0.99; */
+      flex: 1;
+      /* width: 620px; */
       padding-right: 20px;
       display: flex;
       flex-direction: column;
@@ -21,8 +22,8 @@ export const Artilecontainer = styled.div`
         padding-bottom: 12px;
         .article-title {
           line-height: 1.5;
-          font-size: 24px;
-          font-weight: 400;
+          font-size: 20px;
+          font-weight: 600;
           cursor: pointer;
           display: -webkit-box;
           overflow: hidden;
@@ -31,7 +32,7 @@ export const Artilecontainer = styled.div`
           text-overflow: ellipsis;
         }
         .article-title:hover {
-          color: #f04142;
+          /* color: #f04142; */
           color: #1890ff;
         }
       }
@@ -43,6 +44,7 @@ export const Artilecontainer = styled.div`
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           text-overflow: ellipsis;
+          color: #666;
         }
       }
       .article-bottom {

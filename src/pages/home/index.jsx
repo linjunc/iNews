@@ -11,11 +11,16 @@ import { getArticles } from '../../services/home'
 let num = 0
 let tag = 'recommend'
 let isOnGet = false
+let hasMore = true
 const Home = (props) => {
   const [onLoading, setOnLoading] = useState(false)
-  const [homeLoading, setHomeLoading] = useState(true) //骨架
+  // const [homeLoading, setHomeLoading] = useState(true) //骨架
   const [articleList, setArticleList] = useState([])
   const getArticleList = async (tag) => {
+    if (!hasMore) {
+      message.warn('该类新闻都在这里了，看看其他类的吧！')
+      return
+    }
     if (isOnGet) return
     isOnGet = true
     try {
@@ -28,10 +33,11 @@ const Home = (props) => {
       num = num + 10 //跳过的条数增加
 
       const newList = data?.data?.article_list ? data.data.article_list : []
+      if (!newList.length) hasMore = false
       //添加到文章列表
       setArticleList((val) => [...val, ...newList])
 
-      setHomeLoading(false) //骨架消失
+      // setHomeLoading(false) //骨架消失
     } catch (error) {
       message.error('数据获取失败,请重试！')
     } finally {
@@ -42,8 +48,8 @@ const Home = (props) => {
   const location = useLocation()
   // const channel =
   useMemo(() => {
-    setHomeLoading(true) //骨架出现
-
+    // setHomeLoading(true) //骨架出现
+    hasMore = true
     let scrollTopTimer = setInterval(function () {
       //回到顶部
       let top = document.body.scrollTop || document.documentElement.scrollTop
