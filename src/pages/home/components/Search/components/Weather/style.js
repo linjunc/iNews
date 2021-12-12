@@ -11,6 +11,12 @@ export const WeatherWrapper = styled.div`
     grid-column: 1 / 4;
     display: grid;
     grid-template: 1fr 1fr / 3fr 2fr;
+    .temp,
+    .text {
+      justify-self: right;
+      text-align: right;
+      margin-right: 20px;
+    }
     .temp {
       position: relative;
       font-size: 30px;
@@ -18,13 +24,12 @@ export const WeatherWrapper = styled.div`
         content: '℃';
         position: absolute;
         top: 10%;
-        left: 50%;
+        right: -20px;
         font-size: 18px;
       }
     }
     .text {
       font-size: 20px;
-      text-indent: 5px;
     }
     .icon {
       align-self: center;
