@@ -1,13 +1,30 @@
 // 文章详情
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useState, createElement } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
-import { Skeleton, Button, Slider, message, Modal } from 'antd'
+import {
+  Skeleton,
+  Button,
+  Slider,
+  message,
+  Modal,
+  Avatar,
+  Tooltip,
+  Comment,
+} from 'antd'
 import { throttle } from 'lodash'
 import { PhotoProvider, PhotoSlider } from 'react-photo-view'
 import 'react-photo-view/dist/index.css'
+import {
+  DislikeOutlined,
+  LikeOutlined,
+  DislikeFilled,
+  LikeFilled,
+} from '@ant-design/icons'
+import moment from 'moment'
+import Comments from './components/Comments'
 
 import {
   collectArticle,
@@ -28,7 +45,7 @@ import LoveButton from '../../components/LoveButton'
 import logo from '../../assets/logo/logo.png'
 import { DetailWrapper } from './style'
 import { FocusAuthor } from '../../services/user'
-
+import { get_comments } from '../../services/comment'
 // dayjs 配置
 dayjs.locale('zh-cn') // use locale
 dayjs.extend(relativeTime)
@@ -39,6 +56,7 @@ const Detail = memo(() => {
   // 状态定义
   const { id } = useParams()
   const navigate = useNavigate()
+  // const [comments] = useState(false)
   const [artLoading, setArtLoading] = useState(false) // 骨架屏显示
   // 关注，点赞，收藏状态
   const [focusGroup, setFocusGroup] = useState({
@@ -62,7 +80,42 @@ const Detail = memo(() => {
     commentNum: 0,
     collectNum: 0,
   })
-
+  const [comment_content, setComments] = useState() // 评论区数据
+  const [likes, setLikes] = useState(0) //设置喜欢
+  const [dislikes, setDislikes] = useState(0) //设置👎
+  const [action, setAction] = useState(null) //设置行为
+  const like = () => {
+    setLikes(1)
+    setDislikes(0)
+    setAction('liked')
+    console.log(comment_content)
+    console.log(articleList)
+    // console.log(comment_id.comments)
+    // console.log(comment_id)
+    // console.log(comment_id)
+  }
+  const dislike = () => {
+    setLikes(0)
+    setDislikes(1)
+    setAction('disliked')
+  }
+  const actions = [
+    <Tooltip key="comment-basic-like" title="Like">
+      <span onClick={like}>
+        {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+        <span className="comment-action">{likes}</span>
+      </span>
+    </Tooltip>,
+    <Tooltip key="comment-basic-dislike" title="Dislike">
+      <span onClick={dislike}>
+        {React.createElement(
+          action === 'disliked' ? DislikeFilled : DislikeOutlined,
+        )}
+        <span className="comment-action">{dislikes}</span>
+      </span>
+    </Tooltip>,
+    <span key="comment-basic-reply-to">Reply to</span>,
+  ]
   // 初始化文章数据
   useEffect(() => {
     let startTime = 0
@@ -71,8 +124,17 @@ const Detail = memo(() => {
       setArtLoading(true)
       try {
         const res = await getArticleDetail({ item_id: id })
+        //获取评论区的数据
+        const res_comment = await get_comments({
+          article_id: id,
+          n: 5,
+          skip: 0,
+        })
         const { article } = res.data
         const { judge } = res.data
+        //存储评论
+        setComments(res_comment.data.comment_list)
+        console.log(res_comment.data.comment_list)
         // 存储文章点赞数据
         setNumGroup({
           loveNum: article.digg_count,
@@ -347,8 +409,11 @@ const Detail = memo(() => {
               />
             </PhotoProvider>
           </div>
+          {/* 评论区 */}
           <div id="comment" className="comment-container">
-            <div className="comment-content">这里是评论区</div>
+            <div className="comment-content">
+              <Comments comment_son={comment_content}></Comments>
+            </div>
           </div>
         </div>
         {/* 右侧侧边栏 */}

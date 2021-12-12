@@ -4,6 +4,7 @@ import { Skeleton, List, message } from 'antd'
 import { throttle } from 'lodash'
 import { useLocation } from 'react-router-dom'
 import { HomeContainer } from './style'
+import Search from './components/Search'
 import Article from './components/Article'
 import Loading from './components/Loading'
 
@@ -94,6 +95,11 @@ const Home = (props) => {
 
   return (
     <HomeContainer>
+      <Search></Search>
+      <div style={{ height: '60px', lineHeight: '60px', textAlign: 'center' }}>
+        过渡一下
+      </div>
+      {/* <Button onClick={toDetail}> 测试详情 </Button> */}
       {/* <Skeleton active loading={homeLoading} paragraph={{ rows: 16 }} round> */}
       {/* {channel} */}
       <div className="content">

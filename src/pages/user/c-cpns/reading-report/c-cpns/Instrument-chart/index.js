@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
 
-import { throttleFn, lazyload } from '../../../../../../utils/optimize-fn'
+import { lazyload } from '../../../../../../utils/optimize-fn'
+import { throttle } from 'lodash'
 
 import AnalyseTitle from '../analyse-title'
 
@@ -10,8 +11,6 @@ import { InstrumentChartWrapper, ContentWrapper } from './style'
 export default function InstrumentChart() {
   // 通过useRef获取图表包裹元素
   const graphRef = useRef()
-  // 假定给用户的单日最大阅读数
-  const userReadingMaxTime = 320
 
   const initChart = () => {
     const myChart = echarts.init(graphRef.current)
@@ -20,6 +19,7 @@ export default function InstrumentChart() {
       series: [
         {
           type: 'gauge',
+          name: '阅读时间',
           axisLine: {
             lineStyle: {
               width: 30,
@@ -34,6 +34,8 @@ export default function InstrumentChart() {
             itemStyle: {
               color: 'auto',
             },
+            length: '55%',
+            width: 6,
           },
           axisTick: {
             distance: -30,
@@ -53,7 +55,7 @@ export default function InstrumentChart() {
           },
           axisLabel: {
             color: 'auto',
-            distance: 40,
+            distance: 5,
             fontSize: 16,
           },
           detail: {
@@ -75,15 +77,22 @@ export default function InstrumentChart() {
       ],
     }
     option && myChart.setOption(option)
+    window.removeEventListener('scroll', lazyFn)
   }
+
+  // 将懒加载函数用节流函数包裹一层用于优化
+  const lazyFn = throttle(lazyload(graphRef, initChart), 200)
 
   // 组件挂载到页面上时执行函数为图表配置相关信息
   useEffect(() => {
-    // window.addEventListener('scroll', lazyFn)
-    initChart()
-  }, [])
+    window.addEventListener('scroll', lazyFn)
+    return () => {
+      window.removeEventListener('scroll', lazyFn)
+    }
+  }, [lazyFn])
 
-  // const lazyFn = throttleFn(lazyload)
+  // 假定给用户的单日最大阅读数
+  const userReadingMaxTime = 320
 
   return (
     <div>

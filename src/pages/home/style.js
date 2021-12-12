@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const HomeContainer = styled.div`
+  margin-top: -64px; // 减去头部的64px
   .content {
     position: relative;
     left: 50%;

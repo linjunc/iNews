@@ -1,18 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { Outlet, useParams } from 'react-router'
 
-import CalendarHotGraph from './c-cpns/calendar'
-import ReadingReport from './c-cpns/reading-report'
-import { Button } from 'antd'
+import RightContainer from './c-cpns/right-container'
+import UserInfo from './c-cpns/base-info'
+import ListHeader from './c-cpns/headline'
 
-import { UserCenterWrapper } from './style'
+import {
+  UserCenterWrapper,
+  LeftContainerWrapper,
+  ContentWrapper,
+} from './style'
 
-export default function DCCUserCenter() {
-  const [nowState, setNowState] = useState(true)
-
+export default function UserCenter() {
   return (
     <UserCenterWrapper>
-      <Button onClick={(e) => setNowState(!nowState)}>切换组件</Button>
-      {nowState ? <CalendarHotGraph /> : <ReadingReport />}
+      <LeftContainerWrapper>
+        <UserInfo />
+        <ListHeader />
+        <ContentWrapper>
+          <Outlet />
+        </ContentWrapper>
+      </LeftContainerWrapper>
+      <RightContainer />
     </UserCenterWrapper>
   )
 }

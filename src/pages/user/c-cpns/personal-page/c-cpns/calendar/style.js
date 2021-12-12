@@ -4,39 +4,45 @@ export const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
+  padding: 0 10px;
 
   .title {
     font-size: 1.28em;
     font-weight: bold;
-    color: #40485B;
+    color: #40485b;
   }
 `
 
 export const CalendarWrapper = styled.div`
+  margin: 20px 0;
 
   .react-calendar-heatmap text {
     font-size: 10px;
     fill: #aaa;
   }
 
-  g.react-calendar-heatmap-weekday-labels text{
-    font-size: 9px;
+  svg {
+    transform: translateX(-7px);
   }
 
-  .react-calendar-heatmap .react-calendar-heatmap-small-text {
-    font-size: 5px;
+  g.react-calendar-heatmap-weekday-labels {
+    transform: translate(0, 14) !important;
+  }
+
+  g.react-calendar-heatmap-weekday-labels text {
+    font-size: 10px;
   }
 
   rect {
-      cursor: pointer;
-      stroke: #fff !important;
-      fill-opacity: .7;
-      outline: none;
+    cursor: pointer;
+    stroke: #fff !important;
+    fill-opacity: 0.7;
+    outline: none;
 
-      &:hover {
-        fill-opacity: 1;
-      }
+    &:hover {
+      fill-opacity: 1;
+    }
   }
 
   .react-calendar-heatmap .color-news-0 {
@@ -58,12 +64,15 @@ export const CalendarWrapper = styled.div`
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  color: #40485B;
+  padding: 0 10px;
+  color: #40485b;
 
   .statistics {
+    display: flex;
+    flex-direction: column;
 
     .all-read-time {
-      margin-right: 20px;
+      margin: 0 20px 10px 0;
 
       .num {
         font-weight: 600;

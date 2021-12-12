@@ -7,7 +7,7 @@ import {
   getRange,
   getRandomInt,
   getDaysInfoInYear,
-} from '../../../../utils/date-format'
+} from '../../../../../../utils/date-format'
 
 import { Select } from 'antd'
 
@@ -49,7 +49,7 @@ export default memo(function CalendarHotGraph() {
   return (
     <CalendarWrapper>
       <TitleWrapper>
-        <h1 className="title">阅读时间</h1>
+        <h1 className="title">阅读日历</h1>
         <Select defaultValue="2021" style={{ width: 120 }}>
           <Option value="jack">2021</Option>
         </Select>
@@ -81,6 +81,8 @@ export default memo(function CalendarHotGraph() {
               value.count
             }min`, // 这里toolTip组件要提示的信息
             rx: 2,
+            width: '12px',
+            height: '12px',
           }
         }}
         showWeekdayLabels={true}
@@ -88,13 +90,13 @@ export default memo(function CalendarHotGraph() {
       <ButtonWrapper>
         <div className="statistics">
           <span className="all-read-time">
-            最近一年浏览总时间：<span className="num">2356</span> 分钟
+            最近连续登陆时间: <span className="num">6</span> 天
           </span>
           <span className="all-read-time">
             最长连续登陆时间：<span className="num">326</span> 天
           </span>
           <span className="all-read-time">
-            最近连续登陆时间: <span className="num">6</span> 天
+            最近一年浏览总时间：<span className="num">2356</span> 分钟
           </span>
         </div>
         <div className="color-show-box">
