@@ -7,7 +7,7 @@ import {
   getRange,
   getRandomInt,
   getDaysInfoInYear,
-} from '../../../../utils/date-format'
+} from '../../../../../../utils/date-format'
 
 import { Select } from 'antd'
 

@@ -12,12 +12,11 @@ import {
 } from './style'
 
 export default function UserCenter() {
-  const { id } = useParams()
   return (
     <UserCenterWrapper>
       <LeftContainerWrapper>
         <UserInfo />
-        <ListHeader id={id} />
+        <ListHeader />
         <ContentWrapper>
           <Outlet />
         </ContentWrapper>

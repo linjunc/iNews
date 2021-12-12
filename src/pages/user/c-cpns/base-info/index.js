@@ -1,53 +1,68 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState, useRef } from 'react'
+import { useNavigate } from 'react-router'
+
+import { getUserInfo } from '../../../../services/user'
+import { getLocal } from '../../../../utils/storage'
 
 import EditBtn from '../edit-btn'
 
 import { BaseInfoWrapper } from './style'
 
-export default memo(function DCCBaseInfo() {
-  const userInfo = {
-    name: 'Running',
-    position: '学生',
-    introduction: '这里是你的个人简介',
-  }
+export default memo(function BaseInfo() {
+  // 使用useContext获取传递过来的用户信息
+  const navigate = useNavigate()
+  // // 设置用户信息的状态
+  const [userAllInfo, setUserAllInfo] = useState({})
+  // 这个变量用来保存一个数据，用于监听路由有没有跳转，如果跳转就不让执行useEffect中的set函数，避免报错
+  const flag = useRef(false)
+
+  // 获取到用户信息后更新状态
+  useEffect(() => {
+    let upDateUserInfo = async () => {
+      const res = await getUserInfo()
+      const newUserAllInfo = res.data.userInfo
+      // 如果falg为true，则执行set函数，否则说明已经路由跳转，set函数也没有必要再执行了，让其执行反而会报错
+      flag && setUserAllInfo(newUserAllInfo)
+    }
+    upDateUserInfo()
+  }, [])
+
+  // 判断用户是否已经登录，如果没有登录则需要跳转至登录页面
+  useEffect(() => {
+    if (!getLocal('token')) {
+      flag = false
+      navigate('/login')
+    }
+  }, [navigate])
+
+  // 获取头像、个人介绍、用户名
+  const { avatar, introduction, nickname } = userAllInfo
 
   return (
     <BaseInfoWrapper>
       <img
         className="avatar"
+        alt="用户头像"
         src={
-          (userInfo.photo && 'http://112.74.173.181:8080/' + userInfo.photo) ||
-          'https://p3-passport.byteacctimg.com/img/user-avatar/7daa5395a692d2f501867755d2667c07~300x300.image'
+          avatar ||
+          require('../../../.././assets/user-center/default-avatar.png').default
         }
       />
       <div className="info-box middle-item">
         <div className="user-name middle-item">
-          <span className="text-nowrap">{userInfo.name}</span>
+          <span className="text-nowrap">{nickname}</span>
         </div>
-        <div className="position">
-          <svg width="21" height="18" viewBox="0 0 21 18">
-            <g fill="none">
+        {introduction && (
+          <div className="brief middle-item">
+            <svg width="21" height="18" viewBox="0 0 21 18">
               <path
                 fill="#72777B"
-                d="M3 8.909V6.947a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1V8.92l-6 2.184v-.42c0-.436-.336-.79-.75-.79h-1.5c-.414 0-.75.354-.75.79v.409L3 8.909zm0 .7l6 2.184v.47c0 .436.336.79.75.79h1.5c.414 0 .75-.354.75-.79v-.46l6-2.183V16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.609zm6.75 1.075h1.5v1.58h-1.5v-1.58z"
+                d="M4 4h13a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm9 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3 3a3 3 0 0 0-6 0h6zM5 7v1h4V7H5zm0 2.5v1h4v-1H5zM5 12v1h4v-1H5z"
               ></path>
-              <path
-                stroke="#72777B"
-                d="M7.5 5.213V4A1.5 1.5 0 0 1 9 2.5h3A1.5 1.5 0 0 1 13.5 4v1.213"
-              ></path>
-            </g>
-          </svg>
-          <span>{userInfo.position || '学生'}</span>
-        </div>
-        <div className="brief middle-item">
-          <svg width="21" height="18" viewBox="0 0 21 18">
-            <path
-              fill="#72777B"
-              d="M4 4h13a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm9 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3 3a3 3 0 0 0-6 0h6zM5 7v1h4V7H5zm0 2.5v1h4v-1H5zM5 12v1h4v-1H5z"
-            ></path>
-          </svg>
-          <span>{userInfo.introduction}</span>
-        </div>
+            </svg>
+            <span>{introduction}</span>
+          </div>
+        )}
       </div>
       <div className="action-box middle-item">
         <div className="link-box">

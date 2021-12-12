@@ -9,8 +9,7 @@ import EditBtn from '../edit-btn'
 
 import { ListHeaderWrapper } from './style'
 
-export default memo(function ListHeader(props) {
-  // const { id } = props
+export default memo(function ListHeader() {
   const [isFixed, setIsFixed] = useState(null)
   let topValue = 0
   let scrollTop = 0
@@ -69,7 +68,7 @@ export default memo(function ListHeader(props) {
       title: '个人主页',
     },
     {
-      pathname: 'posts',
+      pathname: 'person',
       title: '阅读历史',
     },
     {
