@@ -57,9 +57,12 @@ const Header = () => {
     window.addEventListener('scroll', () => {
       bindHandleScroll(pathname)
     })
+    console.log('layout', pathname)
     // 如果是在首页默认不显示
     if (pathname === '/') {
       setShow(false)
+    } else {
+      setShow(true)
     }
     return () => {
       window.removeEventListener('scroll', () => {
