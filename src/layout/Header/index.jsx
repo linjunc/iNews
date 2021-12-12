@@ -28,7 +28,7 @@ const Header = () => {
   }
 
   // 获取距离顶部的距离
-  const bindHandleScroll = throttle((pathname) => {
+  const bindHandleScroll = throttle(() => {
     scrollTop = getScrollTop()
     // 大于一定距离并且上滚了，头部出现
     if (scrollTop >= 700 && scrollTop >= topValue) {
@@ -46,13 +46,10 @@ const Header = () => {
   useEffect(() => {
     // 如果是首页，让首页用context控制
     if (pathname === '/') return
-    window.addEventListener('scroll', () => {
-      bindHandleScroll(pathname)
-    })
+    else window.addEventListener('scroll', bindHandleScroll)
+
     return () => {
-      window.removeEventListener('scroll', () => {
-        bindHandleScroll(pathname)
-      })
+      window.removeEventListener('scroll', bindHandleScroll)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
