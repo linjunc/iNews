@@ -10,7 +10,7 @@ const Parallax = (props) => {
   // 视差部分的偏移距离
   const [contentTranslateY, setContentTranslateY] = useState(0)
   // 视差部分是否可见
-  const [isVisiable, setIsVisiable] = useState()
+  const [isVisible, setIsVisible] = useState()
   // 头部是否可见
   const setHeaderShow = useContext(headerShowContext)
 
@@ -18,7 +18,7 @@ const Parallax = (props) => {
     // 判断视差部分是否进入视窗 的observer
     const observer = new IntersectionObserver(
       ([e]) => {
-        setIsVisiable(e.isIntersecting)
+        setIsVisible(e.isIntersecting)
         setHeaderShow(!e.isIntersecting)
       },
       { threshold: 0 },
@@ -35,11 +35,11 @@ const Parallax = (props) => {
   }, 16)
   // 可见就添加监听器
   useEffect(() => {
-    isVisiable
+    isVisible
       ? window.addEventListener('scroll', handleScroll)
       : window.removeEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [isVisiable])
+  }, [isVisible])
 
   return (
     <ParallaxWrapper>

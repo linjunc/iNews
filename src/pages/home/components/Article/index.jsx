@@ -51,7 +51,7 @@ const Article = ({ data }) => {
           <div className="article-bottom">
             <span className="media_name">{data.media_user.media_name}</span>
             <span onClick={toDetail} className="comment_count">
-              {data.comment_count}评论
+              {data.comment_count} 评论
             </span>
             <span className="publish_time">
               {

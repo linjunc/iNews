@@ -156,13 +156,13 @@ const Detail = memo(() => {
         // 获取用户热门文章
         const userArticle = await getArticleList({
           user_id: article.media_id,
-          n: '5',
+          n: '3',
           skip: '0',
         })
         // 获取标签相关的文章
         const tagArticle = await getArticleByTag({
           tag: article.tag,
-          n: '5',
+          n: '3',
           skip: '0',
         })
         // 热门文章数据
@@ -466,8 +466,14 @@ const Detail = memo(() => {
           {/* 下滑过长后的固定右侧 */}
           <div className={show ? 'sticky-box show' : 'sticky-box'}>
             {/* 作者信息 */}
+            {/* 作者信息 */}
             <div className="author-info">
-              <div className="author-head">
+              <div
+                onClick={() => {
+                  navigate(`/user/${article.media_id}`)
+                }}
+                className="author-head"
+              >
                 <img src={article?.media_user?.avatar_url} alt="" />
               </div>
               <div className="author-name">
@@ -476,8 +482,17 @@ const Detail = memo(() => {
               <div className="author-des">
                 {article?.media_user?.media_info}
               </div>
-              <Button type="primary" className="author-love">
-                + 关注
+              <Button
+                onClick={focusUser}
+                type="primary"
+                style={
+                  focusGroup.focus
+                    ? { backgroundColor: '#2ecc71', border: 'none' }
+                    : {}
+                }
+                className="author-love"
+              >
+                {focusGroup.focus ? '已关注' : '+ 关注'}
               </Button>
             </div>
             {/* 广告 */}
