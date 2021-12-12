@@ -47,13 +47,31 @@ export default function BarChart() {
             '星期日',
           ],
           axisTick: {
-            alignWithLabel: true,
+            show: false,
+          },
+          axisLine: {
+            show: false,
+          },
+          axisLabel: {
+            color: 'rgba(96, 92, 86, 1)',
           },
         },
       ],
       yAxis: [
         {
           type: 'value',
+          axisLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+            lineStyle: {
+              color: 'red',
+            },
+          },
+          axisLabel: {
+            color: 'rgba(96, 92, 86, 1)',
+          },
         },
       ],
       series: [

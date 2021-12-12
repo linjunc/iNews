@@ -8,7 +8,7 @@ export const RightContainerWrapper = styled.div`
 
   .sticky {
     position: fixed;
-    top: 81px;
+    top: 86px;
     width: 240px;
     transition: all 0.2s;
   }

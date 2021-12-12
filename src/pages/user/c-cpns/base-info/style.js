@@ -40,21 +40,7 @@ export const BaseInfoWrapper = styled.div`
       }
     }
 
-    .position {
-      line-height: 1.5;
-
-      svg {
-        margin-right: 7.2px;
-      }
-
-      span {
-        vertical-align: top;
-      }
-    }
-
     .brief {
-      margin-top: 8.8px;
-
       svg {
         height: 21.6px;
         margin-right: 7.2px;

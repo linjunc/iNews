@@ -15,6 +15,8 @@ export const TitleWrapper = styled.div`
 `
 
 export const CalendarWrapper = styled.div`
+  margin: 20px 0;
+
   .react-calendar-heatmap text {
     font-size: 10px;
     fill: #aaa;

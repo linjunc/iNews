@@ -9,7 +9,7 @@ export const DetailWrapper = styled.main`
   transition: all 0.5s;
   font-size: 16px;
   div {
-    display: inline-block;
+    // display: inline-block;
     vertical-align: top;
   }
   .left-sidebar {
@@ -89,12 +89,13 @@ export const DetailWrapper = styled.main`
     }
   }
   .comment-container {
-    display: block;
+    position: relative;
+    display: flex;
     margin: 50px 0;
     padding: 50px 0;
-    background-color: skyblue;
+    // background-color: skyblue;
     .comment-content {
-      height: 1000px;
+      display: block;
     }
   }
   .right-sidebar {

@@ -94,6 +94,18 @@ export default function PieChart() {
           },
         },
       ],
+      color: [
+        '#5470c6',
+        '#91cc75',
+        '#fac858',
+        '#ee6666',
+        '#73c0de',
+        '#3ba272',
+        '#fc8452',
+        '#9a60b4',
+        '#ea7ccc',
+        '#5470c6',
+      ],
     }
     option && myChart.setOption(option)
     // 图表开始渲染之后取消鼠标滚动事件

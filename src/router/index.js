@@ -10,7 +10,7 @@ const Detail = lazy(() => import('../pages/detail'))
 const User = lazy(() => import('../pages/user'))
 const CovidMap = lazy(() => import('../pages/covidMap'))
 // 为个人中心中的组件配置懒加载
-const Posts = lazy(() => import('../pages/user/c-cpns/posts'))
+const PersonalPage = lazy(() => import('../pages/user/c-cpns/personal-page'))
 const Collect = lazy(() => import('../pages/user/c-cpns/collect'))
 const Likes = lazy(() => import('../pages/user/c-cpns/likes'))
 const Concern = lazy(() => import('../pages/user/c-cpns/concern'))
@@ -41,11 +41,11 @@ const routes = [
         children: [
           {
             path: '',
-            element: lazyLoad(<Posts />),
+            element: lazyLoad(<PersonalPage />),
           },
           {
-            path: 'posts',
-            element: lazyLoad(<Posts />),
+            path: 'person',
+            element: lazyLoad(<PersonalPage />),
           },
           {
             path: 'collect',

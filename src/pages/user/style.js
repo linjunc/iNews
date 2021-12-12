@@ -9,10 +9,9 @@ export const UserCenterWrapper = styled.div`
 export const LeftContainerWrapper = styled.div`
   flex: auto;
   min-width: 0;
-  height: 300px;
-  background-color: red;
 `
 
 export const ContentWrapper = styled.div`
   background-color: #fff;
+  overflow: hidden;
 `

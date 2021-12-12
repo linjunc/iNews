@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const GraphWrapper = styled.div`
   & > div {
-    width: 740px !important;
+    width: 760px !important;
     padding-bottom: 20px;
   }
 `

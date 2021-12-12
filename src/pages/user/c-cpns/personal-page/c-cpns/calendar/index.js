@@ -7,7 +7,7 @@ import {
   getRange,
   getRandomInt,
   getDaysInfoInYear,
-} from '../../../../utils/date-format'
+} from '../../../../../../utils/date-format'
 
 import { Select } from 'antd'
 
@@ -49,7 +49,7 @@ export default memo(function CalendarHotGraph() {
   return (
     <CalendarWrapper>
       <TitleWrapper>
-        <h1 className="title">阅读时间</h1>
+        <h1 className="title">阅读日历</h1>
         <Select defaultValue="2021" style={{ width: 120 }}>
           <Option value="jack">2021</Option>
         </Select>

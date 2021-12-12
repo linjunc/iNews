@@ -19,6 +19,7 @@ export default function InstrumentChart() {
       series: [
         {
           type: 'gauge',
+          name: '阅读时间',
           axisLine: {
             lineStyle: {
               width: 30,
@@ -33,6 +34,8 @@ export default function InstrumentChart() {
             itemStyle: {
               color: 'auto',
             },
+            length: '55%',
+            width: 6,
           },
           axisTick: {
             distance: -30,
@@ -52,7 +55,7 @@ export default function InstrumentChart() {
           },
           axisLabel: {
             color: 'auto',
-            distance: 40,
+            distance: 5,
             fontSize: 16,
           },
           detail: {
