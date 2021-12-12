@@ -1,7 +1,8 @@
 import { throttle } from 'lodash'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { ParallaxWrapper } from './style'
 import { getScrollTop } from '../../../../../../utils/scrollHeight'
+import { headerShowContext } from '../../../../../../models/context'
 
 const Parallax = (props) => {
   // 视差部分的引用
@@ -10,11 +11,16 @@ const Parallax = (props) => {
   const [contentTranslateY, setContentTranslateY] = useState(0)
   // 视差部分是否可见
   const [isVisiable, setIsVisiable] = useState()
+  // 头部是否可见
+  const setHeaderShow = useContext(headerShowContext)
 
   useEffect(() => {
     // 判断视差部分是否进入视窗 的observer
     const observer = new IntersectionObserver(
-      ([e]) => setIsVisiable(e.isIntersecting),
+      ([e]) => {
+        setIsVisiable(e.isIntersecting)
+        setHeaderShow(!e.isIntersecting)
+      },
       { threshold: 0 },
     )
     observer.observe(contentRef.current)

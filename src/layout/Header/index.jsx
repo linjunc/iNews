@@ -7,7 +7,7 @@ import { throttle } from 'lodash'
 import { getScrollTop } from '../../utils/scrollHeight'
 import logoSrc from '../../assets/logo/logo_text.png'
 import { MenuWrapper, FixedContainer } from './style'
-import { userContext } from '../../models/context'
+import { headerShowContext, userContext } from '../../models/context'
 import { DELETE_INFO } from '../../models/constant'
 
 const { SubMenu } = Menu
@@ -30,23 +30,13 @@ const Header = () => {
   // 获取距离顶部的距离
   const bindHandleScroll = throttle((pathname) => {
     scrollTop = getScrollTop()
-
-    // 如果在首页时，头部在一定距离内是不会呈现的
-    if (pathname === '/') {
-      if (scrollTop <= window.innerHeight * 0.7) {
-        setShow(false)
-      } else {
-        setShow(true)
-      }
-    } else {
-      // 大于一定距离并且上滚了，头部出现
-      if (scrollTop >= 700 && scrollTop >= topValue) {
-        setShow(false)
-      }
-      // 上滚
-      if (scrollTop <= topValue) {
-        setShow(true)
-      }
+    // 大于一定距离并且上滚了，头部出现
+    if (scrollTop >= 700 && scrollTop >= topValue) {
+      setShow(false)
+    }
+    // 上滚
+    if (scrollTop <= topValue) {
+      setShow(true)
     }
     setTimeout(function () {
       topValue = scrollTop
@@ -54,13 +44,11 @@ const Header = () => {
   }, 200)
   // 初始化滚动事件
   useEffect(() => {
+    // 如果是首页，让首页用context控制
+    if (pathname === '/') return
     window.addEventListener('scroll', () => {
       bindHandleScroll(pathname)
     })
-    // 如果是在首页默认不显示
-    if (pathname === '/') {
-      setShow(false)
-    }
     return () => {
       window.removeEventListener('scroll', () => {
         bindHandleScroll(pathname)
@@ -184,7 +172,12 @@ const Header = () => {
       </FixedContainer>
       {/* 占去头部的 64px */}
       <div style={{ height: '64px' }}></div>
-      <Outlet />
+
+      {/* 如果是首页，将头部显示控制交给首页控制，因为首页已经监听了滚动，再监听一次有点浪费
+      本来想用prop慢慢传，发现在Outlet就卡住了，和VueRouter的router-view不一样，最后选择context */}
+      <headerShowContext.Provider value={setShow}>
+        <Outlet />
+      </headerShowContext.Provider>
 
       {/* <div style={{ height: "1400px", backgroundColor: "skyblue" }}> ddd</div> */}
     </div>
