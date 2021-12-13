@@ -13,7 +13,7 @@ import { DELETE_INFO } from '../../models/constant'
 const { SubMenu } = Menu
 
 const Header = () => {
-  const [current, setCurrent] = useState('recommend')
+  const [current, setCurrent] = useState('app')
   const [show, setShow] = useState(true) // show 的改变导致了组件的重新渲染，怎么解决呢
   const { userInfo, userDispatch } = useContext(userContext)
   const navigate = useNavigate()

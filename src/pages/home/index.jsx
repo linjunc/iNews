@@ -9,6 +9,7 @@ import Article from './components/Article'
 import Loading from './components/Loading'
 
 import { getArticles } from '../../services/home'
+import HotArticle from './components/HotArticle'
 let num = 0
 let tag = 'recommend'
 let isOnGet = false
@@ -65,43 +66,16 @@ const Home = (props) => {
 
     tag = location.state?.current ? location.state.current : tag
 
-    getArticleList(tag)
+    console.log(tag)
+    if (tag !== 'app') getArticleList(tag)
 
-    return location.state?.current ?? 'app'
+    return tag
+    // return location.state?.current ?? 'app'
   }, [location.state])
 
-  const showLoad = () => {
-    if (onLoading) return <Loading />
-  }
-
-  useEffect(() => {
-    const handelToBottom = throttle((e) => {
-      const { clientHeight, scrollHeight, scrollTop } =
-        e.target.scrollingElement
-
-      const isBottom = scrollTop + clientHeight + 10 > scrollHeight //是否到达底部
-
-      if (isBottom) {
-        getArticleList(tag)
-      }
-    }, 1000)
-
-    window.addEventListener('scroll', handelToBottom)
-
-    return () => {
-      window.removeEventListener('scroll', handelToBottom)
-    }
-  }, [])
-
-  return (
-    <HomeContainer>
-      <Search></Search>
-      <div style={{ height: '60px', lineHeight: '60px', textAlign: 'center' }}>
-        过渡一下
-      </div>
-      {/* <Button onClick={toDetail}> 测试详情 </Button> */}
-      {/* <Skeleton active loading={homeLoading} paragraph={{ rows: 16 }} round> */}
-      {/* {channel} */}
+  const showHot = () => {
+    if (tag === 'app') return <HotArticle />
+    return (
       <div className="content">
         <div className="main">
           <List
@@ -116,6 +90,45 @@ const Home = (props) => {
         </div>
         <div className="home_right"></div>
       </div>
+    )
+  }
+
+  const showLoad = () => {
+    if (onLoading) return <Loading />
+  }
+
+  useEffect(() => {
+    const handelToBottom = throttle((e) => {
+      const { clientHeight, scrollHeight, scrollTop } =
+        e.target.scrollingElement
+
+      const isBottom = scrollTop + clientHeight + 10 > scrollHeight //是否到达底部
+
+      if (isBottom && tag !== 'app') {
+        console.log(
+          '---------------------isBottom && channel !== app---------------------',
+        )
+        getArticleList(tag)
+      }
+    }, 1000)
+
+    window.addEventListener('scroll', handelToBottom)
+
+    return () => {
+      window.removeEventListener('scroll', handelToBottom)
+    }
+  }, [])
+
+  return (
+    <HomeContainer>
+      <Search></Search>
+      {/* <div style={{ height: '60px', lineHeight: '60px', textAlign: 'center' }}>
+        过渡一下
+      </div> */}
+      {/* <Button onClick={toDetail}> 测试详情 </Button> */}
+      {/* <Skeleton active loading={homeLoading} paragraph={{ rows: 16 }} round> */}
+      {/* {channel} */}
+      {showHot()}
       {/* </Skeleton> */}
     </HomeContainer>
   )
