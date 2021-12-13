@@ -19,7 +19,7 @@ export const Artilecontainer = styled.div`
       flex-direction: column;
       justify-content: space-between;
       .article-top {
-        padding-bottom: 12px;
+        padding-bottom: 6px;
         .article-title {
           line-height: 1.5;
           font-size: 20px;
@@ -37,10 +37,12 @@ export const Artilecontainer = styled.div`
         }
       }
       .article-center {
-        padding-bottom: 12px;
+        padding-bottom: 6px;
         .article-abstract {
           display: -webkit-box;
           overflow: hidden;
+          color: #86909c;
+          font-size: 14px;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           text-overflow: ellipsis;
@@ -49,6 +51,7 @@ export const Artilecontainer = styled.div`
       }
       .article-bottom {
         color: #999;
+        font-size: 12px;
         .media_name {
           cursor: pointer;
           margin-right: 20px;
