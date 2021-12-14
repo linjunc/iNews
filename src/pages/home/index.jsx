@@ -29,10 +29,10 @@ const Home = (props) => {
       setOnLoading(true) //开启加载中
       const data = await getArticles({
         tag,
-        n: 10,
+        n: 8,
         skip: num,
       })
-      num = num + 10 //跳过的条数增加
+      num = num + 8 //跳过的条数增加
 
       const newList = data?.data?.article_list ? data.data.article_list : []
       if (!newList.length) hasMore = false
@@ -41,6 +41,7 @@ const Home = (props) => {
 
       // setHomeLoading(false) //骨架消失
     } catch (error) {
+      // throttle()
       message.error('数据获取失败,请重试！')
     } finally {
       isOnGet = false
@@ -97,19 +98,39 @@ const Home = (props) => {
     if (onLoading) return <Loading />
   }
 
+  // // 判断滚动方向
+  // // let scrollTop = 0
+  let topValue = 0
+
+  // const bindHandleScroll = throttle(() => {
+  //   // 下滚
+  //   if (scrollTop <= topValue) {
+  //   }
+  //   setTimeout(function () {
+  //     topValue = scrollTop
+  //   }, 0)
+  // }, 200)
+
   useEffect(() => {
     const handelToBottom = throttle((e) => {
+      // console.log(e.target.scrollingElement)
       const { clientHeight, scrollHeight, scrollTop } =
         e.target.scrollingElement
 
       const isBottom = scrollTop + clientHeight + 10 > scrollHeight //是否到达底部
 
-      if (isBottom && tag !== 'app') {
-        console.log(
-          '---------------------isBottom && channel !== app---------------------',
-        )
-        getArticleList(tag)
+      // 下滚
+      if (scrollTop > topValue) {
+        if (isBottom && tag !== 'app') {
+          console.log(
+            '---------------------isBottom && channel !== app---------------------',
+          )
+          getArticleList(tag)
+        }
       }
+      setTimeout(function () {
+        topValue = scrollTop
+      }, 0)
     }, 1000)
 
     window.addEventListener('scroll', handelToBottom)
