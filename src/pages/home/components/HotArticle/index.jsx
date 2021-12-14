@@ -146,6 +146,7 @@ const HotArticle = ({ data }) => {
               {dataArray.map((data) => (
                 <div className="Carousel_node" key={data}>
                   <img className="hot_img" src={data.image_url} alt="" />
+                  <div className="vague"></div>
                   <div className="detail">
                     <h2 className="title">{data.title}</h2>
                     <p className="abstract">{data.abstract}</p>

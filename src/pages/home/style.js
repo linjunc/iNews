@@ -10,14 +10,15 @@ export const HomeContainer = styled.div`
     justify-content: space-between;
     transform: translate(-50%, 0);
     .main {
+      min-height: 700px;
       width: 710px;
-      padding: 0 18px 0px 18px;
+      margin: 20px 0;
+      padding: 0 18px 50px 18px;
       background-color: #fff;
     }
     .home_right {
       margin-left: -350px;
       width: 280px;
-      height: 1500px;
       background-color: yellow;
     }
   }

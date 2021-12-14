@@ -1,10 +1,59 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { SliderWrapper } from './style'
+
+let clickFlag = true
 const Slider = ({ dataArray, next, prev }) => {
+  const [num, setNum] = useState(5) //轮播所在位置
+  const [timer, setTimer] = useState(0) //transition的delay
+  const handelTimer = () => {
+    //处理delay及flag
+    setTimer(1.5)
+    let close = setTimeout(() => {
+      setTimer(0)
+      clearTimeout(close)
+      clickFlag = true
+    }, 1500)
+  }
+  const backTo = (num) => {
+    //改变num以改变位移
+    setNum(num)
+  }
+  const ckeckFlag = () => {
+    //检查是否在动画过程
+    if (!clickFlag) return
+    clickFlag = false
+  }
+  const handelClickLeft = () => {
+    ckeckFlag()
+    prev()
+
+    if (num <= 0) {
+      backTo(5)
+    }
+    let beAfter = setTimeout(() => {
+      //回到5的位置后继续位移
+      setNum((num) => num - 1)
+      handelTimer()
+      clearTimeout(beAfter)
+    }, 0)
+  }
+  const handelClickRight = () => {
+    ckeckFlag()
+    next()
+    if (num > 4) {
+      backTo(0)
+    }
+    let beAfter = setTimeout(() => {
+      //回到0的位置后继续位移
+      setNum((num) => num + 1)
+      handelTimer()
+      clearTimeout(beAfter)
+    }, 0)
+  }
   const sliderArr = dataArray.map((item) => {
     return {
       image_url: item.image_url,
-      isHidden: false,
     }
   })
   const [newSliderArr, setNewSliderArr] = useState([
@@ -12,50 +61,26 @@ const Slider = ({ dataArray, next, prev }) => {
     ...sliderArr,
     ...sliderArr,
   ])
-  const [index, setIndex] = useState(0)
-  useEffect(() => {
-    return () => {}
-  }, [index])
   return (
-    <div className="slider_wrapper">
-      <LeftOutlined
-        onClick={() => {
-          prev()
-          setIndex(index - 1)
-          setNewSliderArr((value) => {
-            const arrTemp = [...value]
-            let node = arrTemp.pop()
-            arrTemp.unshift(node)
-            return arrTemp
-          })
-        }}
-        className="left_before"
-      />
-      <ul className="slider">
-        {newSliderArr.map((data, index) => (
-          <li
-            className="slider_node"
-            style={{ display: index >= 8 ? 'none' : '' }}
-            key={index}
-          >
-            <img className="hot_img" src={data.image_url} alt="" />
-          </li>
-        ))}
-      </ul>
-      <RightOutlined
-        onClick={() => {
-          next()
-          setIndex(index + 1)
-          setNewSliderArr((value) => {
-            const arrTemp = [...value]
-            arrTemp.shift()
-            arrTemp.push(value[1])
-            return arrTemp
-          })
-        }}
-        className="right_next"
-      />
-    </div>
+    <SliderWrapper>
+      <div className="slider_wrapper">
+        <LeftOutlined onClick={handelClickLeft} className="left_before" />
+        <ul
+          style={{
+            transform: `translateX(${-90 * num + 'px'})`,
+            transition: `all ${timer}s`,
+          }}
+          className="slider"
+        >
+          {newSliderArr.map((data, index) => (
+            <li className="slider_node" key={data.image_url + Math.random()}>
+              <img className="hot_img" src={data.image_url} alt="" />
+            </li>
+          ))}
+        </ul>
+        <RightOutlined onClick={handelClickRight} className="right_next" />
+      </div>
+    </SliderWrapper>
   )
 }
 

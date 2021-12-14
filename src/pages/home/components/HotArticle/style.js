@@ -6,9 +6,19 @@ export const HotArticlecontainer = styled.div`
       .main {
         .Carousel_node {
           position: relative;
+          padding: 20px 0;
           .hot_img {
             width: 100%;
             height: 500px;
+          }
+          .vague {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 500px;
+            width: 100%;
+            background-color: black;
+            opacity: 0.6;
           }
           .detail {
             position: absolute;
@@ -38,47 +48,6 @@ export const HotArticlecontainer = styled.div`
               -webkit-box-orient: vertical;
               text-overflow: ellipsis;
             }
-          }
-        }
-        .slider_wrapper {
-          position: relative;
-          width: 100%;
-          overflow: hidden;
-          .slider {
-            display: flex;
-            transition: all 1.5s;
-            .slider_node {
-              .hot_img {
-                width: 85px;
-                height: 75px;
-              }
-            }
-          }
-          .left_before,
-          .right_next {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 30px;
-            height: 75px;
-            line-height: 75px;
-            background-color: #eee;
-            z-index: 99;
-            text-align: center;
-            color: #000;
-            font-size: 21px;
-            transition: all 0.3s;
-            box-shadow: 0 10px 40px rgb(0 0 0 / 15%);
-            cursor: pointer;
-          }
-          .left_before:hover,
-          .right_next:hover {
-            background-color: #1890ff;
-            color: #fff;
-          }
-          .right_next {
-            left: calc(100% - 30px);
           }
         }
       }
