@@ -19,13 +19,10 @@ const Slider = ({ dataArray, next, prev }) => {
     //改变num以改变位移
     setNum(num)
   }
-  const ckeckFlag = () => {
+  const handelClickLeft = () => {
     //检查是否在动画过程
     if (!clickFlag) return
     clickFlag = false
-  }
-  const handelClickLeft = () => {
-    ckeckFlag()
     prev()
 
     if (num <= 0) {
@@ -39,7 +36,9 @@ const Slider = ({ dataArray, next, prev }) => {
     }, 0)
   }
   const handelClickRight = () => {
-    ckeckFlag()
+    //检查是否在动画过程
+    if (!clickFlag) return
+    clickFlag = false
     next()
     if (num > 4) {
       backTo(0)
