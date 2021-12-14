@@ -4,7 +4,7 @@ import Carousel from './components/Carousel'
 import Triggers from './components/Triggers'
 import PageHeader from './components/PageHeader'
 // import Logo from "../../../../assets/logo/logo.png"
-import LogoText from '../../../../assets/logo/logo_text.png'
+import LogoWhiteText from '../../../../assets/logo/logo_white_text.png'
 import { SearchOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 
@@ -29,7 +29,7 @@ const Search = () => {
       <div className="absolute-wrapper">
         <PageHeader></PageHeader>
         <div className="search-wrapper">
-          <img className="logo" src={LogoText} alt="iNews" />
+          <img className="logo" src={LogoWhiteText} alt="iNews" />
           {/* <div className="logo"></div> */}
           <div className="search-box">
             <input type="text" className="input" autoFocus />
