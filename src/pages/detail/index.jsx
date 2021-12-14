@@ -1,5 +1,5 @@
 // 文章详情
-import React, { memo, useEffect, useState, createElement } from 'react'
+import React, { memo, useEffect, useState, createElement, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
@@ -80,6 +80,8 @@ const Detail = memo(() => {
     commentNum: 0,
     collectNum: 0,
   })
+  const timeRef = useRef(0)
+  const tagRef = useRef('')
   const [comment_content, setComments] = useState() // 评论区数据
   const [likes, setLikes] = useState(0) //设置喜欢
   const [dislikes, setDislikes] = useState(0) //设置👎
@@ -190,8 +192,8 @@ const Detail = memo(() => {
           message.warn('您本次阅读时间已经持续了一个小时，请稍作休息噢~')
         }
         // 成功获取文章后，记录当前的时间戳，以及文章的标签
-        startTime = dayjs().valueOf()
-        tag = article.tag
+        timeRef.current = dayjs().valueOf()
+        tagRef.current = article.tag
       } catch (error) {
         // 获取失败直接返回首页
         message.error('加载失败，请重试')
@@ -204,13 +206,16 @@ const Detail = memo(() => {
     return () => {
       // 组件卸载，停止播放
       speak().cancel()
-      // 计算本次阅读时间
-      const timing = dayjs().valueOf() - startTime
       // 发送数据给后台
-      console.log(tag)
-      // 记录单次阅读时间
-      const lastTime = JSON.parse(sessionStorage.getItem('timing')) ?? 0
-      sessionStorage.setItem('timing', timing + lastTime)
+      // 当没有数据时，不做处理
+      if (tagRef.current) {
+        // 记录单次阅读时间
+        // 计算本次阅读时间
+        const timing = dayjs().valueOf() - timeRef.current
+        console.log(tagRef.current, timing)
+        const lastTime = JSON.parse(sessionStorage.getItem('timing')) ?? 0
+        sessionStorage.setItem('timing', timing + lastTime)
+      }
     }
   }, [id, navigate])
 
