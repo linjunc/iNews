@@ -1,13 +1,17 @@
-//热点
-import { Carousel } from 'antd'
-import React, { useRef } from 'react'
-import HotRecommend from './HotRecommend'
-import Slider from './Slider'
-import { HotArticlecontainer } from './style'
+import { Image, List } from 'antd'
+import { HotRecommendWrapper } from './style'
+import notFound from '../../../../../assets/home/404.svg'
+import logo from '../../../../../assets/logo/logo.png'
 import { useNavigate } from 'react-router-dom'
-const HotArticle = ({ data }) => {
-  // 轮播图数据
-  const dataArray = [
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import CenterLine from '../../../../detail/components/CenterLine'
+// dayjs 配置
+dayjs.locale('zh-cn') // use locale
+dayjs.extend(relativeTime)
+const HotRecommend = () => {
+  const hotList = [
     {
       article_id: '61aaf83957145eb325629666',
       publish_time: '1634717676',
@@ -25,10 +29,9 @@ const HotArticle = ({ data }) => {
       abstract:
         '云南瑞丽建材市场，熙熙攘攘热闹非凡，谁都希望自己有个好邻居，偶尔碰到急事儿，相互之间有个照应。市场里有个商铺老板，长得是文质彬彬，得了个外号叫“眼镜”，他极力伪装自己的善良人设，努力经营家庭和事业，从不跟周围的任何人吵架。',
       tag: 'news_society',
-      digg_count: 9603,
+      digg_count: 9602,
       comment_count: 258,
       has_image: true,
-      group_id: '7017607743439651336',
       image_list: [
         'https://p3.toutiaoimg.com/list/pgc-image/ebda9d34d908475ba723000abf23fc7c',
         'https://p3.toutiaoimg.com/list/pgc-image/ebda9d34d908475ba723000abf23fc7c',
@@ -56,7 +59,6 @@ const HotArticle = ({ data }) => {
       digg_count: 222,
       comment_count: 89,
       has_image: true,
-      group_id: '7028736336752296488',
       image_list: [],
     },
     {
@@ -80,7 +82,6 @@ const HotArticle = ({ data }) => {
       digg_count: 2589,
       comment_count: 222,
       has_image: true,
-      group_id: '7008788334466089506',
       image_list: [],
     },
     {
@@ -103,7 +104,6 @@ const HotArticle = ({ data }) => {
       digg_count: 366,
       comment_count: 114,
       has_image: true,
-      group_id: '7037442092582306340',
       image_list: [],
     },
     {
@@ -127,7 +127,29 @@ const HotArticle = ({ data }) => {
       digg_count: 771,
       comment_count: 197,
       has_image: true,
-      group_id: '7029568684570001935',
+      image_list: [],
+    },
+    {
+      article_id: '61aafca475ca51af3981360a',
+      publish_time: 1638089422,
+      image_url:
+        'https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/4268d818749c45ada21d2644d4c12abe',
+      media_id: '61adf20cf1bfdb0262ab931c',
+      media_user: {
+        media_name: '全民历史观',
+        avatar_url:
+          'http://p6.toutiaoimg.com/img/user-avatar/45c0bb850741fce961ca1d9b6d95952d~120x256.image',
+        follower_count: '1164391',
+        media_info: '这是全民历史观的信息，这是信息',
+      },
+      like_count: 151,
+      title: '08年汶川地震，为紧急救援15勇士5000米高空跳下，后来他们怎样了',
+      abstract:
+        '2008年5月14日11时47分，距离汶川8级地震40多小时，四川茂县5000米高空，一声声激昂的呐喊声响彻云霄。',
+      tag: 'news_society',
+      digg_count: 1194,
+      comment_count: 163,
+      has_image: true,
       image_list: [],
     },
   ]
@@ -136,47 +158,48 @@ const HotArticle = ({ data }) => {
     //跳转详情
     navigate(`/detail/${data.article_id}`) // id
   }
-
-  const hot_carousel = useRef(null)
-  const next = () => {
-    hot_carousel.current.next()
-  }
-  const prev = () => {
-    hot_carousel.current.prev()
-  }
-
   return (
-    <HotArticlecontainer>
-      <div className="hot_article">
-        <div className="content">
-          <div className="main">
-            <Carousel ref={hot_carousel} dots={false} effect="fade">
-              {dataArray.map((data) => (
-                <div
-                  onClick={() => {
-                    toDetail(data)
-                  }}
-                  className="Carousel_node"
-                  key={data}
-                >
-                  <img className="hot_img" src={data.image_url} alt="" />
-                  <div className="vague"></div>
-                  <div className="detail">
-                    <h2 className="title">{data.title}</h2>
-                    <p className="abstract">{data.abstract}</p>
-                  </div>
-                </div>
-              ))}
-            </Carousel>
-            <Slider dataArray={dataArray} next={next} prev={prev} />
+    <HotRecommendWrapper>
+      <div className="hot_recommend">
+        {/* 广告 */}
+        <div className="hot-advertise">
+          <div className="our-logo">
+            <img src={logo} alt="" />
           </div>
-          <div className="home_right hot_right">
-            <HotRecommend />
+          <div className="our-text">
+            <div className="our-title">iNews 新闻门户网站</div>
+            <div className="our-slogan">更轻、更快、更有趣</div>
+            <div className="our-info">欢迎加入我们</div>
           </div>
         </div>
+        <CenterLine title="热门推荐" />
+        {hotList?.map((article) => (
+          <div
+            key={article.article_id}
+            className="author-article"
+            onClick={() => toDetail(article)}
+          >
+            <div className="article-list-img">
+              <Image
+                preview={false}
+                src={article?.image_url}
+                fallback={notFound}
+              />
+            </div>
+            <div className="article-list-right">
+              <div className="article-list-title">{article?.title}</div>
+              <div className="article-list-num">
+                <div className="article-read">{article?.like_count} 阅读</div>
+                <div className="article-time">
+                  {dayjs(parseInt(article.publish_time + '000')).fromNow()}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-    </HotArticlecontainer>
+    </HotRecommendWrapper>
   )
 }
 
-export default HotArticle
+export default HotRecommend

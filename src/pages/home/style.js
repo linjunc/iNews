@@ -19,7 +19,6 @@ export const HomeContainer = styled.div`
     .home_right {
       margin-left: -350px;
       width: 280px;
-      background-color: yellow;
     }
   }
 `
