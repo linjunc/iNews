@@ -1,17 +1,12 @@
-import { Image } from 'antd'
-import { HotRecommendWrapper } from './style'
-import notFound from '../../../../../assets/home/404.svg'
-import logo from '../../../../../assets/logo/logo.png'
-import { useNavigate } from 'react-router-dom'
-import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import CenterLine from '../../../../detail/components/CenterLine'
-// dayjs 配置
-dayjs.locale('zh-cn') // use locale
-dayjs.extend(relativeTime)
-const HotRecommend = () => {
-  const hotList = [
+import { RightContentWrapper } from './style'
+import logo from '../../../../assets/logo/logo.png'
+import { Button, List } from 'antd'
+import { useNavigate } from 'react-router'
+import CenterLine from '../../../detail/components/CenterLine'
+const RightContent = () => {
+  const isLogin = localStorage.getItem('token') ? true : false
+
+  const rankList = [
     {
       article_id: '61aaf83957145eb325629666',
       publish_time: '1634717676',
@@ -29,9 +24,10 @@ const HotRecommend = () => {
       abstract:
         '云南瑞丽建材市场，熙熙攘攘热闹非凡，谁都希望自己有个好邻居，偶尔碰到急事儿，相互之间有个照应。市场里有个商铺老板，长得是文质彬彬，得了个外号叫“眼镜”，他极力伪装自己的善良人设，努力经营家庭和事业，从不跟周围的任何人吵架。',
       tag: 'news_society',
-      digg_count: 9602,
+      digg_count: 9603,
       comment_count: 258,
       has_image: true,
+      group_id: '7017607743439651336',
       image_list: [
         'https://p3.toutiaoimg.com/list/pgc-image/ebda9d34d908475ba723000abf23fc7c',
         'https://p3.toutiaoimg.com/list/pgc-image/ebda9d34d908475ba723000abf23fc7c',
@@ -59,6 +55,7 @@ const HotRecommend = () => {
       digg_count: 222,
       comment_count: 89,
       has_image: true,
+      group_id: '7028736336752296488',
       image_list: [],
     },
     {
@@ -82,6 +79,7 @@ const HotRecommend = () => {
       digg_count: 2589,
       comment_count: 222,
       has_image: true,
+      group_id: '7008788334466089506',
       image_list: [],
     },
     {
@@ -104,6 +102,7 @@ const HotRecommend = () => {
       digg_count: 366,
       comment_count: 114,
       has_image: true,
+      group_id: '7037442092582306340',
       image_list: [],
     },
     {
@@ -127,79 +126,84 @@ const HotRecommend = () => {
       digg_count: 771,
       comment_count: 197,
       has_image: true,
-      image_list: [],
-    },
-    {
-      article_id: '61aafca475ca51af3981360a',
-      publish_time: 1638089422,
-      image_url:
-        'https://p3.toutiaoimg.com/list/tos-cn-i-qvj2lq49k0/4268d818749c45ada21d2644d4c12abe',
-      media_id: '61adf20cf1bfdb0262ab931c',
-      media_user: {
-        media_name: '全民历史观',
-        avatar_url:
-          'http://p6.toutiaoimg.com/img/user-avatar/45c0bb850741fce961ca1d9b6d95952d~120x256.image',
-        follower_count: '1164391',
-        media_info: '这是全民历史观的信息，这是信息',
-      },
-      like_count: 151,
-      title: '08年汶川地震，为紧急救援15勇士5000米高空跳下，后来他们怎样了',
-      abstract:
-        '2008年5月14日11时47分，距离汶川8级地震40多小时，四川茂县5000米高空，一声声激昂的呐喊声响彻云霄。',
-      tag: 'news_society',
-      digg_count: 1194,
-      comment_count: 163,
-      has_image: true,
+      group_id: '7029568684570001935',
       image_list: [],
     },
   ]
+
   const navigate = useNavigate()
+  const toLogin = () => {
+    navigate(`/login`)
+  }
+
   const toDetail = (data) => {
     //跳转详情
     navigate(`/detail/${data.article_id}`) // id
   }
-  return (
-    <HotRecommendWrapper>
-      <div className="hot_recommend">
-        {/* 广告 */}
-        <div className="hot-advertise">
-          <div className="our-logo">
-            <img src={logo} alt="" />
-          </div>
-          <div className="our-text">
-            <div className="our-title">iNews 新闻门户网站</div>
-            <div className="our-slogan">更轻、更快、更有趣</div>
-            <div className="our-info">欢迎加入我们</div>
+  const showInfo = () => {
+    if (!isLogin)
+      return (
+        <div className="info">
+          <img className="logo" src={logo} alt="" />
+          <div className="wrapper">
+            <div className="title">
+              <p>登录INEWS后</p>
+              <p>内容更有趣</p>
+            </div>
+            <div className="btnWrapper">
+              <Button onClick={toLogin} className="loginBtn" type="primary">
+                立即登录
+              </Button>
+            </div>
           </div>
         </div>
-        <CenterLine title="热门推荐" />
-        {hotList?.map((article) => (
-          <div
-            key={article.article_id}
-            className="author-article"
-            onClick={() => toDetail(article)}
-          >
-            <div className="article-list-img">
-              <Image
-                preview={false}
-                src={article?.image_url}
-                fallback={notFound}
-              />
-            </div>
-            <div className="article-list-right">
-              <div className="article-list-title">{article?.title}</div>
-              <div className="article-list-num">
-                <div className="article-read">{article?.like_count} 阅读</div>
-                <div className="article-time">
-                  {dayjs(parseInt(article.publish_time + '000')).fromNow()}
-                </div>
-              </div>
-            </div>
+      )
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    console.log(userInfo)
+    return (
+      <div className="info">
+        <img className="logo" src={logo} alt="" />
+        <div className="wrapper">
+          <div className="avatar">
+            <img className="avatarImg" src={userInfo.avatar} alt="" />
           </div>
-        ))}
+          <div className="nickname">
+            {userInfo.nickname || '用户1234567890'}
+          </div>
+        </div>
       </div>
-    </HotRecommendWrapper>
+    )
+  }
+  return (
+    <RightContentWrapper>
+      <div className="right_content">
+        {showInfo()}
+        <div className="hot_rank">
+          <CenterLine title="热门榜单" />
+          <List
+            dataSource={rankList}
+            renderItem={(item, index) => (
+              <List.Item
+                style={{ justifyContent: 'left' }}
+                key={item.article_id}
+              >
+                <span ranknum={index} className="rank">
+                  {index + 1}
+                </span>
+                <h4
+                  onClick={() => {
+                    toDetail(item)
+                  }}
+                  className="title"
+                >
+                  {item.title}
+                </h4>
+              </List.Item>
+            )}
+          />
+        </div>
+      </div>
+    </RightContentWrapper>
   )
 }
-
-export default HotRecommend
+export default RightContent

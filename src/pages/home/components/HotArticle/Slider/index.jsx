@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import { SliderWrapper } from './style'
 
@@ -8,12 +8,12 @@ const Slider = ({ dataArray, next, prev }) => {
   const [timer, setTimer] = useState(0) //transition的delay
   const handelTimer = () => {
     //处理delay及flag
-    setTimer(1.5)
+    setTimer(0.8)
     let close = setTimeout(() => {
       setTimer(0)
       clearTimeout(close)
       clickFlag = true
-    }, 1500)
+    }, 800)
   }
   const backTo = (num) => {
     //改变num以改变位移

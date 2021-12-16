@@ -5,7 +5,7 @@ import HotRecommend from './HotRecommend'
 import Slider from './Slider'
 import { HotArticlecontainer } from './style'
 import { useNavigate } from 'react-router-dom'
-const HotArticle = ({ data }) => {
+const HotArticle = () => {
   // 轮播图数据
   const dataArray = [
     {
