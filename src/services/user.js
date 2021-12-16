@@ -7,6 +7,7 @@ export const getUserInfo = (options) => {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
+    params: options,
   })
 }
 
@@ -14,6 +15,15 @@ export const getUserInfo = (options) => {
 export const FocusAuthor = (options) => {
   return instance({
     url: '/follow_media',
+    method: 'PUT',
+    data: options,
+  })
+}
+
+// 更改用户信息
+export const setUserInfo = (options) => {
+  return instance({
+    url: '/set_user_info',
     method: 'PUT',
     data: options,
   })

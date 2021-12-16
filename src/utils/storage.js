@@ -15,7 +15,7 @@ export const getSession = (itemName) => {
 
 // 存取数据到会话数据的函数
 export const setSession = (itemName, item) => {
-  sessionStorage.getItem(itemName, item)
+  sessionStorage.setItem(itemName, item)
 }
 
 // 将取出来数据中的实体字符转为innerHTML能够解析成的标签形式
