@@ -13,7 +13,7 @@ import { Select } from 'antd'
 
 import { CalendarWrapper, TitleWrapper, ButtonWrapper } from './style'
 
-export default memo(function CalendarHotGraph(props) {
+export default memo(function CalendarHotGraph() {
   const { Option } = Select
   // 该函数用于将每一天对应的date和count，返回的是一年中包含这些数据的新数组；最终是要传递给日历组件的
   const { allDays, endDay } = getDaysInfoInYear()

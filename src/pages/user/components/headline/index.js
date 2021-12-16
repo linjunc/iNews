@@ -79,12 +79,8 @@ export default memo(function ListHeader() {
       title: '我的收藏',
     },
     {
-      pathname: 'tags',
+      pathname: 'concern',
       title: '关注列表',
-    },
-    {
-      pathname: 'report',
-      title: '年度报告',
     },
   ]
 

@@ -7,7 +7,6 @@ import { SettingHeaderWrapper } from './style'
 
 export default function SettingHeader() {
   const { user_id: id } = JSON.parse(getLocal('userInfo'))
-  console.log(id)
 
   return (
     <SettingHeaderWrapper className="middle-item">

@@ -1,4 +1,7 @@
 import React from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+
+import { CSSTransition } from 'react-transition-group'
 
 import {
   RightContainerWrapper,
@@ -8,6 +11,9 @@ import {
 } from './style'
 
 export default function RightContainer() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   // 模拟店在哪数、关注数、评论数等数据
   const likeNum = 70
   const concernNum = 12
@@ -42,7 +48,6 @@ export default function RightContainer() {
       num: '2021-12-10',
     },
   ]
-
   return (
     <RightContainerWrapper>
       <div className="sticky">
@@ -94,6 +99,27 @@ export default function RightContainer() {
             )
           })}
         </CollectionInfoWrapper>
+        {(() => {
+          // 根据路径判断用户当前是否处于年度报告页面，如果在，则不显示图片
+          const pathname = location.pathname
+          const flagStr = pathname.substring(pathname.length - 6)
+          return (
+            flagStr !== 'report' && (
+              <CSSTransition
+                timeout={1000}
+                classNames="report"
+                in={true}
+                appear
+              >
+                <div
+                  className="report-enter"
+                  title="打开年度报告"
+                  onClick={(e) => navigate('report')}
+                ></div>
+              </CSSTransition>
+            )
+          )
+        })()}
       </div>
     </RightContainerWrapper>
   )

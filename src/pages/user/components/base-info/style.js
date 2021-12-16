@@ -20,7 +20,7 @@ export const BaseInfoWrapper = styled.div`
   .info-box {
     flex-direction: column;
     flex: 1 1 auto;
-    min-height: 24px;
+    min-height: 50px;
     font-size: 14px;
     color: #72777b;
 
