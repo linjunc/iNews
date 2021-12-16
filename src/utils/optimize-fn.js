@@ -15,7 +15,7 @@ import { getScrollTop } from './scrollHeight'
 // }
 
 // 在个人主页使用报告中要使用的懒加载函数
-export const lazyload = (graphRef, initChart) => {
+export const lazyLoad = (graphRef, initChart) => {
   // 这里通过闭包让懒加载函数能够访问到dom元素和要执行的函数
   return () => {
     // 可视区域高度

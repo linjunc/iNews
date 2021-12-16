@@ -5,7 +5,6 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { Image } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
-import notFound from '../../../../assets/home/404.svg'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -30,7 +29,9 @@ const Article = ({ data }) => {
           onClick={toDetail}
           className="article-img"
           src={data.image_url}
-          fallback={notFound}
+          onError={(event) => {
+            event.target.parentNode.parentNode.style.display = 'none'
+          }}
         />
       </div>
     ) : null
@@ -51,7 +52,7 @@ const Article = ({ data }) => {
           <div className="article-bottom">
             <span className="media_name">{data.media_user.media_name}</span>
             <span onClick={toDetail} className="comment_count">
-              {data.comment_count}评论
+              {data.comment_count} 评论
             </span>
             <span className="publish_time">
               {

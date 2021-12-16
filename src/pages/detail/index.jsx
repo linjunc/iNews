@@ -1,5 +1,5 @@
 // 文章详情
-import React, { memo, useEffect, useState, createElement } from 'react'
+import React, { memo, useEffect, useState, createElement, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
@@ -73,33 +73,20 @@ const Detail = memo(() => {
     commentNum: 0,
     collectNum: 0,
   })
+  const timeRef = useRef(0)
+  const tagRef = useRef('')
   const [comment_content, setComments] = useState() // 评论区数据
   const [isComment, setisComment] = useState(false) // 评论区是否有评论
   // 初始化文章数据
   useEffect(() => {
-    let startTime = 0
-    let tag = ''
     const getArticle = async () => {
       setArtLoading(true)
+      // setSideLoading(true)
+      setArticleList([])
       try {
         const res = await getArticleDetail({ item_id: id })
-        // //获取评论区的数据
-        // const res_comment = await get_comments({
-        //   article_id: id,
-        //   n: 10,
-        //   skip: 2,
-        // })
         const { article } = res.data
         const { judge } = res.data
-        // //存储评论
-        // setComments(res_comment.data.comment_list)
-        // console.log("评论区数据")
-        // console.log(res_comment.data)
-        // // 评论区状态判断
-        // if(res_comment.data.code === 204){
-        //   setisComment(true)
-        //   console.log('暂时没有评论')
-        // }
         // 存储文章点赞数据
         setNumGroup({
           loveNum: article.digg_count,
@@ -118,16 +105,17 @@ const Detail = memo(() => {
           .unix(article.publish_time)
           .format('YYYY-MM-DD HH:mm')
         setArticle(article)
+        setArtLoading(false)
         // 获取用户热门文章
         const userArticle = await getArticleList({
           user_id: article.media_id,
-          n: '5',
+          n: '3',
           skip: '0',
         })
         // 获取标签相关的文章
         const tagArticle = await getArticleByTag({
           tag: article.tag,
-          n: '5',
+          n: '3',
           skip: '0',
         })
         // 热门文章数据
@@ -147,6 +135,7 @@ const Detail = memo(() => {
           ).fromNow()
         })
         // 添加文章列表数据
+        // setSideLoading(true)
         setArticleList([articleList, tagArticleList])
         // 用户阅读时间过长提醒
         const readLongTime = sessionStorage.getItem('timing')
@@ -155,13 +144,12 @@ const Detail = memo(() => {
           message.warn('您本次阅读时间已经持续了一个小时，请稍作休息噢~')
         }
         // 成功获取文章后，记录当前的时间戳，以及文章的标签
-        startTime = dayjs().valueOf()
-        tag = article.tag
+        timeRef.current = dayjs().valueOf()
+        tagRef.current = article.tag
       } catch (error) {
         // 获取失败直接返回首页
         message.error('加载失败，请重试')
         navigate('/')
-      } finally {
         setArtLoading(false)
       }
     }
@@ -169,13 +157,16 @@ const Detail = memo(() => {
     return () => {
       // 组件卸载，停止播放
       speak().cancel()
-      // 计算本次阅读时间
-      const timing = dayjs().valueOf() - startTime
       // 发送数据给后台
-      console.log(tag)
-      // 记录单次阅读时间
-      const lastTime = JSON.parse(sessionStorage.getItem('timing')) ?? 0
-      sessionStorage.setItem('timing', timing + lastTime)
+      // 当没有数据时，不做处理
+      if (tagRef.current) {
+        // 记录单次阅读时间
+        // 计算本次阅读时间
+        const timing = dayjs().valueOf() - timeRef.current
+        console.log(tagRef.current, timing)
+        const lastTime = JSON.parse(sessionStorage.getItem('timing')) ?? 0
+        sessionStorage.setItem('timing', timing + lastTime)
+      }
     }
   }, [id, navigate])
 
@@ -418,11 +409,18 @@ const Detail = memo(() => {
             </Button>
           </div>
           {/* 虚线 */}
-          <CenterLine title="作者热门文章" />
-          {/* 作者热门文章 */}
-          <ArticleSide articleList={articleList[0]} />
-          <CenterLine title="相关推荐" />
-          <ArticleSide articleList={articleList[1]} />
+          <Skeleton
+            active
+            loading={!articleList[1]}
+            paragraph={{ rows: 16 }}
+            round
+          >
+            <CenterLine title="作者热门文章" />
+            {/* 作者热门文章 */}
+            <ArticleSide articleList={articleList[0]} />
+            <CenterLine title="相关推荐" />
+            <ArticleSide articleList={articleList[1]} />
+          </Skeleton>
           {/* 广告 */}
           <div className="hot-advertise">
             <div className="our-logo">
@@ -437,8 +435,14 @@ const Detail = memo(() => {
           {/* 下滑过长后的固定右侧 */}
           <div className={show ? 'sticky-box show' : 'sticky-box'}>
             {/* 作者信息 */}
+            {/* 作者信息 */}
             <div className="author-info">
-              <div className="author-head">
+              <div
+                onClick={() => {
+                  navigate(`/user/${article.media_id}`)
+                }}
+                className="author-head"
+              >
                 <img src={article?.media_user?.avatar_url} alt="" />
               </div>
               <div className="author-name">
@@ -447,8 +451,17 @@ const Detail = memo(() => {
               <div className="author-des">
                 {article?.media_user?.media_info}
               </div>
-              <Button type="primary" className="author-love">
-                + 关注
+              <Button
+                onClick={focusUser}
+                type="primary"
+                style={
+                  focusGroup.focus
+                    ? { backgroundColor: '#2ecc71', border: 'none' }
+                    : {}
+                }
+                className="author-love"
+              >
+                {focusGroup.focus ? '已关注' : '+ 关注'}
               </Button>
             </div>
             {/* 广告 */}
@@ -462,8 +475,15 @@ const Detail = memo(() => {
                 <div className="our-info">欢迎加入我们</div>
               </div>
             </div>
-            <CenterLine title="相关推荐" />
-            <ArticleSide articleList={articleList[1]} />
+            <Skeleton
+              active
+              loading={!articleList[1]}
+              paragraph={{ rows: 16 }}
+              round
+            >
+              <CenterLine title="相关推荐" />
+              <ArticleSide articleList={articleList[1]} />
+            </Skeleton>
           </div>
           {/* 热榜 */}
           <div className="hot-list"></div>

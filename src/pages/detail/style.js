@@ -73,6 +73,8 @@ export const DetailWrapper = styled.main`
       }
     }
     .article-container {
+      width: 100%;
+      overflow: hidden;
       h1 {
         font-size: 30px;
         line-height: 1.5;

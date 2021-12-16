@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table } from 'antd'
 import jsonp from 'jsonp'
 import { MapListContainer } from './style'
@@ -14,6 +14,10 @@ const MapList = () => {
       {},
       (err, data) => {
         if (!err) {
+          // 添加 key 值
+          data.data.list.forEach((item, index) => {
+            item['key'] = index
+          })
           // 数据整理
           setListData(data.data.list)
           console.log(data.data.list)
@@ -27,6 +31,7 @@ const MapList = () => {
       title: '地区',
       dataIndex: 'name',
       className: 'nameColumn',
+      key: 'address',
     },
     {
       title: '现有',
@@ -34,24 +39,28 @@ const MapList = () => {
       className: 'econColumn',
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.econNum - b.econNum,
+      key: 'now',
     },
     {
       title: '累计',
       dataIndex: 'value',
       className: 'valueColumn',
       sorter: (a, b) => a.value - b.value,
+      key: 'all',
     },
     {
       title: '治愈',
       dataIndex: 'cureNum',
       className: 'cureNumColumn',
       sorter: (a, b) => a.cureNum - b.cureNum,
+      key: 'cure',
     },
     {
       title: '死亡',
       dataIndex: 'deathNum',
       className: 'deathColumn',
       sorter: (a, b) => a.deathNum - b.deathNum,
+      key: 'death',
     },
   ]
   return (

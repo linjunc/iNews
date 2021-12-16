@@ -4,7 +4,7 @@ export const UserCenterWrapper = styled.div`
   display: flex;
   position: relative;
   max-width: 1000px;
-  margin: 21px auto 72px;
+  margin: 11px auto 72px;
 `
 export const LeftContainerWrapper = styled.div`
   flex: auto;
@@ -12,6 +12,8 @@ export const LeftContainerWrapper = styled.div`
 `
 
 export const ContentWrapper = styled.div`
+  min-height: 600px;
   background-color: #fff;
   overflow: hidden;
+  box-sizing: border-box;
 `

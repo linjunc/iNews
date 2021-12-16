@@ -10,7 +10,6 @@ const AfterModal = () => {
   const navigate = useNavigate()
   const { article: articleData, dispatch } = useContext(articleContext)
   const [visible, setVisible] = useState(false)
-  console.log(articleData)
   // 侧边栏文章详情跳转
   const getSideDetail = (id) => {
     navigate(`/detail/${id}`)

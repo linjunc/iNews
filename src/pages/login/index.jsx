@@ -1,5 +1,5 @@
 // 登录页面
-import React, { useRef, useState, useEffect, useContext } from 'react'
+import React, { useRef, useState, useContext } from 'react'
 import ParticlesBg from 'particles-bg'
 import { Form, Input, Button, Carousel, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
