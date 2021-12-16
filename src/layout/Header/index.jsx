@@ -13,7 +13,7 @@ import { DELETE_INFO } from '../../models/constant'
 const { SubMenu } = Menu
 
 const Header = () => {
-  const [current, setCurrent] = useState('app')
+  const [current, setCurrent] = useState('recommend')
   const [show, setShow] = useState(true) // show 的改变导致了组件的重新渲染，怎么解决呢
   const { userInfo, userDispatch } = useContext(userContext)
   const navigate = useNavigate()
@@ -46,7 +46,11 @@ const Header = () => {
   useEffect(() => {
     // 如果是首页，让首页用context控制
     if (pathname === '/') return
-    else window.addEventListener('scroll', bindHandleScroll)
+    else {
+      window.addEventListener('scroll', bindHandleScroll)
+      // 修复使用浏览器返回的bug
+      setShow(true)
+    }
 
     return () => {
       window.removeEventListener('scroll', bindHandleScroll)

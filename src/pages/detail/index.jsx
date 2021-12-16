@@ -120,23 +120,23 @@ const Detail = memo(() => {
   ]
   // 初始化文章数据
   useEffect(() => {
-    let startTime = 0
-    let tag = ''
     const getArticle = async () => {
       setArtLoading(true)
+      // setSideLoading(true)
+      setArticleList([])
       try {
         const res = await getArticleDetail({ item_id: id })
         //获取评论区的数据
-        const res_comment = await get_comments({
-          article_id: id,
-          n: 5,
-          skip: 0,
-        })
+        // const res_comment = await get_comments({
+        //   article_id: id,
+        //   n: 5,
+        //   skip: 0,
+        // })
         const { article } = res.data
         const { judge } = res.data
         //存储评论
-        setComments(res_comment.data.comment_list)
-        console.log(res_comment.data.comment_list)
+        // setComments(res_comment.data.comment_list)
+        // console.log(res_comment.data.comment_list)
         // 存储文章点赞数据
         setNumGroup({
           loveNum: article.digg_count,
@@ -155,6 +155,7 @@ const Detail = memo(() => {
           .unix(article.publish_time)
           .format('YYYY-MM-DD HH:mm')
         setArticle(article)
+        setArtLoading(false)
         // 获取用户热门文章
         const userArticle = await getArticleList({
           user_id: article.media_id,
@@ -184,6 +185,7 @@ const Detail = memo(() => {
           ).fromNow()
         })
         // 添加文章列表数据
+        // setSideLoading(true)
         setArticleList([articleList, tagArticleList])
         // 用户阅读时间过长提醒
         const readLongTime = sessionStorage.getItem('timing')
@@ -198,7 +200,6 @@ const Detail = memo(() => {
         // 获取失败直接返回首页
         message.error('加载失败，请重试')
         navigate('/')
-      } finally {
         setArtLoading(false)
       }
     }
@@ -452,11 +453,18 @@ const Detail = memo(() => {
             </Button>
           </div>
           {/* 虚线 */}
-          <CenterLine title="作者热门文章" />
-          {/* 作者热门文章 */}
-          <ArticleSide articleList={articleList[0]} />
-          <CenterLine title="相关推荐" />
-          <ArticleSide articleList={articleList[1]} />
+          <Skeleton
+            active
+            loading={!articleList[1]}
+            paragraph={{ rows: 16 }}
+            round
+          >
+            <CenterLine title="作者热门文章" />
+            {/* 作者热门文章 */}
+            <ArticleSide articleList={articleList[0]} />
+            <CenterLine title="相关推荐" />
+            <ArticleSide articleList={articleList[1]} />
+          </Skeleton>
           {/* 广告 */}
           <div className="hot-advertise">
             <div className="our-logo">
@@ -511,8 +519,15 @@ const Detail = memo(() => {
                 <div className="our-info">欢迎加入我们</div>
               </div>
             </div>
-            <CenterLine title="相关推荐" />
-            <ArticleSide articleList={articleList[1]} />
+            <Skeleton
+              active
+              loading={!articleList[1]}
+              paragraph={{ rows: 16 }}
+              round
+            >
+              <CenterLine title="相关推荐" />
+              <ArticleSide articleList={articleList[1]} />
+            </Skeleton>
           </div>
           {/* 热榜 */}
           <div className="hot-list"></div>
