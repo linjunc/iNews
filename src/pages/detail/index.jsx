@@ -17,13 +17,6 @@ import {
 import { throttle } from 'lodash'
 import { PhotoProvider, PhotoSlider } from 'react-photo-view'
 import 'react-photo-view/dist/index.css'
-import {
-  DislikeOutlined,
-  LikeOutlined,
-  DislikeFilled,
-  LikeFilled,
-} from '@ant-design/icons'
-import moment from 'moment'
 import Comments from './components/Comments'
 
 import {
@@ -46,12 +39,12 @@ import logo from '../../assets/logo/logo.png'
 import { DetailWrapper } from './style'
 import { FocusAuthor } from '../../services/user'
 import { get_comments } from '../../services/comment'
+
 // dayjs 配置
 dayjs.locale('zh-cn') // use locale
 dayjs.extend(relativeTime)
 
 // 采用 memo 对子组件重新渲染造成的影响进行控制
-
 const Detail = memo(() => {
   // 状态定义
   const { id } = useParams()
@@ -83,41 +76,7 @@ const Detail = memo(() => {
   const timeRef = useRef(0)
   const tagRef = useRef('')
   const [comment_content, setComments] = useState() // 评论区数据
-  const [likes, setLikes] = useState(0) //设置喜欢
-  const [dislikes, setDislikes] = useState(0) //设置👎
-  const [action, setAction] = useState(null) //设置行为
-  const like = () => {
-    setLikes(1)
-    setDislikes(0)
-    setAction('liked')
-    console.log(comment_content)
-    console.log(articleList)
-    // console.log(comment_id.comments)
-    // console.log(comment_id)
-    // console.log(comment_id)
-  }
-  const dislike = () => {
-    setLikes(0)
-    setDislikes(1)
-    setAction('disliked')
-  }
-  const actions = [
-    <Tooltip key="comment-basic-like" title="Like">
-      <span onClick={like}>
-        {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-        <span className="comment-action">{likes}</span>
-      </span>
-    </Tooltip>,
-    <Tooltip key="comment-basic-dislike" title="Dislike">
-      <span onClick={dislike}>
-        {React.createElement(
-          action === 'disliked' ? DislikeFilled : DislikeOutlined,
-        )}
-        <span className="comment-action">{dislikes}</span>
-      </span>
-    </Tooltip>,
-    <span key="comment-basic-reply-to">Reply to</span>,
-  ]
+  const [isComment, setisComment] = useState(false) // 评论区是否有评论
   // 初始化文章数据
   useEffect(() => {
     const getArticle = async () => {
@@ -126,17 +85,8 @@ const Detail = memo(() => {
       setArticleList([])
       try {
         const res = await getArticleDetail({ item_id: id })
-        //获取评论区的数据
-        // const res_comment = await get_comments({
-        //   article_id: id,
-        //   n: 5,
-        //   skip: 0,
-        // })
         const { article } = res.data
         const { judge } = res.data
-        //存储评论
-        // setComments(res_comment.data.comment_list)
-        // console.log(res_comment.data.comment_list)
         // 存储文章点赞数据
         setNumGroup({
           loveNum: article.digg_count,
@@ -417,9 +367,15 @@ const Detail = memo(() => {
           </div>
           {/* 评论区 */}
           <div id="comment" className="comment-container">
-            <div className="comment-content">
-              <Comments comment_son={comment_content}></Comments>
+            <div className="title">
+              评论区 <span>{comment_content?.['length']}</span>
             </div>
+            {/* <div className="comment-content"
+                style={isComment ? { display: 'none' } : {}} */}
+            {/* > */}
+            <Comments id={id}></Comments>
+            {/* </div> */}
+            {/* <div  style={isComment ? {} : { display: 'none' }}>暂时没有评论</div> */}
           </div>
         </div>
         {/* 右侧侧边栏 */}

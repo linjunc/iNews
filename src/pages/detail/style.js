@@ -92,13 +92,29 @@ export const DetailWrapper = styled.main`
   }
   .comment-container {
     position: relative;
-    display: flex;
+    // display: flex;
     margin: 50px 0;
     padding: 50px 0;
     // background-color: skyblue;
     .comment-content {
       display: block;
     }
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 28px;
+      color: #222;
+    }
+  }
+  /* tile uploaded pictures */
+  .comment-action {
+    padding-left: 8px;
+    cursor: 'auto';
+  }
+
+  [class*='-col-rtl'] .comment-action {
+    padding-right: 8px;
+    padding-left: 0;
   }
   .right-sidebar {
     position: relative;
