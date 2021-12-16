@@ -1,9 +1,9 @@
 import React from 'react'
 import { Outlet, useParams } from 'react-router'
 
-import RightContainer from './c-cpns/right-container'
-import UserInfo from './c-cpns/base-info'
-import ListHeader from './c-cpns/headline'
+import RightContainer from './components/right-container'
+import UserInfo from './components/base-info'
+import ListHeader from './components/headline'
 
 import {
   UserCenterWrapper,
@@ -12,13 +12,16 @@ import {
 } from './style'
 
 export default function UserCenter() {
+  const { id } = useParams()
+  console.log(id)
+
   return (
     <UserCenterWrapper>
       <LeftContainerWrapper>
-        <UserInfo />
+        <UserInfo id={id} />
         <ListHeader />
         <ContentWrapper>
-          <Outlet />
+          <Outlet color="A" />
         </ContentWrapper>
       </LeftContainerWrapper>
       <RightContainer />
