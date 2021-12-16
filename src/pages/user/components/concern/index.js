@@ -1,5 +1,16 @@
 import React, { memo } from 'react'
 
+import SecondNav from './components/second-nav'
+import ConcernItem from './components/concern-item'
+
+import { ConcernItemWrapper } from './style'
+import { Outlet } from 'react-router'
+
 export default memo(function Concern() {
-  return <div>Concern</div>
+  return (
+    <ConcernItemWrapper>
+      <SecondNav />
+      <Outlet />
+    </ConcernItemWrapper>
+  )
 })

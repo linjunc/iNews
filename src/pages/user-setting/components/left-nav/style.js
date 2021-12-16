@@ -4,7 +4,6 @@ export const SettingNavWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 230px;
-  height: 626px;
   padding: 8px;
   background-color: #fff;
 

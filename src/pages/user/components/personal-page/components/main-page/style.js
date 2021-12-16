@@ -22,7 +22,7 @@ export const MarkedAreaWrapper = styled.div`
   }
 
   .title {
-    justify-content: space-between;
+    justify-content: flex-end;
     height: 32px;
 
     h1 {
@@ -58,6 +58,16 @@ export const MarkedAreaWrapper = styled.div`
         }
       }
     }
+  }
+
+  .marked-appear {
+    max-height: 0;
+  }
+
+  .marked-appear-active {
+    max-height: 300px;
+    overflow-y: hidden;
+    transition: all 1.5s;
   }
 
   .ant-input {
