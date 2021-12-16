@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Skeleton } from 'antd'
+import { Navigate } from 'react-router'
 const Header = lazy(() => import('../layout/Header'))
 // import Header from '../layout/Header'
 // import Home from '../pages/home'
@@ -10,11 +11,22 @@ const Detail = lazy(() => import('../pages/detail'))
 const User = lazy(() => import('../pages/user'))
 const CovidMap = lazy(() => import('../pages/covidMap'))
 // 为个人中心中的组件配置懒加载
-const PersonalPage = lazy(() => import('../pages/user/c-cpns/personal-page'))
-const Collect = lazy(() => import('../pages/user/c-cpns/collect'))
-const Likes = lazy(() => import('../pages/user/c-cpns/likes'))
-const Concern = lazy(() => import('../pages/user/c-cpns/concern'))
-const ReadingReport = lazy(() => import('../pages/user/c-cpns/reading-report'))
+const PersonalPage = lazy(() =>
+  import('../pages/user/components/personal-page'),
+)
+const Collect = lazy(() => import('../pages/user/components/collect'))
+const Likes = lazy(() => import('../pages/user/components/likes'))
+const Concern = lazy(() => import('../pages/user/components/concern'))
+const ReadingReport = lazy(() =>
+  import('../pages/user/components/reading-report'),
+)
+const UserSetting = lazy(() => import('../pages/user-setting'))
+const UserProfile = lazy(() =>
+  import('../pages/user-setting/components/user-profile'),
+)
+const UserAccount = lazy(() =>
+  import('../pages/user-setting/components/user-account'),
+)
 
 // 解决懒加载白屏时间
 const lazyLoad = (children) => {
@@ -62,6 +74,24 @@ const routes = [
           {
             path: 'report',
             element: lazyLoad(<ReadingReport />),
+          },
+        ],
+      },
+      {
+        path: '/user/setting',
+        element: lazyLoad(<UserSetting />),
+        children: [
+          {
+            path: '',
+            element: <Navigate to="profile" />,
+          },
+          {
+            path: 'profile',
+            element: lazyLoad(<UserProfile />),
+          },
+          {
+            path: 'account',
+            element: lazyLoad(<UserAccount />),
           },
         ],
       },

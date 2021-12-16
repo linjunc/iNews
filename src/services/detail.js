@@ -2,7 +2,6 @@ import instance from '../utils/request'
 
 // 根据id获取文章详情
 export const getArticleDetail = (options) => {
-  console.log(options)
   return instance({
     url: '/article_content',
     method: 'GET',
