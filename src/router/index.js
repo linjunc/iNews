@@ -27,6 +27,15 @@ const UserProfile = lazy(() =>
 const UserAccount = lazy(() =>
   import('../pages/user-setting/components/user-account'),
 )
+const ConcernTags = lazy(() =>
+  import('../pages/user/components/concern/components/tags'),
+)
+const ConcernFollowers = lazy(() =>
+  import('../pages/user/components/concern/components/followers'),
+)
+const ConcernFollowing = lazy(() =>
+  import('../pages/user/components/concern/components/following'),
+)
 
 // 解决懒加载白屏时间
 const lazyLoad = (children) => {
@@ -68,8 +77,26 @@ const routes = [
             element: lazyLoad(<Likes />),
           },
           {
-            path: 'tags',
+            path: 'concern',
             element: lazyLoad(<Concern />),
+            children: [
+              {
+                path: '',
+                element: <Navigate to="followers" />,
+              },
+              {
+                path: 'tags',
+                element: lazyLoad(<ConcernTags />),
+              },
+              {
+                path: 'followers',
+                element: lazyLoad(<ConcernFollowers />),
+              },
+              {
+                path: 'following',
+                element: lazyLoad(<ConcernFollowing />),
+              },
+            ],
           },
           {
             path: 'report',

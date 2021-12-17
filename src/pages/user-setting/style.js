@@ -2,8 +2,7 @@ import styled from 'styled-components'
 
 export const UserSettingWrapper = styled.div`
   width: 1000px;
-  height: 500px;
-  background-color: #ccc;
+  min-height: 626px;
   margin: 24px auto;
   overflow: hidden;
 `

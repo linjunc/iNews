@@ -1,9 +1,10 @@
-import React, { memo, useEffect, useState, useRef } from 'react'
+import React, { memo, useEffect, useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { getUserInfo } from '../../../../services/user'
+import { userInfoContext } from '../../../../models/context'
 import { getLocal } from '../../../../utils/storage'
 
+import { Spin } from 'antd'
 import EditBtn from '../edit-btn'
 
 import { BaseInfoWrapper } from './style'
@@ -11,31 +12,25 @@ import { BaseInfoWrapper } from './style'
 export default memo(function BaseInfo(props) {
   // 从props中获取到传递过来的用户id
   const { id: user_id } = props
+  const [isInfoLoading, setIsInfoLoading] = useState(true)
   // 使用useContext获取传递过来的用户信息
   const navigate = useNavigate()
-  // 设置用户信息的状态
-  const [userAllInfo, setUserAllInfo] = useState({})
-  // 这个变量用来保存一个数据，用于监听路由有没有跳转，如果跳转就不让执行useEffect中的set函数，避免报错
-  let flag = useRef(true)
-
-  // 获取到用户信息后更新状态
-  useEffect(() => {
-    let upDateUserInfo = async () => {
-      const res = await getUserInfo({ user_id })
-      const newUserAllInfo = res.data.userInfo
-      // 如果flag为true，则执行set函数，否则说明已经路由跳转，set函数也没有必要再执行了，让其执行反而会报错
-      flag && setUserAllInfo(newUserAllInfo)
-    }
-    upDateUserInfo()
-  }, [])
+  // 从context中获取用户信息
+  const userAllInfo = useContext(userInfoContext)
 
   // 判断用户是否已经登录，如果没有登录则需要跳转至登录页面
   useEffect(() => {
     if (!getLocal('token')) {
-      flag = false
       navigate('/login')
     }
   }, [navigate])
+
+  // 当用户信息还没有请求到的时候开启loading状态，请求到时关闭loading
+  useEffect(() => {
+    if (JSON.stringify(userAllInfo) !== '{}') {
+      setIsInfoLoading(false)
+    }
+  }, [userAllInfo])
 
   // 获取头像、个人介绍、用户名
   const { avatar, introduction, nickname } = userAllInfo
@@ -49,11 +44,13 @@ export default memo(function BaseInfo(props) {
           require('../../../.././assets/user-center/default-avatar.png').default
         }
       />
-      <div className="info-box middle-item">
-        <div className="user-name middle-item">
-          <span className="text-nowrap">{nickname || `用户${user_id}`}</span>
-        </div>
-        {introduction && (
+      {isInfoLoading ? (
+        <Spin />
+      ) : (
+        <div className="info-box middle-item">
+          <div className="user-name middle-item">
+            <span className="text-nowrap">{nickname || `用户${user_id}`}</span>
+          </div>
           <div className="brief middle-item">
             <svg width="21" height="18" viewBox="0 0 21 18">
               <path
@@ -61,10 +58,10 @@ export default memo(function BaseInfo(props) {
                 d="M4 4h13a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm9 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3 3a3 3 0 0 0-6 0h6zM5 7v1h4V7H5zm0 2.5v1h4v-1H5zM5 12v1h4v-1H5z"
               ></path>
             </svg>
-            <span>{introduction}</span>
+            <span>{introduction || '该用户暂无简介'}</span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
       <div className="action-box middle-item">
         <div className="link-box">
           <a target="_blank" title="绑定微博">

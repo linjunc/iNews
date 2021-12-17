@@ -12,6 +12,27 @@ export const RightContainerWrapper = styled.div`
     width: 240px;
     transition: all 0.2s;
   }
+
+  .report-enter {
+    width: 100%;
+    height: 410px;
+    margin-top: 10px;
+    background: url(${require('../../../../assets/user-center/report-enter.png')
+        .default})
+      no-repeat;
+    background-size: cover;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .report-appear {
+    max-height: 0;
+  }
+
+  .report-appear-active {
+    max-height: 500px;
+    transition: all 1s;
+  }
 `
 
 export const UserAchievementWrapper = styled.div`

@@ -1,23 +1,29 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useContext } from 'react'
 import { marked } from 'marked'
+import { CSSTransition } from 'react-transition-group'
 
 import { setUserInfo } from '../../../../../../services/user'
 import { getSession, setSession } from '../../../../../../utils/storage'
+import { userInfoContext } from '../../../../../../models/context'
 
-import { Button, Input } from 'antd'
+import { Button, Input, message } from 'antd'
 
 import { MarkedContentWrapper, MarkedAreaWrapper } from './style'
 
 const { TextArea } = Input
-export default function MainPage(props) {
+export default function MainPage() {
   // 用于记录预览框的dom元素
   const markedRef = useRef()
-  const { userAllInfo } = props
-  let { personal_page } = userAllInfo
+  // 从context中获取用户信息
+  const userAllInfo = useContext(userInfoContext)
+  let { personal_page, nickname, introduction } = userAllInfo
   // 记录上一此更改个人主页的代码
-  let lastPersonalPage = useRef(null)
+  let lastPersonalPage = useRef(personal_page)
   // 用于表示是否展示编辑框的状态
   const [isShowEditBox, setIsShowEditBox] = useState(false)
+  // 控制按钮是否处于加载的状态
+  const [isBtnLoading, setIsBtnLoading] = useState(false)
+
   // 对marked实例进行一些配置
   const rendererMD = new marked.Renderer()
   marked.setOptions({
@@ -30,6 +36,11 @@ export default function MainPage(props) {
     smartLists: true, // 使用比原生markdown更时髦的列表。 旧的列表将可能被作为pedantic的处理内容过滤掉.
     smartypants: false, // 使用更为时髦的标点，比如在引用语法中加入破折号。
   }) //基本设置
+
+  // 当personal_page的值更改时更新上一次存储的代码值
+  useEffect(() => {
+    lastPersonalPage.current = personal_page
+  }, [personal_page])
 
   // 组件第一次挂载到页面上时在本地存取个人信息
   useEffect(() => {
@@ -45,17 +56,28 @@ export default function MainPage(props) {
   }, [isShowEditBox, personal_page])
 
   // 用户点击预览按钮之后要像后台发送请求保存更改的个人主页数据
-  const previewMainPage = () => {
+  const previewMainPage = async () => {
     const value = getSession('personal_page')
-    const changeUserInfo = async () => {
-      lastPersonalPage.current = value
-      const res = await setUserInfo({
-        personal_page: value,
-      })
-      personal_page = res.data.userInfo.personal_page
-    }
     if (lastPersonalPage.current !== value) {
-      changeUserInfo()
+      setIsBtnLoading(true)
+      lastPersonalPage.current = value
+      try {
+        const res = await setUserInfo({
+          nickname,
+          introduction,
+          personal_page: value,
+        })
+        const { msg, code } = res.data
+        if (code === 200) {
+          personal_page = res.data.userInfo.personal_page
+        } else {
+          message.error(msg)
+        }
+      } catch (err) {
+        message.error(err)
+      } finally {
+        setIsBtnLoading(false)
+      }
     }
     setIsShowEditBox(false)
   }
@@ -64,7 +86,6 @@ export default function MainPage(props) {
     <MarkedAreaWrapper>
       {personal_page && (
         <div className="title middle-item">
-          <h1>个人简介</h1>
           {!isShowEditBox ? (
             <div
               className="edit middle-item"
@@ -78,6 +99,7 @@ export default function MainPage(props) {
           ) : (
             <Button
               className="preview-btn"
+              loading={isBtnLoading}
               icon={
                 <svg
                   aria-hidden="true"
@@ -108,7 +130,9 @@ export default function MainPage(props) {
           onChange={(e) => setSession('personal_page', e.target.value)}
         />
       ) : (
-        <MarkedContentWrapper ref={markedRef} />
+        <CSSTransition in={true} timeout={1500} appear classNames="marked">
+          <MarkedContentWrapper ref={markedRef} />
+        </CSSTransition>
       )}
     </MarkedAreaWrapper>
   )
