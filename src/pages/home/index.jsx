@@ -12,12 +12,13 @@ import RightContent from './components/RightContent'
 import { getArticles } from '../../services/home'
 import HotArticle from './components/HotArticle'
 let num = 0
-let tag = 'recommend'
+let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
 const Home = (props) => {
-  const [onLoading, setOnLoading] = useState(false)
+  const [onLoadingBtm, setOnLoadingBtm] = useState(false)
+  const [onLoadingTop, setOnLoadingTop] = useState(false)
   const [articleList, setArticleList] = useState([])
   const [isFixed, setIsFixed] = useState(false)
   // 数组打乱方法
@@ -29,7 +30,17 @@ const Home = (props) => {
       ;[arr[m], arr[i]] = [arr[i], arr[m]]
     }
   }
-  const getArticleList = async (tag) => {
+  //文章存session
+  const setArticles = (tag, newList, num, hasMore) => {
+    let articlesList = JSON.parse(sessionStorage.getItem(`${tag}_articles`))
+    if (!articlesList) articlesList = { hasMore: true, num: 0, list: [] }
+
+    articlesList.num = num
+    articlesList.hasMore = hasMore
+    articlesList.list.push(...newList)
+    sessionStorage.setItem(`${tag}_articles`, JSON.stringify(articlesList))
+  }
+  const getArticleList = async (tag, isBtm) => {
     if (!hasMore) {
       if (!msgTimer) {
         msgTimer = setTimeout(() => {
@@ -43,7 +54,9 @@ const Home = (props) => {
     if (isOnGet) return
     isOnGet = true
     try {
-      setOnLoading(true) //开启加载中
+      //开启加载中
+      if (isBtm) setOnLoadingBtm(true)
+      else setOnLoadingTop(true)
       const data = await getArticles({
         tag,
         n: 8,
@@ -52,31 +65,88 @@ const Home = (props) => {
       num = num + 8 //跳过的条数增加
 
       const newList = data?.data?.article_list ? data.data.article_list : []
-      if (!newList.length) hasMore = false
+      hasMore = data.data.has_more
       shuffle(newList)
       //添加到文章列表
       setArticleList((val) => [...val, ...newList])
 
-      // setHomeLoading(false) //骨架消失
+      switch (tag) {
+        case 'app':
+          break
+        case 'recommend':
+          setArticles('recommend', newList, num, hasMore)
+          break
+        case 'news_society':
+          setArticles('news_society', newList, num, hasMore)
+          break
+        case 'news_entertainment':
+          setArticles('news_entertainment', newList, num, hasMore)
+          break
+        case 'news_tech':
+          setArticles('news_tech', newList, num, hasMore)
+          break
+        case 'news_military':
+          setArticles('news_military', newList, num, hasMore)
+          break
+        case 'news_sports':
+          setArticles('news_sports', newList, num, hasMore)
+          break
+        case 'news_car':
+          setArticles('news_car', newList, num, hasMore)
+          break
+        case 'news_finance':
+          setArticles('news_finance', newList, num, hasMore)
+          break
+        case 'news_world':
+          setArticles('news_world', newList, num, hasMore)
+          break
+        case 'news_fashion':
+          setArticles('news_fashion', newList, num, hasMore)
+          break
+        case 'news_history':
+          setArticles('news_history', newList, num, hasMore)
+          break
+        case 'news_legal':
+          setArticles('news_legal', newList, num, hasMore)
+          break
+        case 'news_politics':
+          setArticles('news_politics', newList, num, hasMore)
+          break
+        case 'news_air':
+          setArticles('news_air', newList, num, hasMore)
+          break
+        default:
+          break
+      }
     } catch (error) {
-      // throttle()
       message.error('数据获取失败,请重试！')
     } finally {
       isOnGet = false
-      setOnLoading(false) //取消加载中
+      //取消加载中
+      setOnLoadingBtm(false)
+      setOnLoadingTop(false)
     }
   }
   const location = useLocation()
   useMemo(() => {
-    hasMore = true
-    num = 0 //跳转条数重新置零
-    setArticleList([]) //列表清空
-
     tag = location.state?.current ? location.state.current : tag
 
     console.log(tag)
+
+    let articlesList = JSON.parse(sessionStorage.getItem(`${tag}_articles`))
+    console.log(articlesList)
+    if (articlesList) {
+      hasMore = articlesList.hasMore
+      num = articlesList.num
+      setArticleList(articlesList.list)
+    } else {
+      hasMore = true
+      num = 0 //跳转条数重新置零
+      setArticleList([]) //列表清空
+    }
+
     if (tag !== 'app') {
-      getArticleList(tag)
+      if (hasMore) getArticleList(tag, false)
       let timer = setTimeout(() => {
         console.log(document.getElementsByClassName('content')[0].offsetTop)
         document.documentElement.scrollTop =
@@ -93,6 +163,7 @@ const Home = (props) => {
     return (
       <div className="content">
         <div className="main">
+          {showLoadTop()}
           <List
             dataSource={articleList}
             renderItem={(item) => (
@@ -101,7 +172,8 @@ const Home = (props) => {
               </List.Item>
             )}
           />
-          {showLoad()}
+          {showLoadBtm()}
+          {hasNone()}
         </div>
         <div className={isFixed ? 'home_right fixed_box' : 'home_right'}>
           <RightContent />
@@ -110,8 +182,19 @@ const Home = (props) => {
     )
   }
 
-  const showLoad = () => {
-    if (onLoading) return <Loading />
+  const showLoadBtm = () => {
+    if (onLoadingBtm) return <Loading />
+  }
+  const showLoadTop = () => {
+    if (onLoadingTop) return <Loading />
+  }
+  const hasNone = () => {
+    if (!hasMore)
+      return (
+        <div className="btmLine">
+          <span className="title">已经到最低了噢~</span>
+        </div>
+      )
   }
 
   let topValue = 0
@@ -128,7 +211,7 @@ const Home = (props) => {
       // 下滚
       if (scrollTop > topValue) {
         if (isBottom && tag !== 'app') {
-          getArticleList(tag)
+          getArticleList(tag, isBottom)
         }
       }
       setTimeout(function () {
