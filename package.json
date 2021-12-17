@@ -15,8 +15,8 @@
     "jsonp": "^0.2.1",
     "loadsh": "^0.0.4",
     "lodash": "^4.17.21",
-    "md5": "^2.3.0",
     "marked": "^4.0.7",
+    "md5": "^2.3.0",
     "nanoid": "^3.1.30",
     "particles-bg": "^2.5.5",
     "qrcode.react": "^1.0.1",
@@ -35,7 +35,8 @@
     "react-transition-group": "^4.4.2",
     "react-zmage": "^0.8.5-beta.37",
     "styled-components": "^5.3.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "xss": "^1.0.10"
   },
   "scripts": {
     "start": "react-scripts start",
