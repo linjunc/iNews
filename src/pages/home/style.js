@@ -56,6 +56,7 @@ export const HomeContainer = styled.div`
       left: 50%;
       margin-left: 220px;
       opacity: 1;
+    }
   }
   .hideBottom {
     position: fixed;
