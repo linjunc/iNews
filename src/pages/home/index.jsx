@@ -148,7 +148,6 @@ const Home = (props) => {
     if (tag !== 'app') {
       if (hasMore) getArticleList(tag, false)
       let timer = setTimeout(() => {
-        console.log(document.getElementsByClassName('content')[0].offsetTop)
         document.documentElement.scrollTop =
           document.getElementsByClassName('content')[0].offsetTop
         clearTimeout(timer)
