@@ -20,12 +20,9 @@ export const get_comments_user = (options) => {
 }
 
 //发送文章的评论
-export const post_comments = (options, token) => {
+export const post_comments = (options) => {
   // 根据用户的text、article_id  发送评论，文章的id
   return instance({
-    headers: {
-      Authorization: token,
-    },
     url: '/comment',
     method: 'post',
     data: options,
@@ -38,18 +35,25 @@ export const post_comments_reply = (options) => {
   return instance({
     url: '/reply',
     method: 'post',
+    data: options,
+  })
+}
+
+//根据评论id，获取评论回复内容
+export const get_comments_reply = (options) => {
+  // 根据用户的text、comment_id  发送评论，评论的id
+  return instance({
+    url: '/reply_list',
+    method: 'get',
     params: options,
   })
 }
 
 //根据评论id，点赞、取消点赞评论
 //put请求
-export const put_comments_digg = (options, token) => {
+export const put_comments_digg = (options) => {
   // 根据用户的text、comment_id  发送评论，评论的id
   return instance({
-    headers: {
-      Authorization: token,
-    },
     url: '/comment_digg',
     method: 'put',
     data: options,

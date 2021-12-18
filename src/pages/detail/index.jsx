@@ -39,7 +39,7 @@ import logo from '../../assets/logo/logo.png'
 import { DetailWrapper } from './style'
 import { FocusAuthor } from '../../services/user'
 import { get_comments } from '../../services/comment'
-
+import RenderIfVisible from 'react-render-if-visible'
 // dayjs 配置
 dayjs.locale('zh-cn') // use locale
 dayjs.extend(relativeTime)
@@ -373,7 +373,9 @@ const Detail = memo(() => {
             {/* <div className="comment-content"
                 style={isComment ? { display: 'none' } : {}} */}
             {/* > */}
-            <Comments id={id}></Comments>
+            <RenderIfVisible defaultHeight={200}>
+              <Comments id={id}></Comments>
+            </RenderIfVisible>
             {/* </div> */}
             {/* <div  style={isComment ? {} : { display: 'none' }}>暂时没有评论</div> */}
           </div>
