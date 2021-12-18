@@ -46,7 +46,7 @@ const Comments = ({ id }) => {
     const getCommentlist = async () => {
       const res_comment = await get_comments({
         article_id: id,
-        n: 30,
+        n: 5,
         skip: 0,
       })
       // 评论区状态判断
@@ -202,8 +202,8 @@ const Comments = ({ id }) => {
     // console.log(likes[index - 1])
     let tem = {
       actions: [<Pinglun a={index}></Pinglun>],
-      author: userInfo.nickname,
-      avatar: userInfo.avatar,
+      author: userInfo?.nickname,
+      avatar: userInfo?.avatar,
       content: <p>{value}</p>,
       datetime: (
         <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
@@ -289,8 +289,8 @@ const Comments = ({ id }) => {
                 // </span>,
                 <span key="comment-list-reply-to-0">回复</span>,
               ],
-              author: userInfo.nickname,
-              avatar: userInfo.avatar,
+              author: userInfo?.nickname,
+              avatar: userInfo?.avatar,
               content: <p>{replyListContent[i].text}</p>,
               datetime: (
                 <Tooltip
@@ -387,23 +387,26 @@ const Comments = ({ id }) => {
             </Button>
           </Form.Item>
         </Commenttt>
-        <List
-          loading={isReplyLoading}
-          className="comment-list"
-          itemLayout="horizontal"
-          dataSource={replyList}
-          renderItem={(item) => (
-            <li>
-              <Comment
-                actions={item.actions}
-                author={item.author}
-                avatar={item.avatar}
-                content={item.content}
-                datetime={item.datetime}
-              />
-            </li>
-          )}
-        />
+        {replyList.length && (
+          <List
+            loading={isReplyLoading}
+            className="comment-list"
+            itemLayout="horizontal"
+            dataSource={replyList}
+            style={{ textAlign: 'left' }}
+            renderItem={(item) => (
+              <li>
+                <Comment
+                  actions={item.actions}
+                  author={item.author}
+                  avatar={item.avatar}
+                  content={item.content}
+                  datetime={item.datetime}
+                />
+              </li>
+            )}
+          />
+        )}
         {/* <button onClick={(e) => {like(e.currentTarget)} } index={a.a}>+</button> */}
         {/* <input value={val} onChange={event => setVal(event.target.value)}/> */}
       </div>
@@ -431,6 +434,7 @@ const Comments = ({ id }) => {
       <List
         loading={commentLoding}
         className="comment-list"
+        style={{ textAlign: 'left' }}
         header={`${data.length} replies`}
         itemLayout="horizontal"
         dataSource={data}
