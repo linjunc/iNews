@@ -1,10 +1,15 @@
 import React, { useRef, useEffect, useState, useContext } from 'react'
+import { useParams } from 'react-router'
 import { marked } from 'marked'
 import { CSSTransition } from 'react-transition-group'
 import xss from 'xss'
 
 import { setUserInfo } from '../../../../../../services/user'
-import { getSession, setSession } from '../../../../../../utils/storage'
+import {
+  getLocal,
+  getSession,
+  setSession,
+} from '../../../../../../utils/storage'
 import { allUserInfoContext } from '../../../../../../models/context'
 
 import { Button, Input, message } from 'antd'
@@ -30,6 +35,7 @@ const myXss = new xss.FilterXSS({
 export default function MainPage() {
   // 用于记录预览框的dom元素
   const markedRef = useRef()
+  const { id: user_id } = useParams()
   // 从context中获取用户信息
   const { userInfo: userAllInfo } = useContext(allUserInfoContext)
   let { personal_page, nickname, introduction } = userAllInfo
@@ -98,9 +104,13 @@ export default function MainPage() {
     setIsShowEditBox(false)
   }
 
+  // 判断是否为他人访问个人主页
+  const { user_id: self_id } = JSON.parse(getLocal('userInfo') || '{}')
+  const isSelf = user_id === self_id
+
   return (
     <MarkedAreaWrapper>
-      {personal_page && (
+      {isSelf && personal_page && (
         <div className="title middle-item">
           {!isShowEditBox ? (
             <div
