@@ -30,7 +30,7 @@ const Parallax = (props) => {
   // scroll listener，随着滚动距离设置偏移量
   const handleScroll = throttle(() => {
     setContentTranslateY(
-      getScrollTop() / contentRef.current.getBoundingClientRect().height,
+      getScrollTop() / contentRef.current?.getBoundingClientRect().height,
     )
   }, 16)
   // 可见就添加监听器

@@ -1,19 +1,10 @@
 // 文章详情
-import React, { memo, useEffect, useState, createElement, useRef } from 'react'
+import React, { memo, useEffect, useState, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
-import {
-  Skeleton,
-  Button,
-  Slider,
-  message,
-  Modal,
-  Avatar,
-  Tooltip,
-  Comment,
-} from 'antd'
+import { Skeleton, Button, Slider, message, Modal } from 'antd'
 import { throttle } from 'lodash'
 import { PhotoProvider, PhotoSlider } from 'react-photo-view'
 import 'react-photo-view/dist/index.css'
@@ -25,7 +16,9 @@ import {
   getArticleByTag,
   getArticleDetail,
   getArticleList,
+  readTime,
 } from '../../services/detail'
+import { getAllImg } from '../../utils/getImg'
 import { speak } from '../../utils/speak'
 import { getScrollTop } from '../../utils/scrollHeight'
 import BackToTop from './components/BackToTop'
@@ -38,7 +31,6 @@ import LoveButton from '../../components/LoveButton'
 import logo from '../../assets/logo/logo.png'
 import { DetailWrapper } from './style'
 import { FocusAuthor } from '../../services/user'
-import { get_comments } from '../../services/comment'
 
 // dayjs 配置
 dayjs.locale('zh-cn') // use locale
@@ -49,15 +41,7 @@ const Detail = memo(() => {
   // 状态定义
   const { id } = useParams()
   const navigate = useNavigate()
-  // const [comments] = useState(false)
   const [artLoading, setArtLoading] = useState(false) // 骨架屏显示
-  // 关注，点赞，收藏状态
-  const [focusGroup, setFocusGroup] = useState({
-    loveDone: false,
-    collect: false,
-    focus: false,
-    read: false,
-  })
   const [article, setArticle] = useState({}) // 文章数据
   const [articleList, setArticleList] = useState([]) // 文章列表数据
   const [show, setShow] = useState(false) // 侧边栏固定状态
@@ -72,29 +56,26 @@ const Detail = memo(() => {
     loveNum: 0,
     commentNum: 0,
     collectNum: 0,
+    loveDone: false,
+    collect: false,
+    focus: false,
+    read: false,
   })
   const timeRef = useRef(0)
   const tagRef = useRef('')
-  const [comment_content, setComments] = useState() // 评论区数据
-  const [isComment, setisComment] = useState(false) // 评论区是否有评论
   // 初始化文章数据
   useEffect(() => {
     const getArticle = async () => {
       setArtLoading(true)
-      // setSideLoading(true)
       setArticleList([])
       try {
         const res = await getArticleDetail({ item_id: id })
-        const { article } = res.data
-        const { judge } = res.data
-        // 存储文章点赞数据
+        const { article, judge } = res.data
+        // 存储文章点赞数据，点赞状态迁移
         setNumGroup({
           loveNum: article.digg_count,
           commentNum: article.comment_count,
           collectNum: article.like_count,
-        })
-        // 存储 操作状态
-        setFocusGroup({
           loveDone: judge.is_digg,
           collect: judge.is_like,
           focus: judge.is_follow,
@@ -106,36 +87,37 @@ const Detail = memo(() => {
           .format('YYYY-MM-DD HH:mm')
         setArticle(article)
         setArtLoading(false)
-        // 获取用户热门文章
-        const userArticle = await getArticleList({
-          user_id: article.media_id,
-          n: '3',
-          skip: '0',
-        })
-        // 获取标签相关的文章
-        const tagArticle = await getArticleByTag({
-          tag: article.tag,
-          n: '3',
-          skip: '0',
-        })
-        // 热门文章数据
-        const articleList = userArticle.data.article_list
-        // 标签文章数据
-        const tagArticleList = tagArticle.data.article_list
+        const requestArr = [
+          // 获取用户热门文章
+          getArticleList({
+            user_id: article.media_id,
+            n: '3',
+            skip: '0',
+          }),
+          // 获取标签相关的文章
+          getArticleByTag({
+            tag: article.tag,
+            n: '3',
+            skip: '0',
+          }),
+        ]
+        const resArr = await Promise.all(requestArr)
+        const [userArticle, tagArticle] = [resArr[0], resArr[1]]
+        // 热门文章数据  标签文章数据
+        const [articleList, tagArticleList] = [
+          userArticle.data.article_list,
+          tagArticle.data.article_list,
+        ]
+        const tempList = [articleList, tagArticleList]
         // 计算到当前时间的距离
-        articleList.forEach((article) => {
-          article.publish_time = dayjs(
-            parseInt(article.publish_time + '000'),
-          ).fromNow()
-        })
-        // 计算到当前时间的距离
-        tagArticleList.forEach((article) => {
-          article.publish_time = dayjs(
-            parseInt(article.publish_time + '000'),
-          ).fromNow()
-        })
+        tempList.map((item) =>
+          item.forEach((article) => {
+            article.publish_time = dayjs(
+              parseInt(article.publish_time + '000'),
+            ).fromNow()
+          }),
+        )
         // 添加文章列表数据
-        // setSideLoading(true)
         setArticleList([articleList, tagArticleList])
         // 用户阅读时间过长提醒
         const readLongTime = sessionStorage.getItem('timing')
@@ -159,12 +141,13 @@ const Detail = memo(() => {
       speak().cancel()
       // 发送数据给后台
       // 当没有数据时，不做处理
-      if (tagRef.current) {
-        // 记录单次阅读时间
+      if (tagRef.current && dayjs().valueOf() - timeRef.current > 20000) {
         // 计算本次阅读时间
         const timing = dayjs().valueOf() - timeRef.current
-        console.log(tagRef.current, timing)
+        // 记录单次阅读时间
+        readTime({ tag: tagRef.current, read_time: timing })
         const lastTime = JSON.parse(sessionStorage.getItem('timing')) ?? 0
+        // 临时存储单次阅读时间到本地
         sessionStorage.setItem('timing', timing + lastTime)
       }
     }
@@ -184,9 +167,9 @@ const Detail = memo(() => {
     if (hasToken) {
       setNumGroup({
         ...numGroup,
-        loveNum: focusGroup.loveDone ? --numGroup.loveNum : ++numGroup.loveNum,
+        loveNum: numGroup.loveDone ? --numGroup.loveNum : ++numGroup.loveNum,
+        loveDone: !numGroup.loveDone,
       })
-      setFocusGroup({ ...focusGroup, loveDone: !focusGroup.loveDone })
       digArticle({ article_id: article.item_id })
     } else {
       message.info('请先登录')
@@ -197,11 +180,11 @@ const Detail = memo(() => {
     if (hasToken) {
       setNumGroup({
         ...numGroup,
-        collectNum: focusGroup.collect
+        collectNum: numGroup.collect
           ? --numGroup.collectNum
           : ++numGroup.collectNum,
+        collect: !numGroup.collect,
       })
-      setFocusGroup({ ...focusGroup, collect: !focusGroup.collect })
       collectArticle({ article_id: article.item_id })
     } else {
       message.info('请先登录')
@@ -210,16 +193,22 @@ const Detail = memo(() => {
   // 处理关注用户事件
   const focusUser = () => {
     if (hasToken) {
-      if (focusGroup.focus) {
+      if (numGroup.focus) {
         Modal.confirm({
           title: '你确定要取消关注作者吗？',
           onOk: () => {
-            setFocusGroup({ ...focusGroup, focus: !focusGroup.focus })
+            setNumGroup({
+              ...numGroup,
+              focus: !numGroup.focus,
+            })
             FocusAuthor({ media_id: article.media_id })
           },
         })
       } else {
-        setFocusGroup({ ...focusGroup, focus: !focusGroup.focus })
+        setNumGroup({
+          ...numGroup,
+          focus: !numGroup.focus,
+        })
         FocusAuthor({ media_id: article.media_id })
       }
     } else {
@@ -254,9 +243,10 @@ const Detail = memo(() => {
   }
   // 图片预览
   const previewImage = (e) => {
+    const allImgArr = getAllImg(article)
     if (e.target.tagName === 'IMG') {
       setVisible(true)
-      const index = article.image_list?.indexOf(e.target.src)
+      const index = allImgArr?.indexOf(e.target.src)
       const currentIndex = index === -1 ? 0 : index
       setPhotoIndex(currentIndex)
     }
@@ -267,11 +257,7 @@ const Detail = memo(() => {
   const bindHandleScroll = throttle(() => {
     scrollTop = getScrollTop()
     // 大于一定距离后显示固定
-    if (scrollTop >= 1000) {
-      setShow(true)
-    } else {
-      setShow(false)
-    }
+    scrollTop >= 1000 ? setShow(true) : setShow(false)
   }, 100)
   // 初始化滚动事件
   useEffect(() => {
@@ -292,7 +278,7 @@ const Detail = memo(() => {
             <div className="left-container">
               <LoveButton
                 handleClick={handleLove}
-                done={focusGroup.loveDone}
+                done={numGroup.loveDone}
                 key="love"
                 content="点赞"
                 type={0}
@@ -307,7 +293,7 @@ const Detail = memo(() => {
               />
               <LoveButton
                 handleClick={handleCollect}
-                done={focusGroup.collect}
+                done={numGroup.collect}
                 key="collect"
                 content="收藏文章"
                 type={2}
@@ -352,7 +338,7 @@ const Detail = memo(() => {
             <PhotoProvider>
               <PhotoSlider
                 images={
-                  article.image_list?.map((item) => ({ src: item })) ?? []
+                  getAllImg(article)?.map((item) => ({ src: item })) ?? []
                 }
                 visible={visible}
                 onClose={() => setVisible(false)}
@@ -367,15 +353,7 @@ const Detail = memo(() => {
           </div>
           {/* 评论区 */}
           <div id="comment" className="comment-container">
-            <div className="title">
-              评论区 <span>{comment_content?.['length']}</span>
-            </div>
-            {/* <div className="comment-content"
-                style={isComment ? { display: 'none' } : {}} */}
-            {/* > */}
             <Comments id={id}></Comments>
-            {/* </div> */}
-            {/* <div  style={isComment ? {} : { display: 'none' }}>暂时没有评论</div> */}
           </div>
         </div>
         {/* 右侧侧边栏 */}
@@ -399,13 +377,13 @@ const Detail = memo(() => {
               onClick={focusUser}
               type="primary"
               style={
-                focusGroup.focus
+                numGroup.focus
                   ? { backgroundColor: '#2ecc71', border: 'none' }
                   : {}
               }
               className="author-love"
             >
-              {focusGroup.focus ? '已关注' : '+ 关注'}
+              {numGroup.focus ? '已关注' : '+ 关注'}
             </Button>
           </div>
           {/* 虚线 */}
@@ -435,7 +413,6 @@ const Detail = memo(() => {
           {/* 下滑过长后的固定右侧 */}
           <div className={show ? 'sticky-box show' : 'sticky-box'}>
             {/* 作者信息 */}
-            {/* 作者信息 */}
             <div className="author-info">
               <div
                 onClick={() => {
@@ -455,13 +432,13 @@ const Detail = memo(() => {
                 onClick={focusUser}
                 type="primary"
                 style={
-                  focusGroup.focus
+                  numGroup.focus
                     ? { backgroundColor: '#2ecc71', border: 'none' }
                     : {}
                 }
                 className="author-love"
               >
-                {focusGroup.focus ? '已关注' : '+ 关注'}
+                {numGroup.focus ? '已关注' : '+ 关注'}
               </Button>
             </div>
             {/* 广告 */}

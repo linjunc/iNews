@@ -145,6 +145,7 @@ export const DetailWrapper = styled.main`
       }
       .author-love {
         color: white;
+        transition: all 0.3s;
       }
       div {
         margin: 4px 0;
