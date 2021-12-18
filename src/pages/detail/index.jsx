@@ -31,7 +31,8 @@ import LeftSide from './components/LeftSide'
 import LoveButton from '../../components/LoveButton'
 import { DetailWrapper } from './style'
 import { FocusAuthor } from '../../services/user'
-
+import { get_comments } from '../../services/comment'
+import RenderIfVisible from 'react-render-if-visible'
 // dayjs 配置
 dayjs.locale('zh-cn') // use locale
 dayjs.extend(relativeTime)
@@ -321,7 +322,12 @@ const Detail = memo(() => {
           </div>
           {/* 评论区 */}
           <div id="comment" className="comment-container">
-            <Comments id={id}></Comments>
+            <div className="title">
+              评论区 <span>{comment_content?.['length']}</span>
+            </div>
+            <RenderIfVisible defaultHeight={200}>
+              <Comments id={id}></Comments>
+            </RenderIfVisible>
           </div>
         </div>
         {/* 右侧侧边栏 */}
