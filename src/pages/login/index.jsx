@@ -97,27 +97,36 @@ const Login = () => {
               <Form.Item
                 name="account"
                 rules={[
-                  { required: true, message: 'Please input your account!' },
+                  {
+                    required: true,
+                    message: '请输入你的账号',
+                  },
+                  {
+                    pattern: /^[^\u4e00-\u9fa5]+$/,
+                    message: '请勿输入中文',
+                  },
                 ]}
               >
                 <Input
                   prefix={<UserOutlined className="site-form-item-icon" />}
-                  placeholder="account"
+                  placeholder="请输入账号"
                 />
               </Form.Item>
               <Form.Item
                 name="password"
                 rules={[
-                  { required: true, message: 'Please input your Password!' },
+                  {
+                    required: true,
+                    message: '请输入密码',
+                  },
                 ]}
               >
                 <Input.Password
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
-                  placeholder="Password"
+                  placeholder="请输入密码"
                 />
               </Form.Item>
-
               <Form.Item>
                 <Button
                   loading={loginLoading}
@@ -125,7 +134,7 @@ const Login = () => {
                   htmlType="submit"
                   className="login-form-button"
                 >
-                  Log in
+                  登录 / 注册
                 </Button>
               </Form.Item>
             </Form>
@@ -134,11 +143,7 @@ const Login = () => {
       </LoginForm>
       {/* 关于我们 */}
       <AboutUs>
-        {/* <AboutTitle>关于我们</AboutTitle> */}
         {/* 轮播图 */}
-        {/* 左右按钮 */}
-        {/* <ArrowL onClick={() => { handleGotoPrev() }}><LeftCircleTwoTone style={{ fontSize: "30px" }} /></ArrowL>
-                <ArrowR onClick={() => { handleGotoNext() }}><RightCircleTwoTone style={{ fontSize: "30px" }} /></ArrowR> */}
         <Carousel
           ref={calRef}
           dots={false}
