@@ -13,7 +13,7 @@ import { DELETE_INFO } from '../../models/constant'
 const { SubMenu } = Menu
 
 const Header = () => {
-  const [current, setCurrent] = useState('recommend')
+  const [current, setCurrent] = useState('app')
   const [show, setShow] = useState(true) // show 的改变导致了组件的重新渲染，怎么解决呢
   const { userInfo, userDispatch } = useContext(userContext)
   const navigate = useNavigate()
@@ -133,15 +133,15 @@ const Header = () => {
                 <Menu.Item key="news_finance">财经</Menu.Item>
                 <Menu.Item key="news_world">国际</Menu.Item>
                 <Menu.Item key="news_fashion">时尚</Menu.Item>
-                <Menu.Item key="news_travel">旅游</Menu.Item>
-                <Menu.Item key="news_discovery">探索</Menu.Item>
-                <Menu.Item key="news_baby">育儿</Menu.Item>
-                <Menu.Item key="news_regimen">养生</Menu.Item>
-                <Menu.Item key="news_story">故事</Menu.Item>
-                <Menu.Item key="news_essay">美文</Menu.Item>
-                <Menu.Item key="news_game">游戏</Menu.Item>
+                {/* <Menu.Item key="news_travel">旅游</Menu.Item> */}
+                {/* <Menu.Item key="news_discovery">探索</Menu.Item> */}
+                {/* <Menu.Item key="news_baby">育儿</Menu.Item> */}
+                {/* <Menu.Item key="news_regimen">养生</Menu.Item> */}
+                {/* <Menu.Item key="news_story">故事</Menu.Item> */}
+                {/* <Menu.Item key="news_essay">美文</Menu.Item> */}
+                {/* <Menu.Item key="news_game">游戏</Menu.Item> */}
                 <Menu.Item key="news_history">历史</Menu.Item>
-                <Menu.Item key="news_food">美食</Menu.Item>
+                {/* <Menu.Item key="news_food">美食</Menu.Item> */}
                 <Menu.Item key="news_legal">政法</Menu.Item>
                 <Menu.Item key="news_politics">政治</Menu.Item>
                 <Menu.Item key="news_air">航空</Menu.Item>

@@ -19,7 +19,6 @@ export const getArticleList = (options) => {
 }
 
 // 根据标签获取文章
-
 export const getArticleByTag = (options) => {
   return instance({
     url: '/article_list',
@@ -29,7 +28,6 @@ export const getArticleByTag = (options) => {
 }
 
 // 点赞文章，传入文章 id，通过token判断用户
-
 export const digArticle = (options) => {
   return instance({
     url: '/article_digg',
@@ -39,10 +37,18 @@ export const digArticle = (options) => {
 }
 
 // 收藏文章
-
 export const collectArticle = (options) => {
   return instance({
     url: '/article_like',
+    method: 'PUT',
+    data: options,
+  })
+}
+
+// 上传阅读时间
+export const readTime = (options) => {
+  return instance({
+    url: '/read_time',
     method: 'PUT',
     data: options,
   })

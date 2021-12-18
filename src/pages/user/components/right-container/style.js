@@ -15,7 +15,7 @@ export const RightContainerWrapper = styled.div`
 
   .report-enter {
     width: 100%;
-    height: 410px;
+    height: 120px;
     margin-top: 10px;
     background: url(${require('../../../../assets/user-center/report-enter.png')
         .default})
@@ -30,8 +30,8 @@ export const RightContainerWrapper = styled.div`
   }
 
   .report-appear-active {
-    max-height: 500px;
-    transition: all 1s;
+    max-height: 120px;
+    transition: max-height 1s;
   }
 `
 

@@ -1,32 +1,89 @@
-import React, { memo } from 'react'
+import React, { memo, useState, useEffect, useContext } from 'react'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import ReactTooltip from 'react-tooltip'
 
 import {
   shiftDate,
-  getRange,
-  getRandomInt,
   getDaysInfoInYear,
+  getAllDays,
 } from '../../../../../../utils/date-format'
+import { calendarDataContext } from '../../../../../../models/context'
 
 import { Select } from 'antd'
 
 import { CalendarWrapper, TitleWrapper, ButtonWrapper } from './style'
 
+const { Option } = Select
 export default memo(function CalendarHotGraph() {
-  const { Option } = Select
-  // 该函数用于将每一天对应的date和count，返回的是一年中包含这些数据的新数组；最终是要传递给日历组件的
-  const { allDays, endDay } = getDaysInfoInYear()
-
-  // 注意：这个年份不是固定的，我们最好写成是自适应年份的代码，即判断当前的年份，并且要判断出是平年还是闰年，最终再决定这个天数
-  const randomValues = getRange(allDays).map((index) => {
-    return {
-      date: shiftDate(endDay, -index),
-      count: getRandomInt(0, 180),
-    }
+  // 从context中获取到日历热图所需要的数据并将状态保存下来
+  const yearlyData = useContext(calendarDataContext)
+  console.log(yearlyData)
+  console.log('-----------')
+  const [calendarData, setCalendarData] = useState(yearlyData)
+  // 在日历热图下方要展示的数据状态
+  const [showTimeDate, setShowTimeDate] = useState({
+    recentlyLoginTime: 0,
+    longestLoginTime: 0,
+    allReadingTime: 0,
   })
+
+  // 当context传递过来的数据改变时，需要更新状态;由于后台只返回
+  useEffect(() => {
+    let initAllDaysArr = getAllDays(allDays, endDay)
+    const len = yearlyData.length
+    if (len) {
+      // 获取初始化数组
+      const copyYearlyData = [...yearlyData]
+      // 赋值时用的计数器变量
+      let counter = 0
+      // 用于记录用户年度阅读总时长的变量，
+      let allReadingTime = 0
+      // 用于记录用户年度最长登录时间的变量，
+      let longestLoginTime = 0
+      let maxLongestLoginTime = 0
+      // 用于记录用户年度最近最长登录时间的变量以及是否继续记录的标志
+      let recentlyLoginTime = 0
+      let flag = true
+      // 由于后台返回的时间并没有按照我们想要的时间顺序排列，所以这里要将响应结果排序
+      copyYearlyData.sort((obj1, obj2) => {
+        return obj2.date - obj1.date
+      })
+      // 将排序好的数据数组里的日期对应一个数组
+      const dateArr = copyYearlyData.map((item) => {
+        allReadingTime += item.count
+        return item.date.getTime()
+      })
+      // 将排序好的数据数组里的阅读时间对应一个数组
+      const countArr = copyYearlyData.map((item) => {
+        return item.count
+      })
+
+      initAllDaysArr.forEach((item, index) => {
+        if (dateArr.includes(item.date.getTime())) {
+          const targetObj = initAllDaysArr[index]
+          targetObj.count = countArr[counter++]
+          longestLoginTime++
+          flag && recentlyLoginTime++
+          maxLongestLoginTime = Math.max(maxLongestLoginTime, longestLoginTime)
+        } else {
+          longestLoginTime = 0
+          if (maxLongestLoginTime) {
+            flag = false
+          }
+        }
+      })
+      setShowTimeDate({
+        recentlyLoginTime,
+        longestLoginTime: maxLongestLoginTime,
+        allReadingTime,
+      })
+    }
+    // 无论数组长度是否为0都要更新状态
+    setCalendarData(initAllDaysArr)
+  }, [yearlyData])
+
   // 存储虚拟数据（以后是从后台获取的）
-  localStorage.setItem('randomValues', JSON.stringify(randomValues))
+  // localStorage.setItem('randomValues', JSON.stringify(calendarData))
 
   // 用户鼠标经过颜色格子的时候显示颜色对应的范围
   const handleShowNumScope = (index) => {
@@ -46,21 +103,33 @@ export default memo(function CalendarHotGraph() {
     }
   }
 
+  // 该函数用于将每一天对应的date和count，返回的是一年中包含这些数据的新数组；最终是要传递给日历组件的
+  const { allDays, endDay } = getDaysInfoInYear()
+
+  // 计算年度阅读总时间
+  // const allReadingTime = (() => {
+  //   let sum = 0
+  //   calendarData.forEach(item => {
+  //     sum += item.count
+  //   })
+  //   return sum
+  // })()
+
   return (
     <CalendarWrapper>
       <TitleWrapper>
         <h1 className="title">阅读日历</h1>
         <Select defaultValue="2021" style={{ width: 120 }}>
-          <Option value="jack">2021</Option>
+          <Option>2021</Option>
         </Select>
       </TitleWrapper>
       <CalendarHeatmap
-        startDate={shiftDate(endDay, -365)} // 日历的开始时间，要根据平年闰年计算出往前推的天数
+        startDate={shiftDate(endDay, -allDays)} // 日历的开始时间，要根据平年闰年计算出往前推的天数
         endDate={endDay} // 结束时间，只需调成每一年的最后一天即可
-        values={randomValues} // 记录着每一年每一天的数据
+        values={calendarData} // 记录着每一年每一天的数据
         classForValue={(value) => {
           // 根据对应的value值决定类名的函数
-          const time = value.count
+          const time = value && value.count
           if (!time) {
             return 'color-news-0'
           } else if (time < 20) {
@@ -77,9 +146,9 @@ export default memo(function CalendarHotGraph() {
         tooltipDataAttrs={(value) => {
           // 这个回调的参数其实就是对应天数的value值，包含date和count属性
           return {
-            'data-tip': `${value.date.toISOString().slice(0, 10)}  浏览时间: ${
-              value.count
-            }min`, // 这里toolTip组件要提示的信息
+            'data-tip': `${
+              (value.date && value.date.toISOString().slice(0, 10)) || ''
+            }  浏览时间: ${value.count}min`, // 这里toolTip组件要提示的信息
             rx: 2,
             width: '12px',
             height: '12px',
@@ -90,13 +159,16 @@ export default memo(function CalendarHotGraph() {
       <ButtonWrapper>
         <div className="statistics">
           <span className="all-read-time">
-            最近连续登陆时间: <span className="num">6</span> 天
+            最近连续登陆时间:{' '}
+            <span className="num">{showTimeDate.recentlyLoginTime}</span> 天
           </span>
           <span className="all-read-time">
-            最长连续登陆时间：<span className="num">326</span> 天
+            最长连续登陆时间：
+            <span className="num">{showTimeDate.longestLoginTime}</span> 天
           </span>
           <span className="all-read-time">
-            最近一年浏览总时间：<span className="num">2356</span> 分钟
+            最近一年浏览总时间：
+            <span className="num">{showTimeDate.allReadingTime}</span> 分钟
           </span>
         </div>
         <div className="color-show-box">

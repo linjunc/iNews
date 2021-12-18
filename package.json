@@ -36,7 +36,8 @@
     "react-transition-group": "^4.4.2",
     "react-zmage": "^0.8.5-beta.37",
     "styled-components": "^5.3.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "xss": "^1.0.10"
   },
   "scripts": {
     "start": "react-scripts start",

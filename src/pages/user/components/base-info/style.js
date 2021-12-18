@@ -4,10 +4,13 @@ export const BaseInfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-bottom: 8px;
+  padding-top: 5px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+  min-height: 189px;
 
   .avatar {
     flex: 0 0 auto;
@@ -20,7 +23,6 @@ export const BaseInfoWrapper = styled.div`
   .info-box {
     flex-direction: column;
     flex: 1 1 auto;
-    min-height: 50px;
     font-size: 14px;
     color: #72777b;
 

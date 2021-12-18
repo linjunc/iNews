@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-
 import { CSSTransition } from 'react-transition-group'
 
 import {
@@ -10,7 +9,7 @@ import {
   FollowNumWrapper,
 } from './style'
 
-export default function RightContainer() {
+export default memo(function RightContainer() {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -123,4 +122,4 @@ export default function RightContainer() {
       </div>
     </RightContainerWrapper>
   )
-}
+})
