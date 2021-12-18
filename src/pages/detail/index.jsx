@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
-import { Skeleton, Button, Slider, message, Modal } from 'antd'
+import { Skeleton, Button, message, Modal } from 'antd'
 import { throttle } from 'lodash'
 import { PhotoProvider, PhotoSlider } from 'react-photo-view'
 import 'react-photo-view/dist/index.css'
@@ -22,13 +22,13 @@ import { getAllImg } from '../../utils/getImg'
 import { speak } from '../../utils/speak'
 import { getScrollTop } from '../../utils/scrollHeight'
 import BackToTop from './components/BackToTop'
-import QrCode from './components/QrCode'
 import ArticleSide from './components/ArticleSide'
 import CenterLine from './components/CenterLine'
 import AfterLook from './components/AfterLook/'
 import SpeakArticle from './components/SpeakArticle'
+import BannerCard from './components/BannerCard'
+import LeftSide from './components/LeftSide'
 import LoveButton from '../../components/LoveButton'
-import logo from '../../assets/logo/logo.png'
 import { DetailWrapper } from './style'
 import { FocusAuthor } from '../../services/user'
 
@@ -265,6 +265,7 @@ const Detail = memo(() => {
     return () => {
       window.removeEventListener('scroll', bindHandleScroll)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -272,47 +273,14 @@ const Detail = memo(() => {
       {/* 骨架屏加载 */}
       <Skeleton active loading={artLoading} paragraph={{ rows: 16 }} round>
         {/* 左侧交互按钮 */}
-        <div className="left-sidebar">
-          <div className="left-box">
-            <div className="left-clear"></div>
-            <div className="left-container">
-              <LoveButton
-                handleClick={handleLove}
-                done={numGroup.loveDone}
-                key="love"
-                content="点赞"
-                type={0}
-                number={numGroup.loveNum}
-              />
-              <LoveButton
-                handleClick={handleComment}
-                key="comment"
-                content="评论区"
-                type={1}
-                number={numGroup.commentNum}
-              />
-              <LoveButton
-                handleClick={handleCollect}
-                done={numGroup.collect}
-                key="collect"
-                content="收藏文章"
-                type={2}
-                number={numGroup.collectNum}
-              />
-              <QrCode />
-              <div className="size-controller">
-                <div className="controller-title">字体大小</div>
-                <Slider
-                  onChange={handleSize}
-                  min={12}
-                  max={24}
-                  vertical
-                  value={size}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <LeftSide
+          numGroup={numGroup}
+          size={size}
+          handleCollect={handleCollect}
+          handleComment={handleComment}
+          handleLove={handleLove}
+          handleSize={handleSize}
+        />
         {/* 文章内容 */}
         <div
           className="main"
@@ -386,7 +354,7 @@ const Detail = memo(() => {
               {numGroup.focus ? '已关注' : '+ 关注'}
             </Button>
           </div>
-          {/* 虚线 */}
+          {/* 右侧文章列表 */}
           <Skeleton
             active
             loading={!articleList[1]}
@@ -400,16 +368,7 @@ const Detail = memo(() => {
             <ArticleSide articleList={articleList[1]} />
           </Skeleton>
           {/* 广告 */}
-          <div className="hot-advertise">
-            <div className="our-logo">
-              <img src={logo} alt="" />
-            </div>
-            <div className="our-text">
-              <div className="our-title">iNews 新闻门户网站</div>
-              <div className="our-slogan">更轻、更快、更有趣</div>
-              <div className="our-info">欢迎加入我们</div>
-            </div>
-          </div>
+          <BannerCard />
           {/* 下滑过长后的固定右侧 */}
           <div className={show ? 'sticky-box show' : 'sticky-box'}>
             {/* 作者信息 */}
@@ -442,16 +401,7 @@ const Detail = memo(() => {
               </Button>
             </div>
             {/* 广告 */}
-            <div className="hot-advertise">
-              <div className="our-logo">
-                <img src={logo} alt="" />
-              </div>
-              <div className="our-text">
-                <div className="our-title">iNews 新闻门户网站</div>
-                <div className="our-slogan">更轻、更快、更有趣</div>
-                <div className="our-info">欢迎加入我们</div>
-              </div>
-            </div>
+            <BannerCard />
             <Skeleton
               active
               loading={!articleList[1]}

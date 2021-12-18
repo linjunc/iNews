@@ -8,6 +8,7 @@ import Search from './components/Search'
 import Article from './components/Article'
 import Loading from './components/Loading'
 import RightContent from './components/RightContent'
+import HomeToTop from '../../components/HomeToTop'
 
 import { getArticles } from '../../services/home'
 import HotArticle from './components/HotArticle'
@@ -16,6 +17,7 @@ let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
+
 const Home = (props) => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
@@ -69,7 +71,6 @@ const Home = (props) => {
       shuffle(newList)
       //添加到文章列表
       setArticleList((val) => [...val, ...newList])
-
       switch (tag) {
         case 'app':
           break
@@ -230,6 +231,9 @@ const Home = (props) => {
     <HomeContainer>
       <Search></Search>
       {showHot()}
+      <div className="hideBottom">
+        <HomeToTop />
+      </div>
     </HomeContainer>
   )
 }

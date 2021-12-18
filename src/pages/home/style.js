@@ -52,4 +52,14 @@ export const HomeContainer = styled.div`
       margin-left: 230px;
     }
   }
+  .hideBottom {
+    position: fixed;
+    bottom: -55px;
+    right: 50px;
+    width: 88px;
+    height: 123px;
+    img {
+      transition: all 0.2s;
+    }
+  }
 `
