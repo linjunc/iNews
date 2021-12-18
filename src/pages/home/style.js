@@ -4,8 +4,11 @@ export const HomeContainer = styled.div`
   margin-top: -64px; // 减去头部的64px
   .content {
     position: relative;
-    left: 50%;
-    margin-left: -500px;
+    /* left: 50%; */
+    /* margin-left: -500px; */
+    /* left: 0;
+    right: 0; */
+    margin: 0 auto;
     width: 1000px;
     display: flex;
     justify-content: space-between;
@@ -44,12 +47,15 @@ export const HomeContainer = styled.div`
     }
     .home_right {
       width: 280px;
+      /* transition: all .5s; */
+      /* transition: top 0.5s; */
     }
     .fixed_box {
       position: fixed;
       top: 80px;
       left: 50%;
-      margin-left: 230px;
+      margin-left: 220px;
+      opacity: 1;
     }
   }
 `
