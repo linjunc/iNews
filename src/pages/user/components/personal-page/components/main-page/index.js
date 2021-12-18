@@ -5,7 +5,7 @@ import xss from 'xss'
 
 import { setUserInfo } from '../../../../../../services/user'
 import { getSession, setSession } from '../../../../../../utils/storage'
-import { userInfoContext } from '../../../../../../models/context'
+import { allUserInfoContext } from '../../../../../../models/context'
 
 import { Button, Input, message } from 'antd'
 
@@ -31,7 +31,7 @@ export default function MainPage() {
   // 用于记录预览框的dom元素
   const markedRef = useRef()
   // 从context中获取用户信息
-  const userAllInfo = useContext(userInfoContext)
+  const { userInfo: userAllInfo } = useContext(allUserInfoContext)
   let { personal_page, nickname, introduction } = userAllInfo
   // 记录上一此更改个人主页的代码
   let lastPersonalPage = useRef(personal_page)
