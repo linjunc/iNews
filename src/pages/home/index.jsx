@@ -12,25 +12,17 @@ import HomeToTop from '../../components/HomeToTop'
 
 import { getArticles } from '../../services/home'
 import HotArticle from './components/HotArticle'
+import { shuffle } from '../../utils/shuffle'
 let num = 0
 let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
-
 const Home = (props) => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
   const [articleList, setArticleList] = useState([])
-  // 数组打乱方法
-  const shuffle = (arr) => {
-    let m = arr.length,
-      i
-    while (m) {
-      i = (Math.random() * m--) >>> 0
-      ;[arr[m], arr[i]] = [arr[i], arr[m]]
-    }
-  }
+  const [hotArr, setHotArr] = useState([])
   //文章存session
   const setArticles = (tag, newList, num, hasMore) => {
     let articlesList = JSON.parse(sessionStorage.getItem(`${tag}_articles`))
@@ -70,54 +62,7 @@ const Home = (props) => {
       shuffle(newList)
       //添加到文章列表
       setArticleList((val) => [...val, ...newList])
-      switch (tag) {
-        case 'app':
-          break
-        case 'recommend':
-          setArticles('recommend', newList, num, hasMore)
-          break
-        case 'news_society':
-          setArticles('news_society', newList, num, hasMore)
-          break
-        case 'news_entertainment':
-          setArticles('news_entertainment', newList, num, hasMore)
-          break
-        case 'news_tech':
-          setArticles('news_tech', newList, num, hasMore)
-          break
-        case 'news_military':
-          setArticles('news_military', newList, num, hasMore)
-          break
-        case 'news_sports':
-          setArticles('news_sports', newList, num, hasMore)
-          break
-        case 'news_car':
-          setArticles('news_car', newList, num, hasMore)
-          break
-        case 'news_finance':
-          setArticles('news_finance', newList, num, hasMore)
-          break
-        case 'news_world':
-          setArticles('news_world', newList, num, hasMore)
-          break
-        case 'news_fashion':
-          setArticles('news_fashion', newList, num, hasMore)
-          break
-        case 'news_history':
-          setArticles('news_history', newList, num, hasMore)
-          break
-        case 'news_legal':
-          setArticles('news_legal', newList, num, hasMore)
-          break
-        case 'news_politics':
-          setArticles('news_politics', newList, num, hasMore)
-          break
-        case 'news_air':
-          setArticles('news_air', newList, num, hasMore)
-          break
-        default:
-          break
-      }
+      setArticles(tag, newList, num, hasMore)
     } catch (error) {
       message.error('数据获取失败,请重试！')
     } finally {
@@ -159,7 +104,7 @@ const Home = (props) => {
   }, [location.state])
 
   const showHot = () => {
-    if (tag === 'app') return <HotArticle />
+    if (tag === 'app') return <HotArticle hotArr={hotArr} />
     return (
       <div className="content">
         <div className="main">
@@ -175,7 +120,7 @@ const Home = (props) => {
           {showLoadBtm()}
           {hasNone()}
         </div>
-        <RightContent />
+        <RightContent hotArr={hotArr} />
       </div>
     )
   }
@@ -198,6 +143,22 @@ const Home = (props) => {
   let topValue = 0
 
   useEffect(() => {
+    let hotArr_sess = JSON.parse(sessionStorage.getItem('hotArr'))
+    if (!hotArr_sess) {
+      getArticles({
+        tag: 'hot',
+        n: 12,
+        skip: 0,
+      }).then(
+        (res) => {
+          hotArr_sess = res.data.article_list
+          sessionStorage.setItem('hotArr', JSON.stringify(hotArr_sess))
+          setHotArr(hotArr_sess)
+        },
+        (err) => message.error(err),
+      )
+    } else setHotArr(hotArr_sess)
+
     const handelToBottom = throttle((e) => {
       const { clientHeight, scrollHeight, scrollTop } =
         e.target.scrollingElement
