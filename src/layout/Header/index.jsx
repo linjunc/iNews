@@ -14,7 +14,7 @@ const { SubMenu } = Menu
 
 const Header = () => {
   const [current, setCurrent] = useState('app')
-  const [show, setShow] = useState(true) // show 的改变导致了组件的重新渲染，怎么解决呢
+  const [show, setShow] = useState(false) // show 的改变导致了组件的重新渲染，怎么解决呢
   const navigate = useNavigate()
   const { pathname } = useLocation()
   // 判断滚动方向
@@ -43,13 +43,13 @@ const Header = () => {
   }, 200)
   // 初始化滚动事件
   useEffect(() => {
+    console.log(123)
     // 如果是首页，让首页用context控制
     if (pathname === '/') return
-    else {
-      window.addEventListener('scroll', bindHandleScroll)
-      // 修复使用浏览器返回的bug
-      setShow(true)
-    }
+
+    window.addEventListener('scroll', bindHandleScroll)
+    // 修复使用浏览器返回的bug
+    setShow(true)
 
     return () => {
       window.removeEventListener('scroll', bindHandleScroll)

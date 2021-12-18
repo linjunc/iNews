@@ -35,9 +35,7 @@ const Parallax = (props) => {
         getScrollTop() / contentRef.current.getBoundingClientRect().height,
       )
     }, 16)
-    isVisible
-      ? window.addEventListener('scroll', handleScroll)
-      : window.removeEventListener('scroll', handleScroll)
+    if (isVisible) window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isVisible])
 

@@ -1,6 +1,7 @@
 import { PageHeaderWrapper } from './style'
 import Weather from '../Weather'
 import { Popover } from 'antd'
+import Avatar from '../../../../../../components/Avatar'
 
 const PageHeader = () => {
   return (
@@ -10,10 +11,10 @@ const PageHeader = () => {
           <div>关于</div>
         </div>
         <div className="right-box">
-          <Popover content={<Weather />} color="rgba(255, 255, 255, 0.8)">
+          <Popover content={<Weather />} color="rgba(255, 255, 255, 0.9)">
             天气
           </Popover>
-          <div>登录</div>
+          <Avatar color="rgba(255, 255, 255, 0.9)"></Avatar>
         </div>
       </div>
     </PageHeaderWrapper>

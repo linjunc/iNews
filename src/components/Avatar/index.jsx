@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router'
 import { userContext } from '../../models/context'
 import { DELETE_INFO } from '../../models/constant'
 
-const Avatar = () => {
-  console.log('avatar rerender')
+const Avatar = ({ color }) => {
   const { userInfo, userDispatch } = useContext(userContext)
   const navigate = useNavigate()
 
@@ -43,7 +42,9 @@ const Avatar = () => {
   if (userInfo) {
     // 下拉菜单
     const menu = (
-      <Menu style={{ width: '110px', textAlign: 'center' }}>
+      <Menu
+        style={{ width: '110px', textAlign: 'center', backgroundColor: color }}
+      >
         <Menu.Item key="0">
           <span onClick={toUser}>个人中心</span>
         </Menu.Item>
