@@ -4,11 +4,12 @@ import { Link, NavLink } from 'react-router-dom'
 import { getScrollTop } from '../../../../utils/scrollHeight'
 
 import { Avatar } from 'antd'
-import EditBtn from '../edit-btn'
+import OperateBtn from '../operate-btn'
 
 import { ListHeaderWrapper } from './style'
 
-export default memo(function ListHeader() {
+export default memo(function ListHeader(props) {
+  const { isSelf, concernUserFn } = props
   const [isFixed, setIsFixed] = useState(null)
   let topValue = 0
   let scrollTop = 0
@@ -127,7 +128,9 @@ export default memo(function ListHeader() {
               )
             })}
           </div>
-          {isFixed && <EditBtn />}
+          {isFixed && (
+            <OperateBtn isSelf={isSelf} concernUserFn={concernUserFn} />
+          )}
         </div>
       </ListHeaderWrapper>
     </>

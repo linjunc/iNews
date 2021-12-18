@@ -25,19 +25,17 @@ const Parallax = (props) => {
     )
     observer.observe(contentRef.current)
     return () => observer.disconnect()
-  }, [contentRef])
+  }, [contentRef, setHeaderShow])
 
-  // scroll listener，随着滚动距离设置偏移量
-  const handleScroll = throttle(() => {
-    setContentTranslateY(
-      getScrollTop() / contentRef.current.getBoundingClientRect().height,
-    )
-  }, 16)
   // 可见就添加监听器
   useEffect(() => {
-    isVisible
-      ? window.addEventListener('scroll', handleScroll)
-      : window.removeEventListener('scroll', handleScroll)
+    // scroll listener，随着滚动距离设置偏移量
+    const handleScroll = throttle(() => {
+      setContentTranslateY(
+        getScrollTop() / contentRef.current.getBoundingClientRect().height,
+      )
+    }, 16)
+    if (isVisible) window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isVisible])
 

@@ -1,22 +1,21 @@
-import React, { memo, useEffect, useContext, useState } from 'react'
-import { useNavigate } from 'react-router'
+import React, { useEffect, useContext, memo } from 'react'
+import { useNavigate, useParams } from 'react-router'
 
 import { userInfoContext } from '../../../../models/context'
 import { getLocal } from '../../../../utils/storage'
 
-import { Spin } from 'antd'
-import EditBtn from '../edit-btn'
+import OperateBtn from '../operate-btn'
 
 import { BaseInfoWrapper } from './style'
 
 export default memo(function BaseInfo(props) {
   // 从props中获取到传递过来的用户id
-  const { id: user_id } = props
-  const [isInfoLoading, setIsInfoLoading] = useState(true)
+  const { id: user_id } = useParams
   // 使用useContext获取传递过来的用户信息
   const navigate = useNavigate()
   // 从context中获取用户信息
   const userAllInfo = useContext(userInfoContext)
+  const { isSelf, concernUserFn } = props
 
   // 判断用户是否已经登录，如果没有登录则需要跳转至登录页面
   useEffect(() => {
@@ -25,15 +24,9 @@ export default memo(function BaseInfo(props) {
     }
   }, [navigate])
 
-  // 当用户信息还没有请求到的时候开启loading状态，请求到时关闭loading
-  useEffect(() => {
-    if (JSON.stringify(userAllInfo) !== '{}') {
-      setIsInfoLoading(false)
-    }
-  }, [userAllInfo])
-
   // 获取头像、个人介绍、用户名
   const { avatar, introduction, nickname } = userAllInfo
+
   return (
     <BaseInfoWrapper>
       <img
@@ -44,24 +37,21 @@ export default memo(function BaseInfo(props) {
           require('../../../.././assets/user-center/default-avatar.png').default
         }
       />
-      {isInfoLoading ? (
-        <Spin />
-      ) : (
-        <div className="info-box middle-item">
-          <div className="user-name middle-item">
-            <span className="text-nowrap">{nickname || `用户${user_id}`}</span>
-          </div>
-          <div className="brief middle-item">
-            <svg width="21" height="18" viewBox="0 0 21 18">
-              <path
-                fill="#72777B"
-                d="M4 4h13a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm9 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3 3a3 3 0 0 0-6 0h6zM5 7v1h4V7H5zm0 2.5v1h4v-1H5zM5 12v1h4v-1H5z"
-              ></path>
-            </svg>
-            <span>{introduction || '该用户暂无简介'}</span>
-          </div>
+      <div className="info-box middle-item">
+        <div className="user-name middle-item">
+          <span className="text-nowrap">{nickname || `用户${user_id}`}</span>
         </div>
-      )}
+        <div className="brief middle-item">
+          <svg width="21" height="18" viewBox="0 0 21 18">
+            <path
+              fill="#72777B"
+              d="M4 4h13a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm9 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3 3a3 3 0 0 0-6 0h6zM5 7v1h4V7H5zm0 2.5v1h4v-1H5zM5 12v1h4v-1H5z"
+            ></path>
+          </svg>
+          <span>{introduction || '该用户暂无简介'}</span>
+        </div>
+      </div>
+
       <div className="action-box middle-item">
         <div className="link-box">
           <a target="_blank" title="绑定微博">
@@ -104,7 +94,11 @@ export default memo(function BaseInfo(props) {
           </a>
         </div>
       </div>
-      <EditBtn style={{ marginBottom: '6px' }} />
+      <OperateBtn
+        style={{ marginBottom: '6px' }}
+        isSelf={isSelf}
+        concernUserFn={concernUserFn}
+      />
     </BaseInfoWrapper>
   )
 })

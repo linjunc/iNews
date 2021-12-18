@@ -10,9 +10,17 @@ export const getRange = (count) => {
   return Array.from({ length: count }, (_, i) => i)
 }
 
-// 生成随记数的函数
-export const getRandomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min
+// 返回一个从一年第一天到最后一天的数组
+export const getAllDays = (allDays, endDay) => {
+  // 判断当前的年份，并且要判断出是平年还是闰年，最终再决定这个天数
+  const allDaysArr = getRange(allDays).map((index) => {
+    return {
+      date: new Date(shiftDate(endDay, -index)),
+      count: 0,
+    }
+  })
+  // allDaysArr.reverse()
+  return allDaysArr
 }
 
 // 该函数用于获取当前年份并返回一天中的总天数和结束日期等数据

@@ -71,11 +71,4 @@ export const MenuWrapper = styled.div`
       cursor: pointer;
     }
   }
-  .login-button {
-    font-size: 16px;
-    font-weight: 500;
-    height: 36px;
-    border-radius: 8px;
-    margin-left: 16px;
-  }
 `

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Button, Menu, Input, Dropdown, Avatar, message, Modal } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Menu, Input } from 'antd'
+import Avatar from '../../components/Avatar'
 import { SearchOutlined } from '@ant-design/icons'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 import { throttle } from 'lodash'
@@ -7,15 +8,13 @@ import { throttle } from 'lodash'
 import { getScrollTop } from '../../utils/scrollHeight'
 import logoSrc from '../../assets/logo/logo_text.png'
 import { MenuWrapper, FixedContainer } from './style'
-import { headerShowContext, userContext } from '../../models/context'
-import { DELETE_INFO } from '../../models/constant'
+import { headerShowContext } from '../../models/context'
 
 const { SubMenu } = Menu
 
 const Header = () => {
   const [current, setCurrent] = useState('app')
-  const [show, setShow] = useState(true) // show 的改变导致了组件的重新渲染，怎么解决呢
-  const { userInfo, userDispatch } = useContext(userContext)
+  const [show, setShow] = useState(false) // show 的改变导致了组件的重新渲染，怎么解决呢
   const navigate = useNavigate()
   const { pathname } = useLocation()
   // 判断滚动方向
@@ -44,13 +43,13 @@ const Header = () => {
   }, 200)
   // 初始化滚动事件
   useEffect(() => {
+    console.log(123)
     // 如果是首页，让首页用context控制
     if (pathname === '/') return
-    else {
-      window.addEventListener('scroll', bindHandleScroll)
-      // 修复使用浏览器返回的bug
-      setShow(true)
-    }
+
+    window.addEventListener('scroll', bindHandleScroll)
+    // 修复使用浏览器返回的bug
+    setShow(true)
 
     return () => {
       window.removeEventListener('scroll', bindHandleScroll)
@@ -58,54 +57,10 @@ const Header = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
-  // 路由跳转，click
-  const toLogin = () => {
-    navigate('/login')
-  }
-
+  // 路由跳转，去首页
   const toHome = () => {
     navigate('/')
   }
-  const toCovid = () => {
-    navigate('/covidMap')
-  }
-  // 退出登录
-  const logout = () => {
-    Modal.confirm({
-      title: '你确定要退出账号吗？退出后有些服务无法享受噢~',
-      onOk: () => {
-        navigate('/login')
-        localStorage.removeItem('token')
-        localStorage.removeItem('userInfo')
-        message.success('退出成功')
-        // 更新context 中的数据
-        userDispatch({
-          type: DELETE_INFO,
-        })
-      },
-    })
-  }
-
-  // 下拉菜单
-  const menu = (
-    <Menu style={{ width: '110px', textAlign: 'center' }}>
-      <Menu.Item key="0">
-        <span
-          onClick={() => {
-            navigate(`/user/${userInfo.user_id}`)
-          }}
-        >
-          个人中心
-        </span>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <span onClick={logout}>退出登录</span>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <span onClick={toCovid}>肺炎地图</span>
-      </Menu.Item>
-    </Menu>
-  )
 
   return (
     <div>
@@ -158,17 +113,7 @@ const Header = () => {
               <SearchOutlined />
             </button>
           </div>
-          {userInfo ? (
-            <>
-              <Dropdown arrow={true} overlay={menu} placement="bottomCenter">
-                <Avatar style={{ cursor: 'pointer' }} src={userInfo.avatar} />
-              </Dropdown>
-            </>
-          ) : (
-            <Button type="primary" onClick={toLogin} className="login-button">
-              登录
-            </Button>
-          )}
+          <Avatar></Avatar>
         </MenuWrapper>
       </FixedContainer>
       {/* 占去头部的 64px */}

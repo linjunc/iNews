@@ -20,4 +20,7 @@ export const Commenttt = styled.div`
   .reply {
     width: 600px;
   }
+  .dianzan {
+    width: 30px;
+  }
 `

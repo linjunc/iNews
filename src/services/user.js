@@ -46,3 +46,12 @@ export const uploadUserInfo = (options) => {
     data: options,
   })
 }
+
+// 获取用户一年中浏览的时间用于生成日历热图
+export const getSpendTimeYearly = (options) => {
+  return instance({
+    url: '/calendar_hot_graph',
+    method: 'GET',
+    params: options,
+  })
+}

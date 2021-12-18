@@ -16,6 +16,7 @@ export const PageHeaderWrapper = styled.div`
     .left-box,
     .right-box {
       display: flex;
+      align-items: center;
     }
     .left-box {
       > * {

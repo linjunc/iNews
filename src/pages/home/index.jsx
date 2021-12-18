@@ -8,6 +8,7 @@ import Search from './components/Search'
 import Article from './components/Article'
 import Loading from './components/Loading'
 import RightContent from './components/RightContent'
+import HomeToTop from '../../components/HomeToTop'
 
 import { getArticles } from '../../services/home'
 import HotArticle from './components/HotArticle'
@@ -16,11 +17,11 @@ let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
+
 const Home = (props) => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
   const [articleList, setArticleList] = useState([])
-  const [isFixed, setIsFixed] = useState(false)
   // 数组打乱方法
   const shuffle = (arr) => {
     let m = arr.length,
@@ -69,7 +70,6 @@ const Home = (props) => {
       shuffle(newList)
       //添加到文章列表
       setArticleList((val) => [...val, ...newList])
-
       switch (tag) {
         case 'app':
           break
@@ -175,9 +175,7 @@ const Home = (props) => {
           {showLoadBtm()}
           {hasNone()}
         </div>
-        <div className={isFixed ? 'home_right fixed_box' : 'home_right'}>
-          <RightContent />
-        </div>
+        <RightContent />
       </div>
     )
   }
@@ -206,8 +204,6 @@ const Home = (props) => {
 
       const isBottom = scrollTop + clientHeight + 10 > scrollHeight //是否到达底部
 
-      if (scrollTop >= 700) setIsFixed(true)
-      else setIsFixed(false)
       // 下滚
       if (scrollTop > topValue) {
         if (isBottom && tag !== 'app') {
@@ -230,6 +226,9 @@ const Home = (props) => {
     <HomeContainer>
       <Search></Search>
       {showHot()}
+      <div className="hideBottom">
+        <HomeToTop />
+      </div>
     </HomeContainer>
   )
 }

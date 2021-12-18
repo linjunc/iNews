@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useContext } from 'react'
 import { marked } from 'marked'
 import { CSSTransition } from 'react-transition-group'
+import xss from 'xss'
 
 import { setUserInfo } from '../../../../../../services/user'
 import { getSession, setSession } from '../../../../../../utils/storage'
@@ -11,6 +12,21 @@ import { Button, Input, message } from 'antd'
 import { MarkedContentWrapper, MarkedAreaWrapper } from './style'
 
 const { TextArea } = Input
+// 配置过滤xss攻击的白名单
+const myXss = new xss.FilterXSS({
+  whiteList: {
+    div: ['align', 'title', 'style'],
+    p: ['align', 'style'],
+    span: ['align', 'style'],
+    img: ['align', 'alt', 'src', 'target', 'title', 'style'],
+    h1: ['align', 'style'],
+    h2: ['align', 'style'],
+    h3: ['align', 'style'],
+    h4: ['align', 'style'],
+    h5: ['align', 'style'],
+    h6: ['align', 'style'],
+  },
+})
 export default function MainPage() {
   // 用于记录预览框的dom元素
   const markedRef = useRef()
@@ -49,9 +65,9 @@ export default function MainPage() {
 
   useEffect(() => {
     if (!isShowEditBox && personal_page) {
-      markedRef.current.innerHTML = marked(
-        getSession('personal_page') || personal_page,
-      )
+      // 在将用户输入的内容渲染到页面之前先做一次xss攻击过滤
+      const html = myXss.process(getSession('personal_page') || personal_page)
+      markedRef.current.innerHTML = marked(html)
     }
   }, [isShowEditBox, personal_page])
 
