@@ -1,16 +1,19 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useContext } from 'react'
 import * as eCharts from 'echarts'
 
 import { lazyLoad } from '../../../../../../utils/optimize-fn'
 import { throttle } from 'lodash'
+import { allUserInfoContext } from '../../../../../../models/context'
 
 import AnalyseTitle from '../analyse-title'
 
 import { InstrumentChartWrapper, ContentWrapper } from './style'
 
-export default function InstrumentChart() {
+export default function InstrumentChart(props) {
+  const { readingTimeRank } = props
   // 通过useRef获取图表包裹元素
   const graphRef = useRef()
+  const { calendarData } = useContext(allUserInfoContext)
 
   const initChart = () => {
     const myChart = eCharts.init(graphRef.current)
@@ -69,10 +72,10 @@ export default function InstrumentChart() {
           },
           data: [
             {
-              value: userReadingMaxTime,
+              value: readingTimeRank[0]?.value || 0,
             },
           ],
-          max: 480, // 这个是按照用户每天浏览网站8小时计算出的单日使用最长时间量程
+          max: 800,
         },
       ],
     }
@@ -91,8 +94,12 @@ export default function InstrumentChart() {
     }
   }, [lazyFn])
 
-  // 假定给用户的单日最大阅读数
-  const userReadingMaxTime = 320
+  // 计算用户年度浏览总时长
+  let userReadingMaxTime = 0
+  calendarData.length &&
+    calendarData.forEach((item) => {
+      userReadingMaxTime += item.count
+    })
 
   return (
     <div>
@@ -102,12 +109,13 @@ export default function InstrumentChart() {
           <p>
             这一年里
             <br />
-            您与iNews一起度过了<span>32154</span>分钟
+            您与iNews一起度过了<span>{userReadingMaxTime}</span>分钟
           </p>
           <p>
-            您热衷于阅读<span>热点类</span>新闻
+            您热衷于阅读<span>{readingTimeRank[0]?.name}</span>新闻
             <br />
-            在这神秘的领域您总共投入了<span>320</span>分钟
+            在这神秘的领域您总共投入了
+            <span>{readingTimeRank[0]?.value || 0}</span>分钟
           </p>
           <p>
             感谢你对我们的<span>支持</span>

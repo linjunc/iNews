@@ -4,11 +4,13 @@ import * as eCharts from 'echarts'
 import { lazyLoad } from '../../../../../../utils/optimize-fn'
 import { throttle } from 'lodash'
 
+import { Empty } from 'antd'
 import AnalyseTitle from '../analyse-title'
 
 import { GraphWrapper } from './style'
 
-export default function PieChart() {
+export default function PieChart(props) {
+  const { readingTimeRank } = props
   // 通过useRef获取图表包裹元素
   const graphRef = useRef()
 
@@ -43,48 +45,7 @@ export default function PieChart() {
           name: '访问来源',
           type: 'pie',
           radius: '50%',
-          data: [
-            {
-              name: '热点类',
-              value: 320,
-            },
-            {
-              name: '财经类',
-              value: 300,
-            },
-            {
-              name: '科技类',
-              value: 290,
-            },
-            {
-              name: '国际类',
-              value: 240,
-            },
-            {
-              name: '体育类',
-              value: 230,
-            },
-            {
-              name: '娱乐类',
-              value: 180,
-            },
-            {
-              name: '数码类',
-              value: 160,
-            },
-            {
-              name: '游戏类',
-              value: 150,
-            },
-            {
-              name: '时尚类',
-              value: 100,
-            },
-            {
-              name: '美食类',
-              value: 60,
-            },
-          ],
+          data: readingTimeRank,
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -117,18 +78,24 @@ export default function PieChart() {
 
   // 等到dom渲染到页面之后再执行initChart操作
   useEffect(() => {
-    window.addEventListener('scroll', lazyFn)
-    return () => {
-      window.removeEventListener('scroll', lazyFn)
+    if (readingTimeRank.length) {
+      window.addEventListener('scroll', lazyFn)
+      return () => {
+        window.removeEventListener('scroll', lazyFn)
+      }
     }
-  }, [lazyFn])
+  }, [lazyFn, readingTimeRank])
 
   return (
     <div>
       <AnalyseTitle infoIndex={0} />
-      <GraphWrapper>
-        <div ref={graphRef} style={{ width: '900px', height: '500px' }}></div>
-      </GraphWrapper>
+      {readingTimeRank.length ? (
+        <GraphWrapper>
+          <div ref={graphRef} style={{ width: '900px', height: '500px' }}></div>
+        </GraphWrapper>
+      ) : (
+        <Empty description="您暂时还没有阅读记录哦！" />
+      )}
     </div>
   )
 }

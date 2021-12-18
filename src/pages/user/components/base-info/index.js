@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, memo } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { userInfoContext } from '../../../../models/context'
+import { allUserInfoContext } from '../../../../models/context'
 import { getLocal } from '../../../../utils/storage'
 
 import OperateBtn from '../operate-btn'
@@ -14,7 +14,7 @@ export default memo(function BaseInfo(props) {
   // 使用useContext获取传递过来的用户信息
   const navigate = useNavigate()
   // 从context中获取用户信息
-  const userAllInfo = useContext(userInfoContext)
+  const { userInfo } = useContext(allUserInfoContext)
   const { isSelf, concernUserFn } = props
 
   // 判断用户是否已经登录，如果没有登录则需要跳转至登录页面
@@ -25,7 +25,7 @@ export default memo(function BaseInfo(props) {
   }, [navigate])
 
   // 获取头像、个人介绍、用户名
-  const { avatar, introduction, nickname } = userAllInfo
+  const { avatar, introduction, nickname } = userInfo
 
   return (
     <BaseInfoWrapper>

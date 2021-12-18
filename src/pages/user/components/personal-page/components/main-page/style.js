@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const MarkedAreaWrapper = styled.div`
-  padding: 0 10px;
+  padding: 10px;
   max-height: 330px;
   overflow-y: auto;
   border-bottom: 2px solid #eee;
