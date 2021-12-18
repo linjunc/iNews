@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 // 该函数主要是用于生成一个新的时间戳
 export const shiftDate = (date, numDays) => {
   const newDate = new Date(date)
@@ -23,7 +25,7 @@ export const getAllDays = (allDays, endDay) => {
   return allDaysArr
 }
 
-// 该函数用于获取当前年份并返回一天中的总天数和结束日期等数据
+// 该函数用于获取当前年份并返回一年中的总天数和结束日期等数据
 export const getDaysInfoInYear = () => {
   const nowTime = new Date()
   const nowYear = nowTime.getFullYear()
@@ -40,6 +42,7 @@ export const getDaysInfoInYear = () => {
 
 // 通过日期字符串获取日期上的年份、月份以及天数
 export const getMonthAndDay = (dateStr) => {
+  dateStr = dayjs(dateStr).format('YYYY-MM-DD HH:mm:ss')
   const dateArr = dateStr.split('-')
   return {
     day: parseInt(dateArr[2]),
@@ -60,7 +63,9 @@ export const getWhatDay = (dateStr) => {
 export const getLongestWeek = (yearlyArr) => {
   // 获取该年中第一天是星期几
   if (!yearlyArr.length) return
-  const dayNum = getWhatDay(yearlyArr[0].date.slice(0, 10))
+  const dayNum = getWhatDay(
+    dayjs(yearlyArr[0].date).format('YYYY-MM-DD HH:mm:ss').slice(0, 10),
+  )
 
   // 判断该年的第一天是否为周一
   let startIndex = 0

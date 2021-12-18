@@ -27,7 +27,7 @@ const HomeToTop = () => {
     <ToTopWrapper>
       <img src={wing} alt="wing" className={finish ? 'wing show' : 'wing'} />
       <Popover
-        content={`您当日阅读时间已达 ${(
+        content={`您本次阅读时间已达 ${(
           sessionStorage.getItem('timing') / 60000
         )?.toFixed(0)} 分钟`}
       >

@@ -1,13 +1,6 @@
 import styled from 'styled-components'
 
 export const UserProfileWrapper = styled.div`
-  .main-title {
-    padding-bottom: 16px;
-    border-bottom: 1px solid #f1f1f1;
-    font-size: 24px;
-    font-weight: 700;
-  }
-
   & > div {
     flex-direction: column;
   }

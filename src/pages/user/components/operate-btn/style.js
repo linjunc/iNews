@@ -2,13 +2,13 @@ import styled from 'styled-components'
 
 export const EditBtnWrapper = styled.button`
   width: 118px;
-  height: 34px;
+  height: 32px;
   background-color: #fff;
   border-radius: 4px;
   border: 1px solid #1890ff;
   transition: all 0.3s;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: #1890ff;
   cursor: pointer;
@@ -21,12 +21,13 @@ export const EditBtnWrapper = styled.button`
 
 export const ConcernBtnWrapper = styled.button`
   width: 118px;
-  height: 34px;
+  height: 32px;
   transition: all 0.3s;
   border-radius: 4px;
   border: 1px solid #1890ff;
   cursor: pointer;
   outline: none;
+  font-size: 15px;
 
   &.has-follow {
     background-color: #1890ff;

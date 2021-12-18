@@ -1,43 +1,49 @@
-import React, { memo } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
+import { message } from 'antd'
+import { getTagsList } from '../../../../../../services/user'
+import { skeletonHandlerHOC } from '../../../../../../utils/high-order-components'
 import ConcernItem from '../concern-item'
 
-export default memo(function ConcernTags() {
-  const listData = [
-    {
-      title: 'LYM',
-    },
-    {
-      title: '丁同学啊',
-    },
-    {
-      title: '用户4564654',
-    },
-    {
-      title: '温暖回忆',
-    },
-    {
-      title: '小四456',
-    },
-    {
-      title: '我是何同学',
-    },
-    {
-      title: '罗翔说刑法',
-    },
-    {
-      title: '芜湖',
-    },
-    {
-      title: '好家伙',
-    },
-  ]
+import { MyEmpty } from './style'
+
+export default function ConcernTags() {
+  const { id: user_id } = useParams()
+  const [isLoading, setIsLoading] = useState(true)
+  const [tagsList, setTagsList] = useState([])
+
+  // 获取该用户所有的关注者列表
+  useEffect(async () => {
+    try {
+      const res = await getTagsList({
+        user_id,
+        n: '10',
+        skip: '0',
+      })
+      console.log(res)
+      res.data.tag_list && setTagsList(res.data.tag_list)
+    } catch (err) {
+      message.error('请求失败，请重试！')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
 
   return (
-    <div className="items">
-      {listData.map((item) => {
-        return <ConcernItem key={item.title} />
-      })}
+    <div>
+      {skeletonHandlerHOC(
+        tagsList.length ? (
+          tagsList.map((item) => {
+            return <ConcernItem key={item.name} userInfo={item} isTag={true} />
+          })
+        ) : (
+          <MyEmpty description="您暂时还没有关注标签哦！" />
+        ),
+        { rows: 0 },
+        isLoading,
+        true,
+      )}
     </div>
   )
-})
+}

@@ -15,7 +15,7 @@ export const RightContainerWrapper = styled.div`
 
   .report-enter {
     width: 100%;
-    height: 120px;
+    height: 122px;
     margin-top: 10px;
     background: url(${require('../../../../assets/user-center/report-enter.png')
         .default})
