@@ -10738,6 +10738,11 @@ react-refresh@^0.8.3:
   resolved "https://registry.npmmirror.com/react-refresh/download/react-refresh-0.8.3.tgz"
   integrity sha1-ch1GV2ctQAxePHXQY8SoX7LV1o8=
 
+react-render-if-visible@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-render-if-visible/-/react-render-if-visible-1.0.3.tgz#b85aeabaa896aa4f06c53832dc3493901bdb6475"
+  integrity sha512-jOm0JSBjCHWkj3A2o0+nFprUa+FcbI1e1vZEiqbm0QLAEd76FNx2zBZiWskg8oIKf/q8knI+fFDPlIyj5wgGHQ==
+
 react-router-dom@^6.0.2:
   version "6.0.2"
   resolved "https://registry.npmmirror.com/react-router-dom/download/react-router-dom-6.0.2.tgz"
