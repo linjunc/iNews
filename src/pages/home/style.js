@@ -42,15 +42,6 @@ export const HomeContainer = styled.div`
         }
       }
     }
-    .home_right {
-      width: 280px;
-    }
-    .fixed_box {
-      position: fixed;
-      top: 80px;
-      left: 50%;
-      margin-left: 230px;
-    }
   }
   .hideBottom {
     position: fixed;

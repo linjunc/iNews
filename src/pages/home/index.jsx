@@ -22,7 +22,6 @@ const Home = (props) => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
   const [articleList, setArticleList] = useState([])
-  const [isFixed, setIsFixed] = useState(false)
   // 数组打乱方法
   const shuffle = (arr) => {
     let m = arr.length,
@@ -176,9 +175,7 @@ const Home = (props) => {
           {showLoadBtm()}
           {hasNone()}
         </div>
-        <div className={isFixed ? 'home_right fixed_box' : 'home_right'}>
-          <RightContent />
-        </div>
+        <RightContent />
       </div>
     )
   }
@@ -207,8 +204,6 @@ const Home = (props) => {
 
       const isBottom = scrollTop + clientHeight + 10 > scrollHeight //是否到达底部
 
-      if (scrollTop >= 700) setIsFixed(true)
-      else setIsFixed(false)
       // 下滚
       if (scrollTop > topValue) {
         if (isBottom && tag !== 'app') {

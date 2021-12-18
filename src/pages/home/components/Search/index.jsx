@@ -3,7 +3,6 @@ import Parallax from './components/Parallax'
 import Carousel from './components/Carousel'
 import Triggers from './components/Triggers'
 import PageHeader from './components/PageHeader'
-// import Logo from "../../../../assets/logo/logo.png"
 import LogoWhiteText from '../../../../assets/logo/logo_white_text.png'
 import { SearchOutlined } from '@ant-design/icons'
 import { useState } from 'react'

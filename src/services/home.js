@@ -1,5 +1,6 @@
 import instance from '../utils/request'
 import md5 from 'md5'
+import jsonp from 'jsonp'
 
 export const getArticles = (options) => {
   return instance({

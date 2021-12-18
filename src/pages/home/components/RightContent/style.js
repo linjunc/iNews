@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 
 export const RightContentWrapper = styled.div`
-  width: 100%;
+  width: 280px;
   .right_content {
+    position: sticky;
+    top: 80px;
     margin-top: 20px;
     padding: 0px 5px;
     .info {
