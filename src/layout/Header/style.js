@@ -41,7 +41,7 @@ export const MenuWrapper = styled.div`
       font-size: 18px;
     }
   }
-  .layout-search-box {
+  /* .layout-search-box {
     position: relative;
     width: 330px;
     height: 36px;
@@ -70,5 +70,5 @@ export const MenuWrapper = styled.div`
       z-index: 99;
       cursor: pointer;
     }
-  }
+  } */
 `

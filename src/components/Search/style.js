@@ -15,15 +15,20 @@ const shake = keyframes`
   }
 `
 
-export const SearchWrapper = styled.div`
-  width: 560px;
-  height: 50px;
-  margin: 30px auto 0;
-  background-color: #fff;
-  line-height: 50px;
-  border-radius: 10px;
-
+export const SearchWrapper = styled.div.attrs(
+  ({ width, height, backgroundColor }) => ({
+    width: width || 560,
+    height: height || 50,
+    backgroundColor: backgroundColor || '#fff',
+  }),
+)`
   position: relative;
+  display: flex;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
+  margin: auto;
+  line-height: ${(props) => props.height}px;
+  border-radius: 10px;
   .input,
   .button {
     height: inherit;
@@ -33,22 +38,22 @@ export const SearchWrapper = styled.div`
   }
   .input:focus,
   .input:focus + .button {
-    border-color: rgba(24, 144, 255, 0.6);
+    border-color: #1890ff;
   }
   .input {
-    width: 500px;
+    width: ${(props) => props.width * 0.89}px;
     border-right: none;
     padding-left: 20px;
-    vertical-align: top;
+    background-color: ${(props) => props.backgroundColor};
     outline: none;
     border-radius: 10px 0 0 10px;
   }
   .button {
-    display: inline-block;
-    width: 60px;
+    width: ${(props) => props.width * 0.11}px;
     border-left: none;
+    background-color: ${(props) => props.backgroundColor};
     color: #1890ff;
-    font-size: 24px;
+    font-size: ${(props) => props.height * 0.48}px;
     cursor: pointer;
     border-radius: 0 10px 10px 0;
     &:hover .icon {

@@ -12,7 +12,7 @@ const Parallax = (props) => {
   // 视差部分是否可见
   const [isVisible, setIsVisible] = useState()
   // 头部是否可见
-  const setHeaderShow = useContext(headerShowContext)
+  const [, setHeaderShow] = useContext(headerShowContext)
 
   useEffect(() => {
     // 判断视差部分是否进入视窗 的observer

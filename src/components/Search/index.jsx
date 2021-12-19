@@ -1,14 +1,22 @@
 import { Menu } from 'antd'
-import { useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { articleSearch } from '../../services/home'
 import { SearchWrapper } from './style'
 import { SearchOutlined } from '@ant-design/icons'
+import { headerShowContext } from '../../models/context'
 
-const Search = () => {
+const Search = ({ placeholder, style }) => {
   const [data, setData] = useState([])
   const [value, setValue] = useState('')
   const [isShow, setIsShow] = useState(false)
   const [timer, setTimer] = useState(0)
+  const [headerShow] = useContext(headerShowContext)
+  const inputRef = useRef()
+
+  // 当头部可见改变，失焦
+  useEffect(() => {
+    inputRef.current?.blur()
+  }, [headerShow])
 
   const onChange = ({ target: { value } }) => {
     // 受控组件
@@ -45,9 +53,14 @@ const Search = () => {
 
   return (
     <SearchWrapper
-      style={{ borderRadius: isShow && data?.length ? '10px 10px 0 0' : '' }}
+      style={{
+        borderRadius: isShow && data?.length ? '10px 10px 0 0' : '',
+        backgroundColor: isShow && data?.length ? '#fff' : '',
+      }}
+      {...style}
     >
       <input
+        ref={inputRef}
         type="text"
         className="input"
         autoFocus

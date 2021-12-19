@@ -20,6 +20,7 @@ export const SearchContainer = styled.main`
       .logo-box {
         position: relative;
         display: inline-block;
+        margin-bottom: 30px;
         &::before {
           content: '';
           position: absolute;
