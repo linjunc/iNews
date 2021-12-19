@@ -4,7 +4,7 @@ import { List, message } from 'antd'
 import { throttle } from 'lodash'
 import { useLocation } from 'react-router-dom'
 import { HomeContainer } from './style'
-import Search from './components/Search'
+import CenterSearch from './components/CenterSearch'
 import Article from './components/Article'
 import Loading from './components/Loading'
 import RightContent from './components/RightContent'
@@ -224,7 +224,7 @@ const Home = (props) => {
 
   return (
     <HomeContainer>
-      <Search></Search>
+      <CenterSearch></CenterSearch>
       {showHot()}
       <div className="hideBottom">
         <HomeToTop />
