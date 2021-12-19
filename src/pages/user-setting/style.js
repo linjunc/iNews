@@ -5,6 +5,13 @@ export const UserSettingWrapper = styled.div`
   min-height: 626px;
   margin: 24px auto;
   overflow: hidden;
+
+  .main-title {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 24px;
+    font-weight: 700;
+  }
 `
 export const SettingContainerWrapper = styled.div`
   display: flex;

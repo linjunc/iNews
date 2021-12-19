@@ -12,16 +12,17 @@ const Parallax = (props) => {
   // 视差部分是否可见
   const [isVisible, setIsVisible] = useState()
   // 头部是否可见
-  const setHeaderShow = useContext(headerShowContext)
+  const [, setHeaderShow] = useContext(headerShowContext)
 
   useEffect(() => {
     // 判断视差部分是否进入视窗 的observer
     const observer = new IntersectionObserver(
       ([e]) => {
+        console.log('observer', e.isIntersecting, e)
         setIsVisible(e.isIntersecting)
         setHeaderShow(!e.isIntersecting)
       },
-      { threshold: 0 },
+      { threshold: 0.1 },
     )
     observer.observe(contentRef.current)
     return () => observer.disconnect()
@@ -31,9 +32,10 @@ const Parallax = (props) => {
   useEffect(() => {
     // scroll listener，随着滚动距离设置偏移量
     const handleScroll = throttle(() => {
-      setContentTranslateY(
-        getScrollTop() / contentRef.current.getBoundingClientRect().height,
-      )
+      contentRef.current &&
+        setContentTranslateY(
+          getScrollTop() / contentRef.current.getBoundingClientRect().height,
+        )
     }, 16)
     if (isVisible) window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)

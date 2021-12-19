@@ -6,6 +6,7 @@ export const ListHeaderWrapper = styled.div`
   border-radius: 0.2rem 0.2rem 0 0;
   border-bottom: 1px solid #ebebeb;
   z-index: 100;
+  transition: all 0.3s;
 
   &.sticky,
   &.stickyTop {
@@ -13,11 +14,10 @@ export const ListHeaderWrapper = styled.div`
     left: 0;
     right: 0;
     width: 100%;
-    transition: all 0.3s;
   }
 
   &.sticky {
-    top: 66px;
+    top: 64px;
   }
 
   &.stickyTop {
@@ -51,5 +51,9 @@ export const ListHeaderWrapper = styled.div`
         box-shadow: inset 0 -2px 0 #1890ff;
       }
     }
+  }
+
+  .ant-avatar {
+    background-color: transparent;
   }
 `

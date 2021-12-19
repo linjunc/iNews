@@ -4,10 +4,10 @@ import Carousel from './components/Carousel'
 import Triggers from './components/Triggers'
 import PageHeader from './components/PageHeader'
 import LogoWhiteText from '../../../../assets/logo/logo_white_text.png'
-import { SearchOutlined } from '@ant-design/icons'
 import { useState } from 'react'
+import Search from '../../../../components/Search'
 
-const Search = () => {
+const CenterSearch = () => {
   // 轮播图数据
   const dataArray = [
     'https://www.bing.com/th?id=OHR.GlowWormBMNP_ROW6135196064_1920x1080.jpg&rf=LaDigue_1920x1080.jpg',
@@ -33,13 +33,7 @@ const Search = () => {
           <div className="logo-box">
             <img className="logo" src={LogoWhiteText} alt="iNews" />
           </div>
-          {/* <div className="logo"></div> */}
-          <div className="search-box">
-            <input type="text" className="input" autoFocus />
-            <div className="button">
-              <SearchOutlined className="icon" />
-            </div>
-          </div>
+          <Search></Search>
         </div>
         <Triggers
           length={dataArray.length}
@@ -51,4 +45,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default CenterSearch

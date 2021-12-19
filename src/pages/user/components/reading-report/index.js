@@ -1,10 +1,14 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { CSSTransition } from 'react-transition-group'
 import html2canvas from 'html2canvas'
+import { useParams } from 'react-router'
+
+import { getReadingTimeRank } from '../../../../services/user'
 
 import PieChart from './components/pie-chart'
 import InstrumentChart from './components/Instrument-chart'
 import BarChart from './components/bar-chart'
+import { message } from 'antd'
 
 import {
   ReadingReportWrapper,
@@ -14,6 +18,7 @@ import {
 } from './style'
 
 export default function ReadingReport() {
+  const { id: user_id } = useParams()
   // 用户年度总结阅读时间排行榜
   const [readTimeArr, setReadTimeArr] = useState([
     {
@@ -58,6 +63,9 @@ export default function ReadingReport() {
     },
   ])
 
+  // 用户年度总结阅读时间排行榜
+  const [readingTimeRank, setReadingTimeRank] = useState([])
+
   const reportRef = useRef()
 
   const downLoad = () => {
@@ -77,6 +85,15 @@ export default function ReadingReport() {
     })
   }
 
+  useEffect(async () => {
+    try {
+      const res = await getReadingTimeRank({ user_id })
+      res.data?.data && setReadingTimeRank(res.data.data)
+    } catch (err) {
+      message('请求失败，请刷新页面重试！')
+    }
+  }, [])
+
   return (
     <TransitionWrapper>
       <SecondTitleWrapper>
@@ -93,8 +110,8 @@ export default function ReadingReport() {
               className="title-img"
               alt="年度报告"
             />
-            <PieChart />
-            <InstrumentChart />
+            <PieChart readingTimeRank={readingTimeRank} />
+            <InstrumentChart readingTimeRank={readingTimeRank} />
             <BarChart />
           </div>
         </ReadingReportWrapper>

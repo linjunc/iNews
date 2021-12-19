@@ -4,8 +4,11 @@ export const HomeContainer = styled.div`
   margin-top: -64px; // 减去头部的64px
   .content {
     position: relative;
-    left: 50%;
-    margin-left: -500px;
+    /* left: 50%; */
+    /* margin-left: -500px; */
+    /* left: 0;
+    right: 0; */
+    margin: 0 auto;
     width: 1000px;
     display: flex;
     justify-content: space-between;
@@ -41,6 +44,9 @@ export const HomeContainer = styled.div`
           background-color: #d9d9d9;
         }
       }
+    }
+    .home_right {
+      width: 280px;
     }
   }
   .hideBottom {

@@ -45,13 +45,19 @@ export const ConcernItemWrapper = styled.div`
     align-items: center;
 
     .ant-avatar {
-      margin-right: 20px;
+      margin-right: 10px;
     }
 
     .title {
       font-size: 16px;
       font-weight: 600;
       color: #2e3135;
+    }
+
+    .brief {
+      margin-top: 7.2px;
+      font-size: 12px;
+      color: #b9c0c8;
     }
   }
 `

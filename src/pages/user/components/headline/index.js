@@ -2,6 +2,7 @@ import React, { memo, useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
 import { getScrollTop } from '../../../../utils/scrollHeight'
+import { throttle } from 'lodash'
 
 import { Avatar } from 'antd'
 import OperateBtn from '../operate-btn'
@@ -9,35 +10,23 @@ import OperateBtn from '../operate-btn'
 import { ListHeaderWrapper } from './style'
 
 export default memo(function ListHeader(props) {
-  const { isSelf, concernUserFn } = props
+  const { isSelf, concernUserFn, isShowHistory, avatar } = props
   const [isFixed, setIsFixed] = useState(null)
-  let topValue = 0
   let scrollTop = 0
 
   // 监听滚动条滑动到指定位置时，让导航栏固定;脱离指定位置时，让导航栏恢复正常
-  const fixNav = () => {
+  const fixNav = throttle(() => {
     scrollTop = getScrollTop()
-    setTimeout(function () {
-      topValue = scrollTop
-    }, 0)
-    //记住这里时373
     if (scrollTop >= 251 && scrollTop < 700) {
-      setIsFixed(1)
-      return
+      setIsFixed(true)
     }
-    if (scrollTop >= 700 && scrollTop >= topValue) {
-      setIsFixed(2)
-      return
+    if (scrollTop >= 700) {
+      setIsFixed(false)
     }
     if (scrollTop < 251) {
       setIsFixed(null)
-      return
     }
-    if (scrollTop <= topValue) {
-      setIsFixed(1)
-      return
-    }
-  }
+  }, 200)
 
   useEffect(() => {
     window.addEventListener('scroll', fixNav)
@@ -53,12 +42,12 @@ export default memo(function ListHeader(props) {
 
   // 通过组件当前的状态来决定给nav栏添加什么样的类名
   const addClassByState = () => {
-    if (!isFixed) {
-      return 'not-sticky'
-    } else if (isFixed === 1) {
+    if (isFixed === true) {
       return 'sticky'
-    } else {
+    } else if (isFixed === false) {
       return 'stickyTop'
+    } else {
+      return 'not-sticky'
     }
   }
 
@@ -73,17 +62,20 @@ export default memo(function ListHeader(props) {
     },
     {
       pathname: 'likes',
-      title: '点赞评论',
+      title: isSelf ? '我的点赞' : '他的点赞',
     },
     {
       pathname: 'collect',
-      title: '我的收藏',
+      title: isSelf ? '我的收藏' : '他的收藏',
     },
     {
       pathname: 'concern',
-      title: '关注列表',
+      title: isSelf ? '我的关注' : '他的关注',
     },
   ]
+
+  // 如果用户设置了阅读历史不可见，则不展示阅读历史给他人
+  isSelf || isShowHistory || linkData.splice(1, 1)
 
   return (
     <>
@@ -93,15 +85,7 @@ export default memo(function ListHeader(props) {
           <div className="content">
             {isFixed && (
               <Link to="" onClick={goTop} className="middle-item">
-                <Avatar
-                  size={34}
-                  icon={
-                    <img
-                      src="https://p3-passport.byteacctimg.com/img/user-avatar/7daa5395a692d2f501867755d2667c07~300x300.image"
-                      alt="头像"
-                    />
-                  }
-                />
+                <Avatar size={34} icon={<img src={avatar} alt="头像" />} />
               </Link>
             )}
             {linkData.map((item, index) => {

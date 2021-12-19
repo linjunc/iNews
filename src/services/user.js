@@ -55,3 +55,84 @@ export const getSpendTimeYearly = (options) => {
     params: options,
   })
 }
+
+// 获取新闻类别阅读时间排名
+export const getReadingTimeRank = (options) => {
+  return instance({
+    url: '/reading_time_rank',
+    method: 'GET',
+    params: options,
+  })
+}
+
+// 获取用户关注者列表
+export const getFollowersList = (options) => {
+  return instance({
+    url: '/follower',
+    method: 'GET',
+    params: options,
+  })
+}
+
+// 修改是否展示浏览历史记录
+export const setShowHistory = (options) => {
+  return instance({
+    url: '/set_show_history',
+    method: 'PUT',
+    data: options,
+  })
+}
+
+// 获取关注的人列表
+export const getFollowingList = (options) => {
+  return instance({
+    url: '/follow_list',
+    method: 'GET',
+    params: options,
+  })
+}
+
+// 获取用户关注的标签
+export const getTagsList = (options) => {
+  return instance({
+    url: '/tag_list',
+    method: 'GET',
+    params: options,
+  })
+}
+
+// 设置用户关注标签
+export const focusTags = (options) => {
+  return instance({
+    url: '/set_tag_list',
+    method: 'PUT',
+    data: options,
+  })
+}
+
+// 获取用户点赞了的新闻列表
+export const getLikeList = (options) => {
+  return instance({
+    url: 'article_list_digg',
+    method: 'GET',
+    params: options,
+  })
+}
+
+// 获取用户收藏了的文章列表
+export const getCollectList = (options) => {
+  return instance({
+    url: '/article_list_like',
+    method: 'GET',
+    params: options,
+  })
+}
+
+// 获取浏览新闻历史记录
+export const getHistoryList = (options) => {
+  return instance({
+    url: '/history_list',
+    method: 'GET',
+    params: options,
+  })
+}

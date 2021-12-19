@@ -14,7 +14,7 @@ const CovidMap = lazy(() => import('../pages/covidMap'))
 const PersonalPage = lazy(() =>
   import('../pages/user/components/personal-page'),
 )
-const Collect = lazy(() => import('../pages/user/components/collect'))
+const CollectNews = lazy(() => import('../pages/user/components/collect'))
 const Likes = lazy(() => import('../pages/user/components/likes'))
 const Concern = lazy(() => import('../pages/user/components/concern'))
 const ReadingReport = lazy(() =>
@@ -36,6 +36,7 @@ const ConcernFollowers = lazy(() =>
 const ConcernFollowing = lazy(() =>
   import('../pages/user/components/concern/components/following'),
 )
+const ReadHistory = lazy(() => import('../pages/user/components/read-history'))
 
 // 解决懒加载白屏时间
 const lazyLoad = (children) => {
@@ -66,11 +67,11 @@ const routes = [
           },
           {
             path: 'person',
-            element: lazyLoad(<PersonalPage />),
+            element: lazyLoad(<ReadHistory />),
           },
           {
             path: 'collect',
-            element: lazyLoad(<Collect />),
+            element: lazyLoad(<CollectNews />),
           },
           {
             path: 'likes',

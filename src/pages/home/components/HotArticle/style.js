@@ -8,6 +8,7 @@ export const HotArticlecontainer = styled.div`
         .Carousel_node {
           position: relative;
           padding: 20px 0;
+          cursor: pointer;
           .hot_img {
             width: 100%;
             height: 464px;
