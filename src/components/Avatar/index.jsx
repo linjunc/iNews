@@ -1,5 +1,5 @@
 import { Dropdown, Avatar as AntdAvatar, Menu, Modal, message } from 'antd'
-import { LoginButton } from './style'
+import { LoginButton } from './style.js'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router'
 import { userContext } from '../../models/context'

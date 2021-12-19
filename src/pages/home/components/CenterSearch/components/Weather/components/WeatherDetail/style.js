@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const WeatherWrapper = styled.div`
+export const Detail = styled.div`
   user-select: none;
   display: grid;
   place-items: center;

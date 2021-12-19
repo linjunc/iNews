@@ -1,6 +1,6 @@
 import instance from '../utils/request'
 import md5 from 'md5'
-import jsonp from 'jsonp'
+import { CancelToken } from 'axios'
 
 export const getArticles = (options) => {
   return instance({
@@ -49,5 +49,19 @@ export const getWeatherForecast = (options) => {
     url: 'https://devapi.qweather.com/v7/weather/3d',
     method: 'GET',
     params: options,
+  })
+}
+
+let cancel
+
+export const articleSearch = (params) => {
+  if (cancel) cancel()
+  const source = CancelToken.source()
+  cancel = source.cancel
+  return instance({
+    url: '/article_search',
+    method: 'GET',
+    params,
+    cancelToken: source.token,
   })
 }
