@@ -18,6 +18,7 @@ const Parallax = (props) => {
     // 判断视差部分是否进入视窗 的observer
     const observer = new IntersectionObserver(
       ([e]) => {
+        console.log('observer', e.isIntersecting, e)
         setIsVisible(e.isIntersecting)
         setHeaderShow(!e.isIntersecting)
       },

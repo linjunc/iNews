@@ -44,14 +44,14 @@ const Comments = ({ id }) => {
   // 评论区是否有评论
   const [isComment, setisComment] = useState(false)
   const [commentLoding, setLoding] = useState(true)
-  // // 显示评论数
-  // const [commentNum,setCommentNum] = useState(5)
   // 评论跳过条数
   const [commentSkip, setCommentkip] = useState(0)
+  //是否有更多评论
+  const [isMoreCom, setMoreCon] = useState(false)
+  //评论总数
+  const [comAll, setComAll] = useState(0)
   //渲染得到评论
   useEffect(() => {
-    // setComments([])
-    // console.log(commentNum)
     const getCommentlist = async () => {
       const res_comment = await get_comments({
         article_id: id,
@@ -59,32 +59,26 @@ const Comments = ({ id }) => {
         skip: commentSkip,
       })
       // 评论区状态判断
+      setMoreCon(res_comment.data.has_more)
       if (res_comment.data.code === 204) {
         setisComment(true)
-        // console.log('暂时没有评论')
         setLoding(false)
-        return <>暂时没有评论</>
+        return
       }
+      console.log(res_comment.data.has_more)
+
+      setComAll(res_comment.data.comment_count)
       if (commentSkip > 0) {
         let tem_ = [...res_comment.data.comment_list]
-        // console.log("res_comment.data.comment_list")
-        // console.log(res_comment.data.comment_list)
-        // tem_.push()
         setComments(tem_)
-        // console.log("tem_")
-        // console.log(tem_)
         return
       }
       console.log('评论返回的数据')
-      console.log(res_comment.data)
       let tem = res_comment.data.comment_list
       console.log(id)
       //存储评论
       comment_list.push(tem)
       setComments(tem)
-      console.log('评论区数据（如果有更新的话）')
-      console.log(comment_list)
-      console.log(res_comment.data.comment_list)
     }
     getCommentlist()
   }, [commentSkip])
@@ -163,16 +157,7 @@ const Comments = ({ id }) => {
   }
   //提交处理
   async function onSubmit() {
-    // likes.push(0)
-    // action.push(false)
-    // likes.push(0)
-    // action.push(false)
-    // setLikes([...likes])
-    // setAction([...action])
-    // let likes_tem = [...likes]
-    // likes_tem.push(0)
-    // console.log(likes_tem)
-    // setLikes([...likes_tem])
+    setComAll(comAll + 1)
     likes.push(0)
     replyNum.push(0)
     setLikes((likes) => [...likes, 0])
@@ -193,26 +178,11 @@ const Comments = ({ id }) => {
       article_id: id,
     }
     let userInfo = JSON.parse(localStorage.getItem('userInfo')) //进行json解析
-    // console.log("用户数据")
-    // console.log(userInfo)
     const result = await post_comments(options)
     setValue('')
     commentId.push(result.data.comment_id)
     setCommentID([...commentId])
     setSubmit(!submitting)
-    // console.log(result.data.comment_id)
-    // console.log('返回结果')
-    // console.log(likes)
-    // console.log(action)
-    // console.log(data)
-    // console.log(commentId)
-    // console.log("提交评论后的结果")
-    // console.log(result)
-    // console.log("提交后的likes")
-    // console.log("likes")
-    // console.log(likes)
-    // console.log(index)
-    // console.log(likes[index - 1])
     let tem = {
       actions: [<Pinglun a={index}></Pinglun>],
       author: userInfo?.nickname,
@@ -224,15 +194,7 @@ const Comments = ({ id }) => {
         </Tooltip>
       ),
     }
-    setData([...data, tem])
-    // console.log(comment_list)
-
-    // likes.push(result.data.comment_id)
-
-    // likes.push()
-    // action.push(false)
-    // console.log('data点赞数')
-    // console.log(data)
+    setData([tem, ...data])
   }
 
   //点赞的组件
@@ -256,8 +218,7 @@ const Comments = ({ id }) => {
     return (
       <>
         <Button
-          shape="circle"
-          type="primary"
+          type="text"
           icon={createElement(
             action[id.a + commentSkip] === true ? LikeFilled : LikeOutlined,
           )}
@@ -276,17 +237,19 @@ const Comments = ({ id }) => {
     const [count, setCount] = useState(1)
     //显示回复评论内容
     const [isReplyCon, setIsreplyCon] = useState(false)
+    //回复后显示第一条
+    const [isShift, setIsShift] = useState(false)
     //评论回复列表
     const [replyList, setReplyList] = useState([])
     //获取评论数的跳过的内容
-    const [replySkip, setReplySkip] = useState(-5)
+    const [replySkip, setReplySkip] = useState(0)
+    const [isMoreReply, setIsMoreReply] = useState(false)
     const callback = useCallback(() => {
       return count
     })
     //回复区进行渲染
-    useEffect(() => {
+    function getReplyCom() {
       console.log('回复区进行渲染')
-      // setIsreplyLoding(true)
       const getReplyList = async () => {
         // setIsreply(true)
         const res_reply = await get_comments_reply({
@@ -297,9 +260,7 @@ const Comments = ({ id }) => {
         let userInfo = JSON.parse(localStorage.getItem('userInfo')) //进行json解析
         //评论回复列表
         let replyListContent = res_reply.data.reply_list
-        // console.log("获取到回复区的内容数据")
-        // console.log(commentId)
-        // console.log(res_reply.data)
+        setIsMoreReply(res_reply.data.has_more)
         if (replyListContent !== undefined) {
           for (let i = 0; i < replyListContent['length']; i++) {
             let tem = {
@@ -332,21 +293,27 @@ const Comments = ({ id }) => {
             }
             replyList.push(tem)
           }
+          //删除最后一个元素
+          if (isShift && !res_reply.data.has_more) {
+            replyList.pop()
+          }
           setReplyList([...replyList])
           console.log('replyList')
           console.log(replyList)
           setIsreplyLoding(false)
+          setIsreplyCon(true)
         }
       }
       getReplyList()
-    }, [replySkip])
+      setReplySkip(replySkip + 5)
+    }
+
     //点击回复评论
     async function commentReply() {
       if (val === '') {
         message.info('回复内容不能为空')
         return
       }
-
       if (val !== '') {
         let userInfo = JSON.parse(localStorage.getItem('userInfo')) //进行json解析
         // console.log(userInfo)
@@ -354,8 +321,6 @@ const Comments = ({ id }) => {
         replyNum[a.a + commentSkip] += 1
         console.log(val)
         const res = await post_comments_reply({ text: val, comment_id: id })
-        // console.log("评论回复数据")
-        // console.log(res)
         let tem = {
           actions: [
             // <span onClick={(e) => {like(e.currentTarget)}} index = {i}>
@@ -375,22 +340,19 @@ const Comments = ({ id }) => {
             </Tooltip>
           ),
         }
-        // setReplyList(...replyList)
-        replyList.push(tem)
-        // console.log(replyList)
-        // setReplyList(res_reply.data.reply_list)
+        // getReplyCom()
+        replyList.unshift(tem)
+        setReplyList([...replyList])
+        setIsreplyCon(false)
+        setIsShift(true)
+        // setIsreplyCon(true)
       }
       setVal('')
       setIsreply(false)
     }
-    // console.log("评论id")
-    // console.log(commentId)
-    // console.log("当前对应的个数")
-    // console.log(a.a + commentSkip)
 
     return (
       <div>
-        {/* <h4>{count}</h4> */}
         <span
           onClick={(e) => {
             setCount(count + 1)
@@ -426,9 +388,9 @@ const Comments = ({ id }) => {
         </CommentReply>
 
         {/* 子评论区 */}
-        {isReplyCon && Boolean(replyList.length) && (
+        {(isReplyCon || isShift) && Boolean(replyList.length) && (
           <List
-            loading={isReplyLoading}
+            // loading={isReplyLoading}
             className="comment-list"
             itemLayout="horizontal"
             dataSource={replyList}
@@ -446,36 +408,32 @@ const Comments = ({ id }) => {
             )}
           />
         )}
-        <span>
+
+        <span style={replyNum[a.a + commentSkip] ? {} : { display: 'none' }}>
           <a
             className="ant-dropdown-link"
             style={isReplyCon ? { display: 'none' } : {}}
             onClick={(e) => {
-              setIsreplyCon(true)
-              setReplySkip(replySkip + 5)
+              getReplyCom()
             }}
           >
             {replyNum[a.a + commentSkip]}条回复 <DownOutlined />
           </a>
           <a
             className="ant-dropdown-link"
-            style={!isReplyCon ? { display: 'none' } : {}}
+            style={!isReplyCon || !isMoreReply ? { display: 'none' } : {}}
             onClick={(e) => {
-              setIsreplyCon(true)
-              setReplySkip(replySkip + 5)
+              getReplyCom()
             }}
           >
             显示更多回复 <DownOutlined />
           </a>
         </span>
-        {/* <button onClick={(e) => {like(e.currentTarget)} } index={a.a + commentSkip}>+</button> */}
-        {/* <input value={val} onChange={event => setVal(event.target.value)}/> */}
       </div>
     )
   }
 
   return (
-    //这里的话需要加上一个评论区
     <>
       <>
         <Form.Item>
@@ -496,7 +454,7 @@ const Comments = ({ id }) => {
         loading={commentLoding}
         className="comment-list"
         style={{ textAlign: 'left' }}
-        header={`共有${data.length}条评论`}
+        header={`共有${comAll}条评论`}
         itemLayout="horizontal"
         dataSource={data}
         renderItem={(item) => (
@@ -516,6 +474,7 @@ const Comments = ({ id }) => {
           setCommentkip(commentSkip + 5)
           setLoding(true)
         }}
+        style={data.length && isMoreCom ? {} : { display: 'none' }}
         block
       >
         点击加载更多！
