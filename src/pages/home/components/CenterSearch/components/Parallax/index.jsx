@@ -32,9 +32,10 @@ const Parallax = (props) => {
   useEffect(() => {
     // scroll listener，随着滚动距离设置偏移量
     const handleScroll = throttle(() => {
-      setContentTranslateY(
-        getScrollTop() / contentRef.current.getBoundingClientRect().height,
-      )
+      contentRef.current &&
+        setContentTranslateY(
+          getScrollTop() / contentRef.current.getBoundingClientRect().height,
+        )
     }, 16)
     if (isVisible) window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
