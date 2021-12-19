@@ -23,6 +23,7 @@ export const RightContentWrapper = styled.div`
         flex-direction: column;
         justify-content: space-around;
         text-align: center;
+        cursor: pointer;
         .title {
           display: flex;
           flex-direction: column;
