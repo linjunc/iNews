@@ -28,8 +28,6 @@ export default memo(function ConcernFollowing() {
     }
   }, [])
 
-  console.log(followingList)
-
   return (
     <div className="items">
       {skeletonHandlerHOC(

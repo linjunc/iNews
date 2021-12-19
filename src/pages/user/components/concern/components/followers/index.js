@@ -20,7 +20,6 @@ export default memo(function ConcernFollowers() {
         n: '10',
         skip: '0',
       })
-      console.log(res)
       res.data.follower_list && setFollowersList(res.data.follower_list)
       setIsLoading(false)
     } catch (err) {

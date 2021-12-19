@@ -62,15 +62,15 @@ export default memo(function ListHeader(props) {
     },
     {
       pathname: 'likes',
-      title: '点赞评论',
+      title: isSelf ? '我的点赞' : '他的点赞',
     },
     {
       pathname: 'collect',
-      title: '我的收藏',
+      title: isSelf ? '我的收藏' : '他的收藏',
     },
     {
       pathname: 'concern',
-      title: '关注列表',
+      title: isSelf ? '我的关注' : '他的关注',
     },
   ]
 
