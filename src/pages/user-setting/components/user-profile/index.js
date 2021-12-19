@@ -5,7 +5,7 @@ import { getUserInfo } from '../../../../services/user'
 import { getLocal, getSession, setSession } from '../../../../utils/storage'
 import { uploadAvatar, uploadUserInfo } from '../../../../services/user'
 
-import { Input, Button, message } from 'antd'
+import { Button, message } from 'antd'
 import AvatarInput from './components/avatar-input'
 import FormInput from './components/form-input'
 

@@ -7,7 +7,7 @@ import {
   getDaysInfoInYear,
   getAllDays,
 } from '../../../../../../utils/date-format'
-import { calendarDataContext } from '../../../../../../models/context'
+import { allUserInfoContext } from '../../../../../../models/context'
 
 import { Select } from 'antd'
 
@@ -16,9 +16,7 @@ import { CalendarWrapper, TitleWrapper, ButtonWrapper } from './style'
 const { Option } = Select
 export default memo(function CalendarHotGraph() {
   // 从context中获取到日历热图所需要的数据并将状态保存下来
-  const yearlyData = useContext(calendarDataContext)
-  console.log(yearlyData)
-  console.log('-----------')
+  const { calendarData: yearlyData } = useContext(allUserInfoContext)
   const [calendarData, setCalendarData] = useState(yearlyData)
   // 在日历热图下方要展示的数据状态
   const [showTimeDate, setShowTimeDate] = useState({
@@ -82,9 +80,6 @@ export default memo(function CalendarHotGraph() {
     setCalendarData(initAllDaysArr)
   }, [yearlyData])
 
-  // 存储虚拟数据（以后是从后台获取的）
-  // localStorage.setItem('randomValues', JSON.stringify(calendarData))
-
   // 用户鼠标经过颜色格子的时候显示颜色对应的范围
   const handleShowNumScope = (index) => {
     switch (index) {
@@ -105,7 +100,6 @@ export default memo(function CalendarHotGraph() {
 
   // 该函数用于将每一天对应的date和count，返回的是一年中包含这些数据的新数组；最终是要传递给日历组件的
   const { allDays, endDay } = getDaysInfoInYear()
-
   // 计算年度阅读总时间
   // const allReadingTime = (() => {
   //   let sum = 0

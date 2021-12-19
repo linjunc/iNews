@@ -16,10 +16,14 @@ const Header = () => {
   const [current, setCurrent] = useState('app')
   const [show, setShow] = useState(false) // show 的改变导致了组件的重新渲染，怎么解决呢
   const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const { pathname, state } = useLocation()
   // 判断滚动方向
   let scrollTop = 0
   let topValue = 0
+  // 获取浏览器中的state
+  useEffect(() => {
+    setCurrent(state?.current ?? 'app')
+  }, [state])
   // 函数处理
   const handleClick = (e) => {
     setCurrent(e.key)
@@ -46,7 +50,6 @@ const Header = () => {
     console.log(123)
     // 如果是首页，让首页用context控制
     if (pathname === '/') return
-
     window.addEventListener('scroll', bindHandleScroll)
     // 修复使用浏览器返回的bug
     setShow(true)

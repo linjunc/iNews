@@ -33,10 +33,14 @@ export const RightContentWrapper = styled.div`
           color: #505050;
         }
         .btnWrapper {
-          text-align: center;
+          display: flex;
+          justify-content: center;
           .loginBtn {
-            width: 110px;
-            height: 39px;
+            width: 80px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             border-radius: 7px;
           }
         }
@@ -75,7 +79,7 @@ export const RightContentWrapper = styled.div`
         font-weight: 600;
         display: -webkit-box;
         overflow: hidden;
-        -webkit-line-clamp: 1;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
         cursor: pointer;

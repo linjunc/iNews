@@ -1,13 +1,13 @@
 import React, { memo, useContext } from 'react'
 import { Link } from 'react-router-dom'
 
-import { userInfoContext } from '../../../../models/context'
+import { allUserInfoContext } from '../../../../models/context'
 
 import { EditBtnWrapper, ConcernBtnWrapper } from './style'
 
 export default memo(function OperateBtn(props) {
   const { isSelf, concernUserFn } = props
-  const { is_follow: isFollow } = useContext(userInfoContext)
+  const { isFollow } = useContext(allUserInfoContext)
 
   const styleInfo =
     !isSelf &&

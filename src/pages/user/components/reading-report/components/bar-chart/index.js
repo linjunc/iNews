@@ -1,18 +1,23 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useContext } from 'react'
 import * as eCharts from 'echarts'
 
 import {
   getMonthAndDay,
   getLongestWeek,
+  getDaysInfoInYear,
+  getAllDays,
 } from '../../../../../../utils/date-format'
 import { lazyLoad } from '../../../../../../utils/optimize-fn'
+import { allUserInfoContext } from '../../../../../../models/context'
 import { throttle } from 'lodash'
 
+import { Empty } from 'antd'
 import AnalyseTitle from '../analyse-title'
 
 import { GraphWrapper, TextInfoWrapper } from './style'
 
 export default function BarChart() {
+  let { calendarData } = useContext(allUserInfoContext)
   // 使用useRef创造出的实例获取柱状图所对应的dom元素
   const graphRef = useRef()
 
@@ -93,19 +98,44 @@ export default function BarChart() {
 
   // 组件挂载到页面上时执行函数为图表配置相关信息
   useEffect(() => {
-    window.addEventListener('scroll', lazyFn)
-    return () => {
-      window.removeEventListener('scroll', lazyFn)
+    if (calendarData.length) {
+      window.addEventListener('scroll', lazyFn)
+      return () => {
+        window.removeEventListener('scroll', lazyFn)
+      }
     }
-  }, [lazyFn])
+  }, [lazyFn, calendarData])
 
-  // 从本地获取到虚拟数据（后面会改为从服务器获取）并将数组反转方便后续操作
-  const randomValues =
-    JSON.parse(localStorage.getItem('randomValues'))?.reverse() || []
+  // 下方代码主要是得到分析数据的
+  // 该函数用于获取当前年份并返回一年中的总天数和结束日期等数据
+  const { allDays, endDay: lastDay } = getDaysInfoInYear()
+  // 返回一个从一年第一天到最后一天的数组
+  let initAllDaysArr = getAllDays(allDays, lastDay).reverse()
+  // 由于后台返回的时间并没有按照我们想要的时间顺序排列，所以这里要将响应结果排序
+  calendarData.sort((obj1, obj2) => {
+    return obj1.date - obj2.date
+  })
+  // 将排序好的数据数组里的日期对应一个数组
+  const dateArr = calendarData.map((item) => {
+    return item.date.getTime()
+  })
+  // 将排序好的数据数组里的阅读时间对应一个数组
+  const countArr = calendarData.map((item) => {
+    return item.count
+  })
+  let counter = 0
+  // 更换初始数据的值
+  initAllDaysArr.forEach((item, index) => {
+    if (dateArr.includes(item.date.getTime())) {
+      const targetObj = initAllDaysArr[index]
+      targetObj.count = countArr[counter++]
+    }
+  })
+
+  // 下方代码主要是分析数据的
   // 获取到最大阅读时间周末的起始日期、结束日期、阅读时间总和以及阅读时间数组
   const { startDay, endDay, maxTime, dataArr } =
-    getLongestWeek(randomValues) || {}
-
+    getLongestWeek(initAllDaysArr) || {}
   // 获取最大阅读周的起始日期（几月几日）
   const { day: firstBeginDay, month: firstStartMonth } =
     (startDay && getMonthAndDay(startDay)) || {}
@@ -116,27 +146,36 @@ export default function BarChart() {
   return (
     <div>
       <AnalyseTitle infoIndex={2} />
-      <TextInfoWrapper>
-        <p>
-          <span>{firstStartMonth}</span>月<span>{firstBeginDay}</span>日 ～{' '}
-          <span>{secondEndMonth}</span>月<span>{secondBeginDay}</span>
-          日大概是很特别的一周
-          <br />
-          这一周里，您的阅读频率明显高于其他时间段
-        </p>
-        <p>
-          您共花费了<span>{maxTime}</span>分钟
-          <br />
-          在iNews的世界里面遨游
-        </p>
-        <p>
-          iNews很荣幸能够将继续和您一起
-          <br />去<span>探索</span>这未知世界中的每一个角落
-        </p>
-      </TextInfoWrapper>
-      <GraphWrapper>
-        <div ref={graphRef} style={{ width: '1000px', height: '500px' }}></div>
-      </GraphWrapper>
+      {calendarData.length ? (
+        <>
+          <TextInfoWrapper>
+            <p>
+              <span>{firstStartMonth}</span>月<span>{firstBeginDay}</span>日 ～{' '}
+              <span>{secondEndMonth}</span>月<span>{secondBeginDay}</span>
+              日大概是很特别的一周
+              <br />
+              这一周里，您的阅读频率明显高于其他时间段
+            </p>
+            <p>
+              您共花费了<span>{maxTime}</span>分钟
+              <br />
+              在iNews的世界里面遨游
+            </p>
+            <p>
+              iNews很荣幸能够将继续和您一起
+              <br />去<span>探索</span>这未知世界中的每一个角落
+            </p>
+          </TextInfoWrapper>
+          <GraphWrapper>
+            <div
+              ref={graphRef}
+              style={{ width: '1000px', height: '500px' }}
+            ></div>
+          </GraphWrapper>
+        </>
+      ) : (
+        <Empty description="您暂时还没有阅读数据哦！" />
+      )}
     </div>
   )
 }
