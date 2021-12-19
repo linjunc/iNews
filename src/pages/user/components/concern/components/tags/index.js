@@ -21,7 +21,6 @@ export default function ConcernTags() {
         n: '10',
         skip: '0',
       })
-      console.log(res)
       res.data.tag_list && setTagsList(res.data.tag_list)
     } catch (err) {
       message.error('请求失败，请重试！')
