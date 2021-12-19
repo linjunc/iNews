@@ -17,9 +17,14 @@ export const MenuWrapper = styled.div`
   height: 64px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
-
+  .test {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-right: 20px;
+  }
   .layout-logo {
     height: 50px;
     padding: 0px 16px;
@@ -41,10 +46,11 @@ export const MenuWrapper = styled.div`
       font-size: 18px;
     }
   }
-  /* .layout-search-box {
+  .layout-search-box {
     position: relative;
-    width: 330px;
+    width: 200px;
     height: 36px;
+    transition: all 0.3s;
     .layout-search {
       height: 100%;
       padding-left: 18px;
@@ -70,5 +76,22 @@ export const MenuWrapper = styled.div`
       z-index: 99;
       cursor: pointer;
     }
-  } */
+  }
+  .covid {
+    cursor: pointer;
+    width: 100px;
+    text-align: center;
+    padding: 10px 5px;
+    margin-left: 10px;
+    background-color: #e8f3ff;
+    :hover {
+      color: #1890ff;
+    }
+  }
+  .search-focus {
+    width: 320px !important;
+  }
+  .hide {
+    display: none;
+  }
 `
