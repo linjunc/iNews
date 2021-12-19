@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const Commenttt = styled.div`
+export const CommentReply = styled.div`
   /* tile uploaded pictures */
   .comment-action {
     padding-left: 8px;
