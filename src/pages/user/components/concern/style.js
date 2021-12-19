@@ -14,10 +14,6 @@ export const ConcernItemWrapper = styled.div`
     align-items: center;
   }
 
-  .ant-empty {
-    margin-top: 100px;
-  }
-
   .ant-skeleton {
     padding: 15px 0 0 28.8px;
 
