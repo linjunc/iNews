@@ -119,20 +119,24 @@ const Header = () => {
               <div
                 className={`layout-search-box ${focus ? 'search-focus' : ''}`}
               >
-                <Input
-                  onFocus={() => {
-                    setFocus(true)
-                  }}
-                  onBlur={() => {
-                    setFocus(false)
-                  }}
+                {/* <Input
                   className="layout-search"
                   placeholder="请输入搜索的内容"
                   allowClear
                 />
                 <button className="layout-search-button">
                   <SearchOutlined />
-                </button>
+                </button> */}
+                <Search
+                  className="layout-search"
+                  setFocus={setFocus}
+                  style={{
+                    height: 36,
+                    backgroundColor: '#f5f5f5',
+                    focusColor: '#d1e9ff',
+                  }}
+                  placeholder="请输入搜索的内容"
+                ></Search>
               </div>
               <div className={`covid ${focus ? 'hide' : ''}`} onClick={toCovid}>
                 肺炎地图

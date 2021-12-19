@@ -5,7 +5,7 @@ import { SearchWrapper } from './style'
 import { SearchOutlined } from '@ant-design/icons'
 import { headerShowContext } from '../../models/context'
 
-const Search = ({ placeholder, style }) => {
+const Search = ({ placeholder, style, setFocus }) => {
   const [data, setData] = useState([])
   const [value, setValue] = useState('')
   const [isShow, setIsShow] = useState(false)
@@ -53,12 +53,19 @@ const Search = ({ placeholder, style }) => {
 
   return (
     <SearchWrapper
-      style={{
-        borderRadius: isShow && data?.length ? '10px 10px 0 0' : '',
-        backgroundColor: isShow && data?.length ? '#fff' : '',
-      }}
+      style={
+        isShow && data?.length
+          ? {
+              borderRadius: '10px 10px 0 0',
+              backgroundColor: '#fff',
+            }
+          : {}
+      }
       {...style}
     >
+      <span className="holder" style={{ display: value ? 'none' : 'block' }}>
+        {placeholder}
+      </span>
       <input
         ref={inputRef}
         type="text"
@@ -66,9 +73,13 @@ const Search = ({ placeholder, style }) => {
         autoFocus
         value={value}
         onChange={onChange}
-        onFocus={() => setIsShow(true)}
+        onFocus={() => {
+          setIsShow(true)
+          setFocus?.(true)
+        }}
         onBlur={(e) => {
           setIsShow(false)
+          setFocus?.(false)
           e.relatedTarget?.click()
         }}
       />

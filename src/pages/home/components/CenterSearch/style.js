@@ -15,7 +15,8 @@ export const SearchContainer = styled.main`
     width: 100%;
     height: 100%;
     .search-wrapper {
-      align-self: center;
+      width: 560px;
+      place-self: center;
       text-align: center;
       .logo-box {
         position: relative;
