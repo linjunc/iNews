@@ -175,12 +175,12 @@ export const ArticleItemWrapper = styled.div`
             .default});
         }
 
-        <<<<<<< HEAD .has-collect-icon {
+        .has-collect-icon {
           background-image: url(${require('../../../../assets/user-center/has-collect.png')
             .default});
         }
 
-        =======>>>>>>>05e9dcb276fc1aa69c0bb211582b8555c5f56e9e .collect-num {
+        .collect-num {
           color: #4e5969 !important;
         }
       }
