@@ -4,7 +4,7 @@ import Carousel from './components/Carousel'
 import Triggers from './components/Triggers'
 import PageHeader from './components/PageHeader'
 import LogoWhiteText from '../../../../assets/logo/logo_white_text.png'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Search from '../../../../components/Search'
 
 const CenterSearch = () => {
@@ -19,6 +19,12 @@ const CenterSearch = () => {
   ]
   // 轮播图索引
   const [carouselNowIndex, setCarouselNowIndex] = useState(0)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCarouselNowIndex((carouselNowIndex + 1) % dataArray.length)
+    }, 5000)
+    return () => clearTimeout(timer)
+  }, [carouselNowIndex, dataArray.length])
 
   return (
     <SearchContainer>

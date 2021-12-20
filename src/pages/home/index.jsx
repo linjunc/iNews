@@ -4,6 +4,7 @@ import { List, message } from 'antd'
 import { throttle } from 'lodash'
 import { useLocation } from 'react-router-dom'
 import { HomeContainer } from './style'
+import Nav from '../../components/Nav'
 import CenterSearch from './components/CenterSearch'
 import Article from './components/Article'
 import Loading from './components/Loading'
@@ -18,7 +19,6 @@ let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
-
 const Home = () => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
@@ -105,6 +105,7 @@ const Home = () => {
     return (
       <div className="content">
         <div className="main">
+          <Nav style={{ height: 54 }}></Nav>
           {showLoadTop()}
           <List
             dataSource={articleList}

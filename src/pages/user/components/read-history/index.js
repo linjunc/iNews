@@ -19,6 +19,7 @@ export default memo(function ReadHistory() {
         n: 10,
         skip: 0,
       })
+      console.log(data.article_list)
       data.article_list &&
         setHistoryList((article_list) => [
           ...article_list,

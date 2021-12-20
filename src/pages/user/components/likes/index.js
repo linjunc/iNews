@@ -19,6 +19,7 @@ export default memo(function LikeNews() {
         n: 10,
         skip: 0,
       })
+      console.log(data.article_list)
       data.article_list &&
         setLikeList((article_list) => [...article_list, ...data.article_list])
     } catch (err) {
