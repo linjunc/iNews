@@ -26,6 +26,7 @@ export const HomeContainer = styled.div`
           position: relative;
           background-color: #fff;
           padding: 0px 10px;
+          color: #666;
           user-select: none;
           z-index: 3;
         }
@@ -53,12 +54,33 @@ export const HomeContainer = styled.div`
           -webkit-box-orient: vertical;
           text-overflow: ellipsis;
         }
-        .description {
-          display: -webkit-box;
-          overflow: hidden;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          text-overflow: ellipsis;
+        .media_user {
+          display: flex;
+          justify-content: left;
+          align-items: center;
+          .mediaDetail {
+            padding-left: 20px;
+            display: flex;
+            max-width: 120px;
+            flex-direction: column;
+            justify-content: space-around;
+            .mediaName {
+              display: -webkit-box;
+              overflow: hidden;
+              -webkit-line-clamp: 1;
+              -webkit-box-orient: vertical;
+              text-overflow: ellipsis;
+            }
+            .description {
+              padding-top: 3px;
+              color: #aaa;
+              display: -webkit-box;
+              overflow: hidden;
+              -webkit-line-clamp: 1;
+              -webkit-box-orient: vertical;
+              text-overflow: ellipsis;
+            }
+          }
         }
       }
     }

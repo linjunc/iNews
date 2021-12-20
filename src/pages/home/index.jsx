@@ -204,15 +204,17 @@ const Home = () => {
                   </div>
                 }
               >
-                <Meta
+                <div
+                  className="media_user"
                   onClick={() => toUser(item)}
                   style={{ cursor: 'pointer', height: 50 }}
-                  avatar={<Avatar src={item.media_user.avatar_url} />}
-                  title={item.media_user.media_name}
-                  description={
+                >
+                  <Avatar src={item.media_user.avatar_url} />
+                  <div className="mediaDetail">
+                    <h4 className="mediaName">{item.media_user.media_name}</h4>
                     <p className="description">{item.media_user.media_info}</p>
-                  }
-                />
+                  </div>
+                </div>
               </Card>
             ))}
           </div>
