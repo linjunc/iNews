@@ -28,6 +28,7 @@ import {
 import { CommentReply } from './style'
 import ReactDom from 'react-dom'
 import Comment_reply from '../Reply'
+import 'moment/locale/zh-cn'
 const { TextArea } = Input
 const Comments = ({ id }) => {
   const [likes, setLikes] = useState([])
@@ -157,6 +158,11 @@ const Comments = ({ id }) => {
   }
   //提交处理
   async function onSubmit() {
+    if (value === '') {
+      setLoding(false)
+      message.info('评论内容不能为空')
+      return
+    }
     setComAll(comAll + 1)
     likes.push(0)
     replyNum.push(0)
@@ -167,11 +173,7 @@ const Comments = ({ id }) => {
     console.log('点赞个数')
     console.log(likes)
     setLoding(true)
-    if (value === '') {
-      setLoding(false)
-      message.info('评论内容不能为空')
-      return
-    }
+
     let index = data.length
     let options = {
       text: value,
@@ -229,7 +231,7 @@ const Comments = ({ id }) => {
   }
   //评论内容
   function Pinglun(a, pinlun) {
-    const [val, setVal] = useState([])
+    const [val, setVal] = useState('')
     //显示回复框
     const [isReply, setIsreply] = useState(false)
     // 显示回复的加载
@@ -239,11 +241,13 @@ const Comments = ({ id }) => {
     const [isReplyCon, setIsreplyCon] = useState(false)
     //回复后显示第一条
     const [isShift, setIsShift] = useState(false)
+    //回复后需要返回多少条
+    const [ShiftNum, setShiftNum] = useState(0)
     //评论回复列表
     const [replyList, setReplyList] = useState([])
     //获取评论数的跳过的内容
     const [replySkip, setReplySkip] = useState(0)
-    const [isMoreReply, setIsMoreReply] = useState(false)
+    const [isMoreReply, setIsMoreReply] = useState(true)
     const callback = useCallback(() => {
       return count
     })
@@ -294,9 +298,18 @@ const Comments = ({ id }) => {
             replyList.push(tem)
           }
           //删除最后一个元素
-          if (isShift && !res_reply.data.has_more) {
+          let time = ShiftNum
+
+          while (isShift && !res_reply.data.has_more && time) {
+            // console.log("弹出")
+            // console.log(ShiftNum)
+            // while(!time){
             replyList.pop()
+            time -= 1
+            // }
           }
+          // setShiftNum(0)
+
           setReplyList([...replyList])
           console.log('replyList')
           console.log(replyList)
@@ -310,6 +323,7 @@ const Comments = ({ id }) => {
 
     //点击回复评论
     async function commentReply() {
+      console.log(val)
       if (val === '') {
         message.info('回复内容不能为空')
         return
@@ -345,6 +359,7 @@ const Comments = ({ id }) => {
         setReplyList([...replyList])
         setIsreplyCon(false)
         setIsShift(true)
+        setShiftNum(ShiftNum + 1)
         // setIsreplyCon(true)
       }
       setVal('')
@@ -412,7 +427,7 @@ const Comments = ({ id }) => {
         <span style={replyNum[a.a + commentSkip] ? {} : { display: 'none' }}>
           <a
             className="ant-dropdown-link"
-            style={isReplyCon ? { display: 'none' } : {}}
+            style={isReplyCon || !isMoreReply ? { display: 'none' } : {}}
             onClick={(e) => {
               getReplyCom()
             }}

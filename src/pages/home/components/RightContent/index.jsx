@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router'
 import CenterLine from '../../../detail/components/CenterLine'
 const RightContent = ({ hotArr }) => {
   const isLogin = localStorage.getItem('token') ? true : false
-
   const navigate = useNavigate()
   const toLogin = () => {
     navigate(`/login`)

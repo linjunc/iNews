@@ -14,6 +14,7 @@ export default function ConcernTags() {
   const { id: user_id } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [tagsList, setTagsList] = useState([])
+
   const [isAllTagsShow, setIsAllTagsShow] = useState(false)
 
   const allTagList = [
