@@ -150,7 +150,7 @@ export const ArticleItemWrapper = styled.div`
           color: #4e5969;
 
           &.active {
-            color: #1890ff;
+            color: #1890ff !important;
           }
         }
 

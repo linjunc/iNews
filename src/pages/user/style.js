@@ -21,6 +21,7 @@ export const LeftContainerWrapper = styled.div`
 
 export const ContentWrapper = styled.div`
   min-height: 600px;
+  padding-bottom: 10px;
   background-color: #fff;
   overflow: hidden;
   box-sizing: border-box;

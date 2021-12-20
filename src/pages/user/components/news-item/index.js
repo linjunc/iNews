@@ -5,6 +5,7 @@ import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import { collectArticle, digArticle } from '../../../../services/detail'
+import noImg from '../../../../assets/home/404.svg'
 
 import { ArticleItemWrapper } from './style'
 
@@ -123,13 +124,23 @@ export default memo(function NewsItem(props) {
               <i
                 className={isCollect ? 'has-collect-icon' : 'collect-icon'}
               ></i>
-              <span className="collect-num">{collectNum || '收藏'}</span>
+              <span className={'collect-num' + (isCollect ? ' active' : '')}>
+                {collectNum || '收藏'}
+              </span>
             </li>
           </ul>
         </div>
         {image_url && image_url !== '”“' && (
           <div className="img-wrapper">
-            <img className="news-img" src={image_url} alt="新闻图片" />
+            <img
+              className="news-img"
+              src={image_url}
+              alt="新闻图片"
+              onError={(e) => {
+                e.target.onerror = null
+                e.target.src = noImg
+              }}
+            />
           </div>
         )}
       </div>

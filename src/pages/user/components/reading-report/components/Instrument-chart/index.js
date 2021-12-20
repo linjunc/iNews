@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useContext } from 'react'
 import * as eCharts from 'echarts'
 
-import { lazyLoad } from '../../../../../../utils/optimize-fn'
-import { throttle } from 'lodash'
 import { allUserInfoContext } from '../../../../../../models/context'
 
 import AnalyseTitle from '../analyse-title'
@@ -80,19 +78,12 @@ export default function InstrumentChart(props) {
       ],
     }
     option && myChart.setOption(option)
-    window.removeEventListener('scroll', lazyFn)
   }
-
-  // 将懒加载函数用节流函数包裹一层用于优化
-  const lazyFn = throttle(lazyLoad(graphRef, initChart), 200)
 
   // 组件挂载到页面上时执行函数为图表配置相关信息
   useEffect(() => {
-    window.addEventListener('scroll', lazyFn)
-    return () => {
-      window.removeEventListener('scroll', lazyFn)
-    }
-  }, [lazyFn])
+    readingTimeRank[0] && initChart()
+  }, [readingTimeRank[0]?.value])
 
   // 计算用户年度浏览总时长
   let userReadingMaxTime = 0

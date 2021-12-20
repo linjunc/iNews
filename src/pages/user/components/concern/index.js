@@ -1,7 +1,6 @@
 import React, { memo } from 'react'
 
 import SecondNav from './components/second-nav'
-import ConcernItem from './components/concern-item'
 
 import { ConcernItemWrapper } from './style'
 import { Outlet } from 'react-router'

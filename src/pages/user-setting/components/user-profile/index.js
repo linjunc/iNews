@@ -1,9 +1,15 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+  memo,
+} from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { getUserInfo } from '../../../../services/user'
-import { getLocal, getSession, setSession } from '../../../../utils/storage'
+import { getSession, setSession } from '../../../../utils/storage'
 import { uploadAvatar, uploadUserInfo } from '../../../../services/user'
+import { userInfoContext } from '../../../../models/context'
 
 import { Button, message } from 'antd'
 import AvatarInput from './components/avatar-input'
@@ -11,24 +17,14 @@ import FormInput from './components/form-input'
 
 import { UserProfileWrapper } from './style'
 
-export default function UserProfile() {
+export default memo(function UserProfile() {
   // 用于存储头像所对应的formData对象
   const [formData, setFormData] = useState(null)
-  const [userAllInfo, setUserAllInfo] = useState({})
   const [isBtnLoading, setIsBtnLoading] = useState(false)
-  const { user_id } = JSON.parse(getLocal('userInfo'))
   const navigate = useNavigate()
+  const { userInfo, setStateFn: setUserInfo } = useContext(userInfoContext)
   // 获取头像、个人介绍、用户名，并存储到本地
-  const { avatar, introduction, nickname, personal_page } = userAllInfo
-  // 获取到用户信息后更新状态
-  useEffect(() => {
-    let upDateUserInfo = async () => {
-      const res = await getUserInfo({ user_id })
-      const newUserAllInfo = res.data.userInfo
-      setUserAllInfo(newUserAllInfo)
-    }
-    upDateUserInfo()
-  }, [])
+  const { avatar, introduction, nickname, personal_page } = userInfo
 
   // 用户名要和简介被修改后修改本地存储的数据
   useEffect(() => {
@@ -59,10 +55,14 @@ export default function UserProfile() {
       setIsBtnLoading(true)
       try {
         const avatarRes = await uploadAvatar(formData)
-        const { code, msg } = avatarRes.data
+        const { code, msg, userInfo } = avatarRes.data
         if (code === 200) {
           message.success('头像修改成功！')
-          setFormData(null)
+          setUserInfo &&
+            setUserInfo({
+              userInfo,
+              isLoading: false,
+            })
         } else if (code === 401) {
           tokenExceed()
         } else {
@@ -74,28 +74,31 @@ export default function UserProfile() {
     }
 
     // 原始的用户名和个人简介
-    const originUserName = userAllInfo.nickname
-    const originIntroduction = userAllInfo.introduction
+    const originUserName = nickname
+    const originIntroduction = introduction
     // 现在的用户名和个人简介
-    const nickname = getSession('username')
-    const introduction = getSession('introduction')
-    if (!nickname) {
+    const nowNickname = getSession('username')
+    const nowIntroduction = getSession('introduction')
+    if (!nowNickname) {
       message.error('用户名不能为空！')
     } else if (
-      originUserName !== nickname ||
-      originIntroduction !== introduction
+      originUserName !== nowNickname ||
+      originIntroduction !== nowIntroduction
     ) {
       setIsBtnLoading(true)
       try {
         const userInfoRes = await uploadUserInfo({
-          nickname,
-          introduction,
+          nickname: nowNickname,
+          introduction: nowIntroduction,
           personal_page,
         })
         const { code, msg, userInfo } = userInfoRes.data
         if (code === 200) {
           message.success('修改信息成功！')
-          setUserAllInfo(userInfo)
+          setUserInfo({
+            userInfo,
+            isLoading: false,
+          })
         } else if (code === 401) {
           tokenExceed()
         } else {
@@ -140,4 +143,4 @@ export default function UserProfile() {
       </div>
     </UserProfileWrapper>
   )
-}
+})

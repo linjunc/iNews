@@ -6,9 +6,8 @@ import { getSession, setSession } from '../../../../../../../../utils/storage'
 import { TagItemWrapper } from './style'
 
 export default memo(function TagItem(props) {
-  const { tagInfo, isAllConcern } = props
-  const { name, tag, isFollow = false } = tagInfo
-  const [isConcern, setIsConcern] = useState(isAllConcern || isFollow)
+  const { name, tag, is_follow = false } = props.tagInfo
+  const [isConcern, setIsConcern] = useState(is_follow)
 
   // 在本地存取已关注标签列表
   const setTagList = (arr) => {
@@ -27,11 +26,8 @@ export default memo(function TagItem(props) {
     if (!isConcern) {
       const newArr = [...hasFollowTags, `${tag}`]
       setTagList(newArr)
-      const res = focusTags({
+      focusTags({
         tag_list: newArr,
-      })
-      res.then((res) => {
-        console.log(res)
       })
     } else {
       let newArr = getTagList()
@@ -40,11 +36,8 @@ export default memo(function TagItem(props) {
         newArr.splice(index, 1)
       }
       setTagList(newArr)
-      const res = focusTags({
+      focusTags({
         tag_list: newArr,
-      })
-      res.then((res) => {
-        console.log(res)
       })
     }
     setIsConcern(!isConcern)

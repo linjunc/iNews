@@ -46,7 +46,9 @@ export default function UserSetting() {
   }, [])
 
   return (
-    <userInfoContext.Provider value={contextInfo.userInfo}>
+    <userInfoContext.Provider
+      value={{ userInfo: contextInfo.userInfo, setStateFn: setContextInfo }}
+    >
       <UserSettingWrapper>
         <SettingHeader />
         <SettingContainerWrapper>
