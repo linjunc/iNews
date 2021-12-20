@@ -19,6 +19,7 @@ let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
+
 const Home = () => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
@@ -77,10 +78,7 @@ const Home = () => {
   useMemo(() => {
     tag = location.state?.current ? location.state.current : tag
 
-    console.log(tag)
-
     let articlesList = JSON.parse(sessionStorage.getItem(`${tag}_articles`))
-    console.log(articlesList)
     if (articlesList) {
       hasMore = articlesList.hasMore
       num = articlesList.num
@@ -95,7 +93,7 @@ const Home = () => {
       if (hasMore) getArticleList(tag, false)
       let timer = setTimeout(() => {
         document.documentElement.scrollTop =
-          document.getElementsByClassName('content')[0].offsetTop
+          document.getElementsByClassName('content')[0].offsetTop - 55
         clearTimeout(timer)
       }, 0)
     }

@@ -45,14 +45,14 @@ const Avatar = ({ color }) => {
       <Menu
         style={{ width: '110px', textAlign: 'center', backgroundColor: color }}
       >
-        <Menu.Item key="0">
-          <span onClick={toUser}>个人中心</span>
+        <Menu.Item onClick={toUser} key="0">
+          <span>个人中心</span>
         </Menu.Item>
-        <Menu.Item key="1">
-          <span onClick={logout}>退出登录</span>
+        <Menu.Item onClick={toCovid} key="1">
+          <span>肺炎地图</span>
         </Menu.Item>
-        <Menu.Item key="2">
-          <span onClick={toCovid}>肺炎地图</span>
+        <Menu.Item onClick={logout} key="2">
+          <span>退出登录</span>
         </Menu.Item>
       </Menu>
     )

@@ -10,7 +10,7 @@ import OperateBtn from '../operate-btn'
 import { ListHeaderWrapper } from './style'
 
 export default memo(function ListHeader(props) {
-  const { isSelf, concernUserFn, isShowHistory, avatar } = props
+  const { isSelf, concernUserFn, isShowHistory, avatar, type } = props
   const [isFixed, setIsFixed] = useState(null)
   let scrollTop = 0
 
@@ -77,13 +77,22 @@ export default memo(function ListHeader(props) {
   // 如果用户设置了阅读历史不可见，则不展示阅读历史给他人
   isSelf || isShowHistory || linkData.splice(1, 1)
 
+  // 如果用户类型是媒体，则需要展现其发布的文章列表上添加一项
+  type === 'media' &&
+    linkData.splice(1, 0, {
+      pathname: 'released',
+      title: isSelf ? '我的文章' : '他的文章',
+    })
+
   return (
     <>
-      {isFixed && <div className="blank" style={{ height: '50px' }}></div>}
+      {isFixed !== null && (
+        <div className="blank" style={{ height: '50px' }}></div>
+      )}
       <ListHeaderWrapper className={addClassByState()}>
         <div className="container middle-item">
           <div className="content">
-            {isFixed && (
+            {isFixed !== null && (
               <Link to="" onClick={goTop} className="middle-item">
                 <Avatar size={34} icon={<img src={avatar} alt="头像" />} />
               </Link>
@@ -112,7 +121,7 @@ export default memo(function ListHeader(props) {
               )
             })}
           </div>
-          {isFixed && (
+          {isFixed !== null && (
             <OperateBtn isSelf={isSelf} concernUserFn={concernUserFn} />
           )}
         </div>

@@ -175,6 +175,11 @@ export const ArticleItemWrapper = styled.div`
             .default});
         }
 
+        .has-collect-icon {
+          background-image: url(${require('../../../../assets/user-center/has-collect.png')
+            .default});
+        }
+
         .collect-num {
           color: #4e5969 !important;
         }

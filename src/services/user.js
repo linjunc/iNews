@@ -136,3 +136,12 @@ export const getHistoryList = (options) => {
     params: options,
   })
 }
+
+// 获取媒体对应的文章列表
+export const getMediaNewsList = (options) => {
+  return instance({
+    url: 'article_list_user',
+    method: 'GET',
+    params: options,
+  })
+}

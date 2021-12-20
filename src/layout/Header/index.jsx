@@ -73,14 +73,6 @@ const Header = () => {
               <div
                 className={`layout-search-box ${focus ? 'search-focus' : ''}`}
               >
-                {/* <Input
-                  className="layout-search"
-                  placeholder="请输入搜索的内容"
-                  allowClear
-                />
-                <button className="layout-search-button">
-                  <SearchOutlined />
-                </button> */}
                 <Search
                   className="layout-search"
                   setFocus={setFocus}

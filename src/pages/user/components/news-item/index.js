@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
-import { digArticle } from '../../../../services/detail'
+import { collectArticle, digArticle } from '../../../../services/detail'
 
 import { ArticleItemWrapper } from './style'
 
@@ -12,13 +12,15 @@ import { ArticleItemWrapper } from './style'
 dayjs.locale('zh-cn') // use locale
 dayjs.extend(relativeTime)
 export default memo(function NewsItem(props) {
-  const { newsInfo, isLikeModel } = props
+  const navigate = useNavigate()
+  const { newsInfo } = props
   const {
     article_id,
     comment_count,
     like_count: collect_count,
     read_count,
     digg_count: like_count,
+    is_like,
     is_digg,
     image_url,
     publish_time,
@@ -30,13 +32,19 @@ export default memo(function NewsItem(props) {
     tag,
   } = newsInfo
 
+  // 管理用户是否点赞以及点赞数目的状态
   const [likeInfo, setLikeInfo] = useState({
     likeNum: like_count,
-    isLike: isLikeModel || is_digg,
+    isLike: is_digg,
   })
-  const navigate = useNavigate()
-
   const { likeNum, isLike } = likeInfo
+
+  // 管理用户是否收藏以及收藏数目的状态
+  const [collectInfo, setCollectInfo] = useState({
+    collectNum: collect_count,
+    isCollect: is_like,
+  })
+  const { collectNum, isCollect } = collectInfo
 
   // 用户点击点赞按钮后点赞/取消点赞新闻
   const likeNews = (e) => {
@@ -46,11 +54,21 @@ export default memo(function NewsItem(props) {
       isLike: !isLike,
     })
     // 发送点赞/取消点赞请求
-    const res = digArticle({
+    digArticle({
       article_id,
     })
-    res.then((res) => {
-      console.log(res)
+  }
+
+  // 用户点击收藏按钮后收藏/取消收藏新闻
+  const collectNews = (e) => {
+    e.stopPropagation()
+    setCollectInfo({
+      collectNum: isCollect ? collectNum - 1 : collectNum + 1,
+      isCollect: !isCollect,
+    })
+    // 发送收藏/取消收藏请求
+    collectArticle({
+      article_id,
     })
   }
 
@@ -70,7 +88,7 @@ export default memo(function NewsItem(props) {
           className="username text-nowrap"
           onClick={(e) => e.stopPropagation()}
         >
-          {media_user.media_name}
+          {media_user?.media_name || '未知'}
         </Link>
         <span className="release-time">
           {
@@ -79,7 +97,7 @@ export default memo(function NewsItem(props) {
           }
         </span>
         <span className="category" onClick={goToCategory}>
-          {tag_name}
+          {tag_name || tag}
         </span>
       </div>
       <div className="content-container">
@@ -101,13 +119,15 @@ export default memo(function NewsItem(props) {
               <i className="uncomment-icon"></i>
               <span className="comment-num">{comment_count || '评论'}</span>
             </li>
-            <li className="item middle-item">
-              <i className="collect-icon"></i>
-              <span className="collect-num">{collect_count}</span>
+            <li className="item middle-item" onClick={collectNews}>
+              <i
+                className={isCollect ? 'has-collect-icon' : 'collect-icon'}
+              ></i>
+              <span className="collect-num">{collectNum || '收藏'}</span>
             </li>
           </ul>
         </div>
-        {image_url && (
+        {image_url && image_url !== '”“' && (
           <div className="img-wrapper">
             <img className="news-img" src={image_url} alt="新闻图片" />
           </div>
