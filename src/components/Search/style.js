@@ -66,26 +66,6 @@ export const SearchWrapper = styled.div.attrs(
     text-align: start;
     cursor: pointer;
     border-radius: 0 5px 5px 0;
-=======
-    border-color: #1890ff;
-  }
-  .input {
-    width: ${(props) => props.width * 0.89}px;
-    border-right: none;
-    padding-left: 20px;
-    background-color: ${(props) => props.backgroundColor};
-    outline: none;
-    border-radius: 10px 0 0 10px;
-  }
-  .button {
-    width: ${(props) => props.width * 0.11}px;
-    border-left: none;
-    background-color: ${(props) => props.backgroundColor};
-    color: #1890ff;
-    font-size: ${(props) => props.height * 0.48}px;
-    cursor: pointer;
-    border-radius: 0 10px 10px 0;
->>>>>>> dev_lhb
     &:hover .icon {
       animation: ${shake} 0.3s forwards;
     }
@@ -96,12 +76,8 @@ export const SearchWrapper = styled.div.attrs(
     z-index: 1;
     left: 0;
     bottom: 0;
-<<<<<<< HEAD
     box-shadow: 2px 2px 20px 0 rgba(0, 0, 0, 0.2);
     border-radius: 0 0 5px 5px;
-=======
-    border-radius: 0 0 10px 10px;
->>>>>>> dev_lhb
     transform: translateY(100%);
     .result {
       .keyword {
