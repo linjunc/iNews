@@ -30,6 +30,9 @@ export const HotRecommendWrapper = styled.div`
           -webkit-box-orient: vertical;
           text-overflow: ellipsis;
         }
+        .article-list-title:hover {
+          color: #1890ff;
+        }
         .article-list-num {
           display: flex;
           flex-direction: row;

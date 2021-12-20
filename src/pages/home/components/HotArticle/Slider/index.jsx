@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import { SliderWrapper } from './style'
 
 let clickFlag = true
+let slider_timer = null
 const Slider = ({ dataArray, next, prev }) => {
   const [num, setNum] = useState(5) //轮播所在位置
   const [timer, setTimer] = useState(0) //transition的delay
@@ -60,6 +61,25 @@ const Slider = ({ dataArray, next, prev }) => {
     ...sliderArr,
     ...sliderArr,
   ])
+
+  const right_next = useRef(null)
+
+  const stopSlider = () => {
+    clearInterval(slider_timer)
+  }
+  const openSlider = () => {
+    slider_timer = setInterval(() => {
+      right_next.current.click()
+    }, 5000)
+  }
+
+  useEffect(() => {
+    if (dataArray.length && !slider_timer) openSlider()
+    return () => {
+      stopSlider()
+    }
+  }, [dataArray])
+
   return (
     <SliderWrapper>
       <div className="slider_wrapper">
@@ -77,7 +97,11 @@ const Slider = ({ dataArray, next, prev }) => {
             </li>
           ))}
         </ul>
-        <RightOutlined onClick={handelClickRight} className="right_next" />
+        <RightOutlined
+          ref={right_next}
+          onClick={handelClickRight}
+          className="right_next"
+        />
       </div>
     </SliderWrapper>
   )
