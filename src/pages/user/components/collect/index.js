@@ -19,7 +19,6 @@ export default memo(function CollectNews() {
         n: 10,
         skip: 0,
       })
-      console.log(data.article_list)
       data.article_list &&
         setCollectList((article_list) => [
           ...article_list,

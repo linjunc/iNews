@@ -19,7 +19,6 @@ export default memo(function LikeNews() {
         n: 10,
         skip: 0,
       })
-      console.log(data.article_list)
       data.article_list &&
         setLikeList((article_list) => [...article_list, ...data.article_list])
     } catch (err) {
@@ -34,13 +33,7 @@ export default memo(function LikeNews() {
       {skeletonHandlerHOC(
         likeList.length ? (
           likeList.map((item) => {
-            return (
-              <NewsItem
-                key={item.article_id}
-                newsInfo={item}
-                isLikeModel={true}
-              />
-            )
+            return <NewsItem key={item.article_id} newsInfo={item} />
           })
         ) : (
           <Empty description="暂时还没有点赞过新闻哦！" />
