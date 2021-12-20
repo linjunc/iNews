@@ -37,6 +37,7 @@ const ConcernFollowing = lazy(() =>
   import('../pages/user/components/concern/components/following'),
 )
 const ReadHistory = lazy(() => import('../pages/user/components/read-history'))
+const MediaNews = lazy(() => import('../pages/user/components/media-news'))
 
 // 解决懒加载白屏时间
 const lazyLoad = (children) => {
@@ -76,6 +77,10 @@ const routes = [
           {
             path: 'likes',
             element: lazyLoad(<Likes />),
+          },
+          {
+            path: 'released',
+            element: lazyLoad(<MediaNews />),
           },
           {
             path: 'concern',

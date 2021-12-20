@@ -56,7 +56,6 @@ export default function UserCenter() {
         const resArr = await Promise.all(reqArr)
         const { userInfo, is_follow } = resArr[0].data
         const { data: calendarData } = resArr[1].data
-        console.log(resArr)
         setContextInfo({
           isFollow: is_follow,
           userInfo,
@@ -110,6 +109,7 @@ export default function UserCenter() {
               avatar={contextInfo.userInfo.avatar}
               concernUserFn={concernUserFn}
               isShowHistory={contextInfo.userInfo.is_show_history}
+              type={contextInfo.userInfo.type}
             />
             <ContentWrapper>
               <Outlet />

@@ -1,8 +1,6 @@
-import React, { memo, useContext } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import React, { memo } from 'react'
+import { useNavigate, useLocation, Link, useParams } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
-
-import { allUserInfoContext } from '../../../../models/context'
 
 import {
   RightContainerWrapper,
@@ -13,6 +11,7 @@ import {
 
 export default memo(function RightContainer(props) {
   const { isSelf, userInfo } = props
+  const { id } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -45,10 +44,12 @@ export default memo(function RightContainer(props) {
     {
       title: '收藏数',
       num: collect_count || 0,
+      to: `/user/${id}/collect`,
     },
     {
       title: '关注标签',
       num: tag_count || 0,
+      to: `/user/${id}/concern/tags`,
     },
     {
       title: '加入于',
@@ -87,19 +88,24 @@ export default memo(function RightContainer(props) {
           </div>
         </UserAchievementWrapper>
         <FollowNumWrapper>
-          <a href="#/">
+          <Link to={`/user/${id}/concern/following`}>
             <p className="title">关注了</p>
             <p className="concern-num">{follow_count || 0}</p>
-          </a>
-          <a href="#/">
+          </Link>
+          <Link to={`/user/${id}/concern/followers`}>
             <p className="title">关注者</p>
             <p className="concern-num">{follower_count || 0}</p>
-          </a>
+          </Link>
         </FollowNumWrapper>
         <CollectionInfoWrapper>
           {bottomData.map((item, index) => {
-            const { title, num } = item
-            return (
+            const { title, num, to } = item
+            return to ? (
+              <Link to={to} key={title}>
+                <span>{title}</span>
+                <span>{num || 0}</span>
+              </Link>
+            ) : (
               <div key={title}>
                 <span>{title}</span>
                 <span>{num || 0}</span>

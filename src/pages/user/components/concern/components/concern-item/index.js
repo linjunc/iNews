@@ -27,15 +27,12 @@ export default function ConcernItem(props) {
     // 阻止冒泡事件
     e.stopPropagation()
     setIsFollow(!isFollow)
-    const res = isTag
+    isTag
       ? focusTags({
           user_id: media_id,
           tag_list: [`${tag}`],
         })
       : FocusAuthor({ media_id })
-    res.then((res) => {
-      console.log(res)
-    })
   }
 
   // item被点击的时候跳转至对应的个人主页
