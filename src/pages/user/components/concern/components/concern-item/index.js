@@ -27,7 +27,7 @@ export default function ConcernItem(props) {
     // 阻止冒泡事件
     e.stopPropagation()
     setIsFollow(!isFollow)
-    isTag
+    const res = isTag
       ? focusTags({
           user_id: media_id,
           tag_list: [`${tag}`],

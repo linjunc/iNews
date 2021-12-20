@@ -2,6 +2,8 @@ import React, { memo } from 'react'
 import { useNavigate, useLocation, Link, useParams } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 
+import { allUserInfoContext } from '../../../../models/context'
+
 import {
   RightContainerWrapper,
   UserAchievementWrapper,
@@ -12,6 +14,7 @@ import {
 export default memo(function RightContainer(props) {
   const { isSelf, userInfo } = props
   const { id } = useParams()
+
   const navigate = useNavigate()
   const location = useLocation()
 

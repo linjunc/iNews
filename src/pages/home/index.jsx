@@ -18,7 +18,6 @@ let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
-
 const Home = () => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
