@@ -15,12 +15,8 @@ export const SearchContainer = styled.main`
     width: 100%;
     height: 100%;
     .search-wrapper {
-<<<<<<< HEAD:src/pages/home/components/CenterSearch/style.js
       width: 560px;
       place-self: center;
-=======
-      align-self: center;
->>>>>>> 05e9dcb276fc1aa69c0bb211582b8555c5f56e9e:src/pages/home/components/Search/style.js
       text-align: center;
       .logo-box {
         position: relative;
