@@ -9,10 +9,10 @@ export const HomeContainer = styled.div`
     display: flex;
     justify-content: space-between;
     .main {
-      min-height: 700px;
+      min-height: 620px;
       width: 700px;
       margin: 20px 0;
-      padding: 0 18px 50px 18px;
+      padding: 0 18px;
       background-color: #fff;
       .btmLine {
         position: relative;
@@ -38,6 +38,27 @@ export const HomeContainer = styled.div`
           width: 100%;
           height: 1px;
           background-color: #d9d9d9;
+        }
+      }
+      .btm_aritles {
+        padding-bottom: 20px;
+        .btm_aritles_title {
+          height: 45px;
+          padding: 3px 5px;
+          text-indent: 8px;
+          font-weight: 600;
+          display: -webkit-box;
+          overflow: hidden;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
+        }
+        .description {
+          display: -webkit-box;
+          overflow: hidden;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
         }
       }
     }

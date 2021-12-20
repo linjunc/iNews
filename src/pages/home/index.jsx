@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { List, message } from 'antd'
+import { List, message, Card, Avatar } from 'antd'
 
 import { throttle } from 'lodash'
 import { useLocation } from 'react-router-dom'
@@ -14,16 +14,27 @@ import HomeToTop from '../../components/HomeToTop'
 import { getArticles } from '../../services/home'
 import HotArticle from './components/HotArticle'
 import { shuffle } from '../../utils/shuffle'
+import { useNavigate } from 'react-router-dom'
 let num = 0
 let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
+const { Meta } = Card
 const Home = () => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
   const [articleList, setArticleList] = useState([])
   const [hotArr, setHotArr] = useState([])
+  const navigate = useNavigate()
+  const toDetail = (data) => {
+    //跳转详情
+    navigate(`/detail/${data.article_id}`) // id
+  }
+  const toUser = (data) => {
+    //跳转主页
+    navigate(`/user/${data.media_id}`) // id
+  }
   //文章存session
   const setArticles = (tag, newList, num, hasMore) => {
     let articlesList = JSON.parse(sessionStorage.getItem(`${tag}_articles`))
@@ -117,6 +128,7 @@ const Home = () => {
           />
           {showLoadBtm()}
           {hasNone()}
+          {btmAritles(hotArr)}
         </div>
         <RightContent hotArr={hotArr} />
       </div>
@@ -136,6 +148,77 @@ const Home = () => {
           <span className="title">已经到最低了噢~</span>
         </div>
       )
+  }
+
+  const btmAritles = (arr) => {
+    if (arr?.length && tag !== 'recommend') {
+      let newArr = [...arr]
+      shuffle(newArr)
+      newArr = newArr.filter((item) => item?.has_image)
+      newArr = newArr.slice(0, 3)
+      return (
+        <div>
+          <div
+            style={{
+              width: 710,
+              marginLeft: -20,
+              height: 20,
+              backgroundColor: '#f4f5f5',
+            }}
+          ></div>
+          <div className="btmLine">
+            <span className="title">文章推荐</span>
+          </div>
+          <div
+            className="btm_aritles"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              paddingTop: 10,
+            }}
+          >
+            {newArr.map((item) => (
+              <Card
+                key={item.article_id}
+                style={{ width: 200 }}
+                cover={
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img
+                      onClick={() => toDetail(item)}
+                      style={{
+                        cursor: 'pointer',
+                        width: 200,
+                        height: 140,
+                        objectFit: 'cover',
+                      }}
+                      alt={item.title}
+                      src={item.image_url}
+                    />
+                    <h4 className="btm_aritles_title">{item.title}</h4>
+                  </div>
+                }
+              >
+                <Meta
+                  onClick={() => toUser(item)}
+                  style={{ cursor: 'pointer', height: 50 }}
+                  avatar={<Avatar src={item.media_user.avatar_url} />}
+                  title={item.media_user.media_name}
+                  description={
+                    <p className="description">{item.media_user.media_info}</p>
+                  }
+                />
+              </Card>
+            ))}
+          </div>
+        </div>
+      )
+    }
   }
 
   let topValue = 0

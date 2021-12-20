@@ -66,6 +66,7 @@ const Slider = ({ dataArray, next, prev }) => {
 
   const stopSlider = () => {
     clearInterval(slider_timer)
+    slider_timer = null
   }
   const openSlider = () => {
     slider_timer = setInterval(() => {
