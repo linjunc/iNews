@@ -12,6 +12,7 @@ const Search = ({ placeholder, style, setFocus }) => {
   const [timer, setTimer] = useState(0)
   const [headerShow] = useContext(headerShowContext)
   const inputRef = useRef()
+  const buttonRef = useRef()
 
   // 当头部可见改变，失焦
   useEffect(() => {
@@ -72,6 +73,9 @@ const Search = ({ placeholder, style, setFocus }) => {
         className="input"
         autoFocus
         value={value}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') buttonRef.current?.click()
+        }}
         onChange={onChange}
         onFocus={() => {
           setIsShow(true)
@@ -84,6 +88,7 @@ const Search = ({ placeholder, style, setFocus }) => {
         }}
       />
       <a
+        ref={buttonRef}
         className="button"
         target="_blank"
         rel="noreferrer"
@@ -100,7 +105,6 @@ const Search = ({ placeholder, style, setFocus }) => {
                 target="_blank"
                 rel="noreferrer"
                 href={`https://so.toutiao.com/search?dvpf=pc&source=input&keyword=${item.title}`}
-                onMouseDown={() => {}}
               >
                 {hightlight(item.title, value)}
               </a>

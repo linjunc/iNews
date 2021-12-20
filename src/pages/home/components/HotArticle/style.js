@@ -4,7 +4,7 @@ export const HotArticlecontainer = styled.div`
   .hot_article {
     .content {
       .main {
-        width: 666px;
+        width: 700px;
         .Carousel_node {
           position: relative;
           padding: 20px 0;

@@ -27,23 +27,10 @@ export const MenuWrapper = styled.div`
   }
   .layout-logo {
     height: 50px;
-    padding: 0px 16px;
+    padding: 0px 17.5px;
     img {
       height: 100%;
       cursor: pointer;
-    }
-  }
-  .layout-nav {
-    width: 700px;
-    min-width: 530px;
-    /* margin: 0 20px; */
-    padding-bottom: 0;
-    .layout-menu {
-      display: flex;
-      align-items: flex-end;
-      /* background: transparent; */
-      border: none;
-      font-size: 18px;
     }
   }
   .layout-search-box {
@@ -51,7 +38,7 @@ export const MenuWrapper = styled.div`
     width: 200px;
     height: 36px;
     transition: all 0.3s;
-    .layout-search {
+    /* .layout-search {
       height: 100%;
       padding-left: 18px;
       padding-right: 52px;
@@ -75,7 +62,7 @@ export const MenuWrapper = styled.div`
       background: none;
       z-index: 99;
       cursor: pointer;
-    }
+    } */
   }
   .covid {
     cursor: pointer;

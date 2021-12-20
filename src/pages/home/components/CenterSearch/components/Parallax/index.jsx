@@ -21,7 +21,7 @@ const Parallax = (props) => {
         setIsVisible(e.isIntersecting)
         setHeaderShow(!e.isIntersecting)
       },
-      { threshold: 0.1 },
+      { threshold: 0 },
     )
     observer.observe(contentRef.current)
     return () => observer.disconnect()

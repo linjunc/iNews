@@ -2,6 +2,7 @@
 import { Carousel } from 'antd'
 import React, { useRef } from 'react'
 import HotRecommend from './HotRecommend'
+import Nav from '../../../../components/Nav'
 import Slider from './Slider'
 import { HotArticlecontainer } from './style'
 import { useNavigate } from 'react-router-dom'
@@ -32,6 +33,7 @@ const HotArticle = ({ hotArr }) => {
       <div className="hot_article">
         <div className="content">
           <div className="main">
+            <Nav style={{ height: 54 }}></Nav>
             <Carousel ref={hot_carousel} dots={false} effect="fade">
               {dataArray.map((data) => (
                 <div
