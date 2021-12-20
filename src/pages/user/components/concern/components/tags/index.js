@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { getSession, setSession } from '../../../../../../utils/storage'
+import {
+  getLocal,
+  getSession,
+  setSession,
+} from '../../../../../../utils/storage'
 
 import { message, Empty } from 'antd'
 import { focusTags, getTagsList } from '../../../../../../services/user'
@@ -12,6 +16,7 @@ import { ConcernTagsWrapper, TagListWrapper } from './style'
 
 export default function ConcernTags() {
   const { id: user_id } = useParams()
+  const { user_id: self_id } = JSON.parse(getLocal('userInfo')) || {}
   const [isLoading, setIsLoading] = useState(true)
   const [tagsList, setTagsList] = useState([])
 
@@ -76,18 +81,27 @@ export default function ConcernTags() {
     },
   ]
 
+  const isSelf = self_id === user_id
+
   // 获取该用户所有的关注者列表
   useEffect(async () => {
     setIsLoading(true)
     try {
-      const { data } = await getTagsList({
-        user_id,
-        n: '20',
-        skip: '0',
-      })
-      console.log(data)
-      const { tag_list } = data
-      const tagArr = tag_list?.map((item) => item.tag) || []
+      const getListFn = (id) => {
+        return getTagsList({
+          user_id: id,
+          n: '20',
+          skip: '0',
+        })
+      }
+      const reqArr = isSelf
+        ? [getListFn(user_id)]
+        : [getListFn(user_id), getListFn(self_id)]
+      const resArr = await Promise.all(reqArr)
+      const { tag_list } = resArr[0].data
+      const { tag_list: myTagList } = resArr[1]?.data || {}
+      const tagArr =
+        (isSelf ? tag_list : myTagList)?.map((item) => item.tag) || []
       // 在本地存储已关注的标签
       setSession('concernTagLists', JSON.stringify(tagArr))
       if (!isAllTagsShow && tag_list) {
@@ -97,7 +111,7 @@ export default function ConcernTags() {
         const newTagList = allTagList.map((item) => {
           // 与已关注到的标签数组作比较
           if (tagArr.includes(item.tag)) {
-            item.isFollow = true
+            item.is_follow = true
           }
           return item
         })
@@ -109,40 +123,31 @@ export default function ConcernTags() {
       setIsLoading(false)
     }
   }, [isAllTagsShow])
-  // const resres = focusTags({
-  //   tag_list: ['news_society', 'news_entertainment', 'news_fashion']
-  // })
-  // resres.then(res => {
-  //   console.log(res);
-  // })
+
   return (
     <ConcernTagsWrapper>
-      <div className="btn-group">
-        <button
-          className={'btn-item' + (isAllTagsShow ? '' : ' active')}
-          onClick={(e) => setIsAllTagsShow(false)}
-        >
-          已关注标签
-        </button>
-        <button
-          className={'btn-item' + (isAllTagsShow ? ' active' : '')}
-          onClick={(e) => setIsAllTagsShow(true)}
-        >
-          全部标签
-        </button>
-      </div>
+      {self_id === user_id && (
+        <div className="btn-group">
+          <button
+            className={'btn-item' + (isAllTagsShow ? '' : ' active')}
+            onClick={(e) => setIsAllTagsShow(false)}
+          >
+            已关注标签
+          </button>
+          <button
+            className={'btn-item' + (isAllTagsShow ? ' active' : '')}
+            onClick={(e) => setIsAllTagsShow(true)}
+          >
+            全部标签
+          </button>
+        </div>
+      )}
       {skeletonHandlerHOC(
         tagsList.length ? (
           <TagListWrapper>
             {tagsList.map((item) => {
               const { name } = item
-              return (
-                <TagItem
-                  key={name}
-                  tagInfo={item}
-                  isAllConcern={!isAllTagsShow}
-                />
-              )
+              return <TagItem key={name} tagInfo={item} />
             })}
           </TagListWrapper>
         ) : (

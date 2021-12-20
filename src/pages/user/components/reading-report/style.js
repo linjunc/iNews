@@ -14,7 +14,6 @@ export const ReadingReportWrapper = styled.div`
     .title-img {
       width: 100%;
       height: 508px;
-      padding: 0 15px;
     }
 
     .report-img {
@@ -34,21 +33,6 @@ export const TransitionWrapper = styled.div`
   .report-appear-active {
     transform: scale(1);
     transition: height 1s, transform 1s;
-  }
-`
-
-export const SecondTitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 28.8px;
-  height: 50px;
-  background-color: #fff;
-
-  .text {
-    font-size: 15px;
-    font-weight: 600;
-    color: #000;
   }
 `
 

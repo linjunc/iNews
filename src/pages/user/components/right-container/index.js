@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { useNavigate, useLocation, Link, useParams } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 
-import { allUserInfoContext } from '../../../../models/context'
+import { Button } from 'antd'
 
 import {
   RightContainerWrapper,
@@ -12,7 +12,7 @@ import {
 } from './style'
 
 export default memo(function RightContainer(props) {
-  const { isSelf, userInfo } = props
+  const { isSelf, userInfo, downLoadReport } = props
   const { id } = useParams()
 
   const navigate = useNavigate()
@@ -25,12 +25,12 @@ export default memo(function RightContainer(props) {
     join_date,
     follow_count,
     follower_count,
-    digg_count: collect_count,
+    digg_count,
   } = userInfo
 
   const discoveryData = [
     {
-      title: `贡献了 ${like_count || 0} 次点赞`,
+      title: `贡献了 ${digg_count || 0} 次点赞`,
       icon: 'M8.596 11.238V19H7.033C6.463 19 6 18.465 6 17.807v-5.282c0-.685.483-1.287 1.033-1.287h1.563zm4.275-4.156A1.284 1.284 0 0 1 14.156 6c.885.016 1.412.722 1.595 1.07.334.638.343 1.687.114 2.361-.207.61-.687 1.412-.687 1.412h3.596c.38 0 .733.178.969.488.239.317.318.728.21 1.102l-1.628 5.645a1.245 1.245 0 0 1-1.192.922h-7.068v-7.889c1.624-.336 2.623-2.866 2.806-4.029z',
     },
     {
@@ -46,7 +46,7 @@ export default memo(function RightContainer(props) {
   const bottomData = [
     {
       title: '收藏数',
-      num: collect_count || 0,
+      num: like_count || 0,
       to: `/user/${id}/collect`,
     },
     {
@@ -121,21 +121,34 @@ export default memo(function RightContainer(props) {
             // 根据路径判断用户当前是否处于年度报告页面，如果在，则不显示图片
             const pathname = location.pathname
             const flagStr = pathname.substring(pathname.length - 6)
-            return (
-              flagStr !== 'report' && (
-                <CSSTransition
-                  timeout={1000}
-                  classNames="report"
-                  in={true}
-                  appear
+            return flagStr !== 'report' ? (
+              <CSSTransition
+                timeout={1000}
+                classNames="report"
+                in={true}
+                appear
+              >
+                <div
+                  className="report-enter"
+                  title="打开年度报告"
+                  onClick={(e) => navigate('report')}
+                ></div>
+              </CSSTransition>
+            ) : (
+              <div className="operate-area">
+                <div
+                  className="go-back"
+                  title="回退"
+                  onClick={(e) => navigate(-1)}
+                ></div>
+                <Button
+                  type="primary"
+                  title="下载年度报告"
+                  onClick={downLoadReport}
                 >
-                  <div
-                    className="report-enter"
-                    title="打开年度报告"
-                    onClick={(e) => navigate('report')}
-                  ></div>
-                </CSSTransition>
-              )
+                  下载年度报告
+                </Button>
+              </div>
             )
           })()}
       </div>

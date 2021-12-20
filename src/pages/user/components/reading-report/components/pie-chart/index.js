@@ -1,18 +1,24 @@
 import React, { useEffect, useRef } from 'react'
 import * as eCharts from 'echarts'
 
-import { lazyLoad } from '../../../../../../utils/optimize-fn'
-import { throttle } from 'lodash'
-
 import { Empty } from 'antd'
 import AnalyseTitle from '../analyse-title'
 
 import { GraphWrapper } from './style'
 
 export default function PieChart(props) {
-  const { readingTimeRank } = props
   // 通过useRef获取图表包裹元素
   const graphRef = useRef()
+  let { readingTimeRank } = props
+  if (readingTimeRank.length > 10) {
+    const sliceBeforeArr = readingTimeRank.slice(0, 6)
+    const sliceAfterArr = readingTimeRank.slice(6)
+    let elseValue = 0
+    sliceAfterArr.forEach((item) => {
+      elseValue += item.value
+    })
+    readingTimeRank = [...sliceBeforeArr, { name: '其他', value: elseValue }]
+  }
 
   const initChart = () => {
     const myChart = eCharts.init(graphRef.current)
@@ -28,6 +34,7 @@ export default function PieChart(props) {
         },
         subtext: '单位：分钟',
         left: 'center',
+        padding: [50, 20, 100, 100],
       },
       tooltip: {
         trigger: 'item',
@@ -37,12 +44,15 @@ export default function PieChart(props) {
         left: 'left',
         width: 1000,
         textStyle: {
-          fontSize: 20, // 左侧选项字体大小,
+          fontSize: 18, // 左侧选项字体大小,
+          color: '#000',
+          lineHeight: 27,
         },
+        padding: [120, 0, 0, 0],
       },
       series: [
         {
-          name: '访问来源',
+          name: '阅读时间',
           type: 'pie',
           radius: '50%',
           data: readingTimeRank,
@@ -53,6 +63,7 @@ export default function PieChart(props) {
               shadowColor: 'rgba(0, 0, 0, 0.5)',
             },
           },
+          hoverOffset: 6,
         },
       ],
       color: [
@@ -69,27 +80,17 @@ export default function PieChart(props) {
       ],
     }
     option && myChart.setOption(option)
-    // 图表开始渲染之后取消鼠标滚动事件
-    window.removeEventListener('scroll', lazyFn) // 执行了initChart函数后就可以取消监听事件了
   }
-
-  // 将懒加载函数用节流函数包裹一层用于优化
-  const lazyFn = throttle(lazyLoad(graphRef, initChart), 200)
 
   // 等到dom渲染到页面之后再执行initChart操作
   useEffect(() => {
-    if (readingTimeRank.length) {
-      window.addEventListener('scroll', lazyFn)
-      return () => {
-        window.removeEventListener('scroll', lazyFn)
-      }
-    }
-  }, [lazyFn, readingTimeRank])
+    readingTimeRank?.length && initChart()
+  }, [readingTimeRank])
 
   return (
     <div>
       <AnalyseTitle infoIndex={0} />
-      {readingTimeRank.length ? (
+      {readingTimeRank?.length ? (
         <GraphWrapper>
           <div ref={graphRef} style={{ width: '900px', height: '500px' }}></div>
         </GraphWrapper>

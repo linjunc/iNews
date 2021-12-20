@@ -33,6 +33,26 @@ export const RightContainerWrapper = styled.div`
     max-height: 120px;
     transition: max-height 1s;
   }
+
+  .operate-area {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+
+    .go-back {
+      width: 32px;
+      height: 32px;
+      background-image: url(${require('../../../../assets/user-center/go-back1.png')
+        .default});
+      background-size: cover;
+      cursor: pointer;
+
+      &:hover {
+        background-image: url(${require('../../../../assets/user-center/go-back2.png')
+          .default});
+      }
+    }
+  }
 `
 
 export const UserAchievementWrapper = styled.div`

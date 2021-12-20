@@ -7,9 +7,7 @@ import {
   getDaysInfoInYear,
   getAllDays,
 } from '../../../../../../utils/date-format'
-import { lazyLoad } from '../../../../../../utils/optimize-fn'
 import { allUserInfoContext } from '../../../../../../models/context'
-import { throttle } from 'lodash'
 
 import { Empty } from 'antd'
 import AnalyseTitle from '../analyse-title'
@@ -90,21 +88,7 @@ export default function BarChart() {
       color: '#37a2da',
     }
     option && myChart.setOption(option)
-    window.removeEventListener('scroll', lazyFn)
   }
-
-  // 将懒加载函数用节流函数包裹一层用于优化
-  const lazyFn = throttle(lazyLoad(graphRef, initChart), 200)
-
-  // 组件挂载到页面上时执行函数为图表配置相关信息
-  useEffect(() => {
-    if (calendarData.length) {
-      window.addEventListener('scroll', lazyFn)
-      return () => {
-        window.removeEventListener('scroll', lazyFn)
-      }
-    }
-  }, [lazyFn, calendarData])
 
   // 下方代码主要是得到分析数据的
   // 该函数用于获取当前年份并返回一年中的总天数和结束日期等数据
@@ -142,6 +126,11 @@ export default function BarChart() {
   // 获取最大阅读周的结束日期（几月几日）
   const { day: secondBeginDay, month: secondEndMonth } =
     (endDay && getMonthAndDay(endDay)) || {}
+
+  // 组件挂载到页面上时执行函数为图表配置相关信息
+  useEffect(() => {
+    dataArr.length && initChart()
+  }, [dataArr])
 
   return (
     <div>

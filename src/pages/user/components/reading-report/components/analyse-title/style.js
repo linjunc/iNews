@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const TitleWrapper = styled.div`
   margin: 0 20px 15px;
-  color: #605c56;
+  color: #444;
   font-weight: bold;
   font-size: 16px;
 
