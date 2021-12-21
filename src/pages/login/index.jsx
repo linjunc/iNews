@@ -33,6 +33,7 @@ const Login = () => {
       if (data.data.code === 200) {
         message.success(data.data.msg)
         localStorage.setItem('token', JSON.stringify(data.data.token))
+        data.data.user_info['userTag'] = data.data.tag_list
         localStorage.setItem('userInfo', JSON.stringify(data.data.user_info))
         userDispatch({
           type: INIT_INFO,

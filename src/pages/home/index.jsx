@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, memo, useContext } from 'react'
 import { List, message, Card, Avatar } from 'antd'
 
 import { throttle } from 'lodash'
@@ -10,23 +10,27 @@ import Article from './components/Article'
 import Loading from './components/Loading'
 import RightContent from './components/RightContent'
 import HomeToTop from '../../components/HomeToTop'
+import TagFirst from './components/TagFirst'
 
 import { getArticles } from '../../services/home'
 import HotArticle from './components/HotArticle'
 import { shuffle } from '../../utils/shuffle'
 import { useNavigate } from 'react-router-dom'
+import { userContext } from '../../models/context'
 let num = 0
 let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
 const { Meta } = Card
-const Home = () => {
+const Home = memo(() => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
   const [articleList, setArticleList] = useState([])
   const [hotArr, setHotArr] = useState([])
   const navigate = useNavigate()
+  const { userInfo } = useContext(userContext)
+
   const toDetail = (data) => {
     //跳转详情
     navigate(`/detail/${data.article_id}`) // id
@@ -273,8 +277,9 @@ const Home = () => {
       <div className="hideBottom">
         <HomeToTop />
       </div>
+      <TagFirst userTag={userInfo?.userTag ?? []} />
     </HomeContainer>
   )
-}
+})
 
 export default Home
