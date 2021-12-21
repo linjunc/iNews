@@ -1,44 +1,34 @@
-import React, { useEffect, useMemo, useState, memo, useContext } from 'react'
-import { List, message, Card, Avatar } from 'antd'
+import React, { useEffect, useMemo, useState, useContext, memo } from 'react'
+import { List, message } from 'antd'
 
 import { throttle } from 'lodash'
 import { useLocation } from 'react-router-dom'
 import { HomeContainer } from './style'
+
 import Nav from '../../components/Nav'
 import CenterSearch from './components/CenterSearch'
 import Article from './components/Article'
-import Loading from './components/Loading'
+import Loading from '../../components/Loading'
 import RightContent from './components/RightContent'
 import HomeToTop from '../../components/HomeToTop'
 import TagFirst from './components/TagFirst'
+import BtmArticles from './components/BtmArticles'
+import HotArticle from './components/HotArticle'
 
 import { getArticles } from '../../services/home'
-import HotArticle from './components/HotArticle'
 import { shuffle } from '../../utils/shuffle'
-import { useNavigate } from 'react-router-dom'
 import { userContext } from '../../models/context'
 let num = 0
 let tag = 'app'
 let isOnGet = false
 let hasMore = true
 let msgTimer = null
-const { Meta } = Card
 const Home = memo(() => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
   const [onLoadingTop, setOnLoadingTop] = useState(false)
   const [articleList, setArticleList] = useState([])
   const [hotArr, setHotArr] = useState([])
-  const navigate = useNavigate()
   const { userInfo } = useContext(userContext)
-
-  const toDetail = (data) => {
-    //跳转详情
-    navigate(`/detail/${data.article_id}`) // id
-  }
-  const toUser = (data) => {
-    //跳转主页
-    navigate(`/user/${data.media_id}`) // id
-  }
   //文章存session
   const setArticles = (tag, newList, num, hasMore) => {
     let articlesList = JSON.parse(sessionStorage.getItem(`${tag}_articles`))
@@ -49,14 +39,15 @@ const Home = memo(() => {
     articlesList.list.push(...newList)
     sessionStorage.setItem(`${tag}_articles`, JSON.stringify(articlesList))
   }
+  //获取文章
   const getArticleList = async (tag, isBtm) => {
     if (!hasMore) {
       if (!msgTimer) {
+        message.warn('该类新闻都在这里了，看看其他类的吧！')
         msgTimer = setTimeout(() => {
-          message.warn('该类新闻都在这里了，看看其他类的吧！')
           clearTimeout(msgTimer)
           msgTimer = null
-        }, 2000)
+        }, 5000)
       }
       return
     }
@@ -88,6 +79,7 @@ const Home = memo(() => {
       setOnLoadingTop(false)
     }
   }
+
   const location = useLocation()
   useMemo(() => {
     tag = location.state?.current ? location.state.current : tag
@@ -116,6 +108,7 @@ const Home = memo(() => {
   }, [location.state])
 
   const showHot = () => {
+    //展示热点页或列表页
     if (tag === 'app') return <HotArticle hotArr={hotArr} />
     return (
       <div className="content">
@@ -160,70 +153,7 @@ const Home = memo(() => {
       shuffle(newArr)
       newArr = newArr.filter((item) => item?.has_image)
       newArr = newArr.slice(0, 3)
-      return (
-        <div>
-          <div
-            style={{
-              width: 710,
-              marginLeft: -20,
-              height: 20,
-              backgroundColor: '#f4f5f5',
-            }}
-          ></div>
-          <div className="btmLine">
-            <span className="title">文章推荐</span>
-          </div>
-          <div
-            className="btm_aritles"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              paddingTop: 10,
-            }}
-          >
-            {newArr.map((item) => (
-              <Card
-                key={item.article_id}
-                style={{ width: 200 }}
-                cover={
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <img
-                      onClick={() => toDetail(item)}
-                      style={{
-                        cursor: 'pointer',
-                        width: 200,
-                        height: 140,
-                        objectFit: 'cover',
-                      }}
-                      alt={item.title}
-                      src={item.image_url}
-                    />
-                    <h4 className="btm_aritles_title">{item.title}</h4>
-                  </div>
-                }
-              >
-                <div
-                  className="media_user"
-                  onClick={() => toUser(item)}
-                  style={{ cursor: 'pointer', height: 50 }}
-                >
-                  <Avatar src={item.media_user.avatar_url} />
-                  <div className="mediaDetail">
-                    <h4 className="mediaName">{item.media_user.media_name}</h4>
-                    <p className="description">{item.media_user.media_info}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )
+      return <BtmArticles newArr={newArr} />
     }
   }
 

@@ -1,3 +1,4 @@
+//文章列表页的右边部分
 import { RightContentWrapper } from './style'
 import logo from '../../../../assets/logo/logo.png'
 import { Button, List } from 'antd'
