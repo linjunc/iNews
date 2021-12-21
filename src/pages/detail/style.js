@@ -157,7 +157,7 @@ export const DetailWrapper = styled.main`
       width: 278px;
       transition: all 0.2s;
       z-index: -1;
-      top: 60px;
+      top: 30px;
     }
     .show {
       opacity: 1 !important;

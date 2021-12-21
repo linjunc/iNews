@@ -38,7 +38,7 @@ const Login = () => {
           type: INIT_INFO,
           userInfo: data.data.user_info,
         })
-        navigate('/')
+        navigate(-1)
       } else {
         message.error(data.data.msg)
         setLoginLoading(false)
@@ -75,7 +75,7 @@ const Login = () => {
             <div
               className="logo"
               onClick={() => {
-                navigate('/')
+                navigate(-1)
               }}
             >
               <img

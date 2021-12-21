@@ -36,7 +36,6 @@ const Header = () => {
   }, 200)
   // 初始化滚动事件
   useEffect(() => {
-    console.log(123)
     // 如果是首页，让首页用context控制
     if (pathname === '/') return
     window.addEventListener('scroll', bindHandleScroll)
