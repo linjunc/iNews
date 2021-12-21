@@ -4,7 +4,6 @@ export const ArticleItemWrapper = styled.div`
   padding: 12px 20px 0;
   background: #fff;
   cursor: pointer;
-  height: 141px;
 
   &:hover {
     background: #fafafa;

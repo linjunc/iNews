@@ -13,6 +13,24 @@ export const UserCenterWrapper = styled.div`
   .ant-skeleton {
     padding: 10px 20px;
   }
+
+  .ant-spin {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+
+    .ant-spin-text {
+      margin-left: 15px;
+    }
+  }
+
+  .toBottom {
+    justify-content: center;
+    margin-top: 10px;
+    color: #666;
+    font-size: 14px;
+  }
 `
 export const LeftContainerWrapper = styled.div`
   flex: auto;
