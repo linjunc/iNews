@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { message, Modal } from 'antd'
 import { TagWrapper } from './style'
 import TagItem from './TagItem'
 import { focusTags } from '../../../../services/user'
 import { userContext } from '../../../../models/context'
 import { EDIT_INFO } from '../../../../models/constant'
-import { setLocal } from '../../../../utils/storage'
 
 const TagFirst = ({ userTag }) => {
-  const oneRef = useRef(true)
   const [nowData, setNowData] = useState([])
   const [isVisible, setIsVisible] = useState(false)
   const { userInfo, userDispatch } = useContext(userContext)
@@ -72,10 +70,13 @@ const TagFirst = ({ userTag }) => {
   ]
   // 如果是第一次打开并且没有关注标签
   useEffect(() => {
-    if (!userTag?.length && oneRef.current && !!userInfo) {
+    // 临时存储打开状态
+    const oneData = JSON.parse(sessionStorage.getItem('oneOpen') ?? 'true')
+    if (!userTag?.length && oneData && !!userInfo) {
       setIsVisible(true)
-      oneRef.current = false
+      sessionStorage.setItem('oneOpen', false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const handleOk = async () => {
     setIsVisible(false)
@@ -109,7 +110,6 @@ const TagFirst = ({ userTag }) => {
       width={1200}
       style={{ top: 60 }}
     >
-      {' '}
       <TagWrapper>
         {allTagList.map((item) => (
           <TagItem
