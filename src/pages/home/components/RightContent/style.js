@@ -27,7 +27,6 @@ export const RightContentWrapper = styled.div`
         .title {
           display: flex;
           flex-direction: column;
-          /* font-size: 18px; */
           text-align: center;
           line-height: 22px;
           font-weight: 600;
@@ -52,9 +51,11 @@ export const RightContentWrapper = styled.div`
           height: 50px;
           border-radius: 50%;
           transform: translate(-50%, 0);
+          overflow: hidden;
           .avatarImg {
             width: 100%;
             height: 100%;
+            object-fit: cover;
           }
         }
         .nickname {
