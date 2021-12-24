@@ -1,5 +1,5 @@
 // 文章项组件
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Artilecontainer } from './style'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Image } from 'antd'
@@ -36,7 +36,6 @@ const Article = ({ data }) => {
       </div>
     ) : null
   }
-  useEffect(() => {}, [])
   return (
     <Artilecontainer>
       <div className="article-node">

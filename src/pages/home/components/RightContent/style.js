@@ -58,8 +58,6 @@ export const RightContentWrapper = styled.div`
             object-fit: cover;
           }
         }
-        .nickname {
-        }
       }
     }
     .hot_rank {

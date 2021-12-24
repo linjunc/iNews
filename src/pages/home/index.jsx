@@ -43,7 +43,7 @@ const Home = memo(() => {
   const getArticleList = async (tag, isBtm) => {
     if (!hasMore) {
       if (!msgTimer) {
-        message.warn('该类新闻都在这里了，看看其他类的吧！')
+        message.warn('该类新闻都在这里了，看看其他类的吧!')
         msgTimer = setTimeout(() => {
           clearTimeout(msgTimer)
           msgTimer = null
@@ -71,7 +71,7 @@ const Home = memo(() => {
       setArticleList((val) => [...val, ...newList])
       setArticles(tag, newList, num, hasMore)
     } catch (error) {
-      message.error('数据获取失败,请重试！')
+      message.error('数据获取失败,请重试!')
     } finally {
       isOnGet = false
       //取消加载中
@@ -172,14 +172,16 @@ const Home = memo(() => {
           sessionStorage.setItem('hotArr', JSON.stringify(hotArr_sess))
           setHotArr(hotArr_sess)
         },
-        (err) => message.error(err),
+        (err) => message.error('加载失败，请重试!'),
       )
     } else setHotArr(hotArr_sess)
 
     const handelToBottom = throttle((e) => {
       const { clientHeight, scrollHeight, scrollTop } =
         e.target.scrollingElement
-
+      //clientHeight 元素内部的高度(单位像素)，包含内边距，但不包括水平滚动条、边框和外边距
+      //scrollHeight 元素内容高度的度量，包括由于溢出导致的视图中不可见内容
+      //scrollTop 元素的内容垂直滚动的像素数
       const isBottom = scrollTop + clientHeight + 10 > scrollHeight //是否到达底部
 
       // 下滚

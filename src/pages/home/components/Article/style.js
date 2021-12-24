@@ -11,9 +11,7 @@ export const Artilecontainer = styled.div`
     min-height: 120px;
     background-color: #ffffff;
     .left {
-      /* flex: 0.99; */
       flex: 1;
-      /* width: 620px; */
       padding-right: 20px;
       display: flex;
       flex-direction: column;
@@ -32,7 +30,6 @@ export const Artilecontainer = styled.div`
           text-overflow: ellipsis;
         }
         .article-title:hover {
-          /* color: #f04142; */
           color: #1890ff;
         }
       }
@@ -65,8 +62,6 @@ export const Artilecontainer = styled.div`
         }
         .comment_count:hover {
           color: #aaa;
-        }
-        .publish_time {
         }
       }
     }

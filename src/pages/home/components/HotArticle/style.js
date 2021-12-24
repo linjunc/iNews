@@ -55,8 +55,6 @@ export const HotArticlecontainer = styled.div`
           }
         }
       }
-      .hot_right {
-      }
     }
   }
 `

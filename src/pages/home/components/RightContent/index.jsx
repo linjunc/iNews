@@ -24,8 +24,13 @@ const RightContent = ({ hotArr }) => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
   const showSvg = (article) => {
-    if (article.read_count > 200)
+    if (
+      article.read_count > 100 &&
+      article.like_count > 200 &&
+      article.comment_count > 200
+    )
       return (
+        //热门文章
         <img
           alt=""
           style={{ marginLeft: '5px' }}
@@ -34,6 +39,7 @@ const RightContent = ({ hotArr }) => {
       )
     if (Date.now() - article.publish_time * 1000 <= 2000000000)
       return (
+        //新的文章
         <img
           alt=""
           style={{ marginLeft: '5px' }}
@@ -66,9 +72,7 @@ const RightContent = ({ hotArr }) => {
           <div className="avatar">
             <img className="avatarImg" src={userInfo.avatar} alt="" />
           </div>
-          <div className="nickname">
-            {userInfo.nickname || '用户1234567890'}
-          </div>
+          <div className="nickname">{userInfo.nickname || '未命名用户'}</div>
         </div>
       </div>
     )
