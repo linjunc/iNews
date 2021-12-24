@@ -141,7 +141,13 @@ const Detail = memo(() => {
       speak().cancel()
       // 发送数据给后台
       // 当没有数据时，不做处理
-      if (tagRef.current && dayjs().valueOf() - timeRef.current > 20000) {
+      const token = localStorage.getItem('token') || false
+      console.log(token)
+      if (
+        tagRef.current &&
+        dayjs().valueOf() - timeRef.current > 20000 &&
+        token
+      ) {
         // 计算本次阅读时间
         const timing = dayjs().valueOf() - timeRef.current
         // 记录单次阅读时间
