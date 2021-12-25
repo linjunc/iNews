@@ -117,6 +117,8 @@ export default function UserCenter() {
         a.dispatchEvent(event) // 这样点击了之后就会在本地下载链接上对应的了
       })
   }, [domRef.current])
+  console.log(contextInfo)
+  console.log('------------')
 
   return (
     <allUserInfoContext.Provider value={contextInfo}>
