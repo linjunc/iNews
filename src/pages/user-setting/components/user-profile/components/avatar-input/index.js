@@ -22,12 +22,8 @@ export default function AvatarInput(props) {
   // 根据文件生成formData并传递给父组件的函数
   const createFormData = (file) => {
     const formData = new FormData()
-    formData.append('smfile', file)
-    formData.append('Authorization', 'Xg2Dr2U60gWe0rYUF3wgQnlmHWz9dbJ0')
-
-    // formData.append('image', file)
-    // formData.append('format', 'xml')
-    // formData.append('key', '7a90dbbff3b9b99f97e481e6b89dead8')
+    formData.append('image', file)
+    formData.append('key', '7a90dbbff3b9b99f97e481e6b89dead8')
     // 将formData传递给父组件中
     transmitFormData(formData)
   }
