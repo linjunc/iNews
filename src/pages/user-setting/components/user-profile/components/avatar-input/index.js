@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 
 import { Avatar, message } from 'antd'
+import noImg from '../../../../../../assets/user-center/default-avatar.png'
 
 import { AvatarInputWrapper } from './style'
 
@@ -8,10 +9,9 @@ export default function AvatarInput(props) {
   const { transmitFormData, avatar } = props
   const inputRef = useRef()
   const [imageUrl, setImageUrl] = useState(
-    avatar
-      ? avatar
-      : require('../../../../../../assets/user-center/default-avatar.png')
-          .default,
+    avatar ||
+      require('../../../../../../assets/user-center/default-avatar.png')
+        .default,
   )
 
   // 用户点击头像打开本地文件夹的函数
@@ -22,7 +22,12 @@ export default function AvatarInput(props) {
   // 根据文件生成formData并传递给父组件的函数
   const createFormData = (file) => {
     const formData = new FormData()
-    formData.append('avatar', file)
+    formData.append('smfile', file)
+    formData.append('Authorization', 'Xg2Dr2U60gWe0rYUF3wgQnlmHWz9dbJ0')
+
+    // formData.append('image', file)
+    // formData.append('format', 'xml')
+    // formData.append('key', '7a90dbbff3b9b99f97e481e6b89dead8')
     // 将formData传递给父组件中
     transmitFormData(formData)
   }
@@ -76,7 +81,18 @@ export default function AvatarInput(props) {
             </i>
             <span>点击修改头像</span>
           </div>
-          <Avatar size={90} icon={<img src={imageUrl} />} />
+          <Avatar
+            size={90}
+            icon={
+              <img
+                src={imageUrl}
+                onError={(e) => {
+                  e.target.onerror = null
+                  e.target.src = noImg
+                }}
+              />
+            }
+          />
           <input
             type="file"
             className="real-input"

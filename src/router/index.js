@@ -1,6 +1,17 @@
 import { lazy, Suspense } from 'react'
 import { Skeleton } from 'antd'
 import { Navigate } from 'react-router'
+
+// 由于个人主页文章列表那里共用了一个组件，所以需要传入不同的请求文章函数以及传入不同的请求关注列表函数
+import {
+  getLikeList,
+  getCollectList,
+  getHistoryList,
+  getMediaNewsList,
+  getFollowingList,
+  getFollowersList,
+} from '../services/user'
+
 const Header = lazy(() => import('../layout/Header'))
 // import Header from '../layout/Header'
 // import Home from '../pages/home'
@@ -14,8 +25,6 @@ const CovidMap = lazy(() => import('../pages/covidMap'))
 const PersonalPage = lazy(() =>
   import('../pages/user/components/personal-page'),
 )
-const CollectNews = lazy(() => import('../pages/user/components/collect'))
-const Likes = lazy(() => import('../pages/user/components/likes'))
 const Concern = lazy(() => import('../pages/user/components/concern'))
 const ReadingReport = lazy(() =>
   import('../pages/user/components/reading-report'),
@@ -30,14 +39,10 @@ const UserAccount = lazy(() =>
 const ConcernTags = lazy(() =>
   import('../pages/user/components/concern/components/tags'),
 )
-const ConcernFollowers = lazy(() =>
-  import('../pages/user/components/concern/components/followers'),
+const ConcernFollow = lazy(() =>
+  import('../pages/user/components/concern/components/follow'),
 )
-const ConcernFollowing = lazy(() =>
-  import('../pages/user/components/concern/components/following'),
-)
-const ReadHistory = lazy(() => import('../pages/user/components/read-history'))
-const MediaNews = lazy(() => import('../pages/user/components/media-news'))
+const NewsList = lazy(() => import('../pages/user/components/news-list'))
 
 // 解决懒加载白屏时间
 const lazyLoad = (children) => {
@@ -68,19 +73,19 @@ const routes = [
           },
           {
             path: 'person',
-            element: lazyLoad(<ReadHistory />),
+            element: lazyLoad(<NewsList getNewsFn={getHistoryList} />),
           },
           {
             path: 'collect',
-            element: lazyLoad(<CollectNews />),
+            element: lazyLoad(<NewsList getNewsFn={getCollectList} />),
           },
           {
             path: 'likes',
-            element: lazyLoad(<Likes />),
+            element: lazyLoad(<NewsList getNewsFn={getLikeList} />),
           },
           {
             path: 'released',
-            element: lazyLoad(<MediaNews />),
+            element: lazyLoad(<NewsList getNewsFn={getMediaNewsList} />),
           },
           {
             path: 'concern',
@@ -96,11 +101,18 @@ const routes = [
               },
               {
                 path: 'followers',
-                element: lazyLoad(<ConcernFollowers />),
+                element: lazyLoad(
+                  <ConcernFollow
+                    getFollowListFn={getFollowersList}
+                    isFollower={true}
+                  />,
+                ),
               },
               {
                 path: 'following',
-                element: lazyLoad(<ConcernFollowing />),
+                element: lazyLoad(
+                  <ConcernFollow getFollowListFn={getFollowingList} />,
+                ),
               },
             ],
           },

@@ -1,8 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-import { getLocal } from '../../../../../../utils/storage'
-
 import { SecondNavWrapper } from './style'
 
 export default function SecondNav() {
