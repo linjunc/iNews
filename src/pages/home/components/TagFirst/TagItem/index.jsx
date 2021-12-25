@@ -3,16 +3,15 @@ import React, { useState } from 'react'
 import { TagItemWrapper } from './style'
 
 export default function TagItem({ setNowData, nowData, tagInfo }) {
-  const { name } = tagInfo
+  const { name, tag } = tagInfo
   const [isConcern, setIsConcern] = useState(false)
   // 将当前的状态存储
   const concernTag = () => {
     if (isConcern) {
-      setNowData(nowData.filter((item) => item !== name))
+      setNowData(nowData.filter((item) => item !== tag))
       setIsConcern(false)
     } else {
-      console.log(nowData)
-      setNowData([...nowData, name])
+      setNowData([...nowData, tag])
       setIsConcern(true)
     }
   }
