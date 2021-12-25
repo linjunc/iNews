@@ -32,9 +32,9 @@ export default function UserCenter() {
   const domRef = useRef()
 
   // 获取dom操作并赋值给domRef
-  const getReportDom = (dom) => {
+  const getReportDom = useCallback((dom) => {
     domRef.current = dom
-  }
+  }, [])
 
   // 管理用户信息和日历热图的数据
   const [contextInfo, setContextInfo] = useState({
@@ -47,36 +47,40 @@ export default function UserCenter() {
   const isSelf = self_id === user_id
 
   // 请求用户信息和日历热图数据，请求完成后取消loading效果
-  useEffect(async () => {
+  useEffect(() => {
     if (flag.current) {
       setIsContentShow(true)
-      try {
-        const reqArr = [
-          getUserInfo({ user_id }),
-          getSpendTimeYearly({ user_id }),
-        ]
-        const resArr = await Promise.all(reqArr)
-        const { userInfo, is_follow } = resArr[0].data
-        const { data: calendarData } = resArr[1].data
-        setContextInfo({
-          isFollow: is_follow,
-          userInfo,
-          calendarData: calendarData
-            ? calendarData.map((item) => {
-                return {
-                  date: new Date(item.date),
-                  count: item.count,
-                }
-              })
-            : [],
-          getReportDom,
-        })
-      } catch (err) {
-        message.error('数据加载失败，请重试!')
+      const getInfo = async () => {
+        try {
+          const reqArr = [
+            getUserInfo({ user_id }),
+            getSpendTimeYearly({ user_id }),
+          ]
+          const resArr = await Promise.all(reqArr)
+          const { userInfo, is_follow } = resArr[0].data
+          const { data: calendarData } = resArr[1].data
+          setContextInfo({
+            isFollow: is_follow,
+            userInfo,
+            calendarData: calendarData
+              ? calendarData.map((item) => {
+                  return {
+                    date: new Date(item.date),
+                    count: item.count,
+                  }
+                })
+              : [],
+            getReportDom,
+          })
+        } catch (err) {
+          message.error('数据加载失败，请重试!')
+        } finally {
+          setIsContentShow(false)
+        }
       }
+      getInfo()
     }
-    setIsContentShow(false)
-  }, [user_id])
+  }, [user_id, getReportDom]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 点击关注按钮后发送请求关注/取消用户;注意：依赖一定要写对，否则可能会因为闭包而造成问题
   const concernUserFn = useCallback(() => {
@@ -116,9 +120,7 @@ export default function UserCenter() {
         // 触发a的单击事件
         a.dispatchEvent(event) // 这样点击了之后就会在本地下载链接上对应的了
       })
-  }, [domRef.current])
-  console.log(contextInfo)
-  console.log('------------')
+  }, [domRef])
 
   return (
     <allUserInfoContext.Provider value={contextInfo}>

@@ -82,6 +82,7 @@ export default function AvatarInput(props) {
             icon={
               <img
                 src={imageUrl}
+                alt="头像"
                 onError={(e) => {
                   e.target.onerror = null
                   e.target.src = noImg

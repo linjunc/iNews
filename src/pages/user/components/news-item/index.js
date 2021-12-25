@@ -1,4 +1,4 @@
-import React, { memo, useState, useRef, useEffect, useCallback } from 'react'
+import React, { memo, useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
@@ -74,7 +74,7 @@ export default memo(function NewsItem(props) {
               }
             },
             imgDom,
-            100,
+            50,
           ),
           200,
         )
@@ -84,7 +84,7 @@ export default memo(function NewsItem(props) {
         }
       }
     }
-  }, [])
+  }, [image_url, index])
 
   // 用户点击点赞按钮后点赞/取消点赞新闻
   const likeNews = (e) => {

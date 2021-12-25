@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect, useContext } from 'react'
+import React, { memo, useState, useEffect, useContext, useMemo } from 'react'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import ReactTooltip from 'react-tooltip'
 
@@ -25,6 +25,10 @@ export default memo(function CalendarHotGraph() {
     longestLoginTime: 0,
     allReadingTime: 0,
   })
+
+  // 该函数用于将每一天对应的date和count，返回的是一年中包含这些数据的新数组；最终是要传递给日历组件的
+  // 注意：返回的时间类型为对象，所以不用useMemo直接作为useEffect依赖的时候每次组件渲染都会执行函数
+  const { allDays, endDay } = useMemo(() => getDaysInfoInYear(), [])
 
   // 当context传递过来的数据改变时，需要更新状态;由于后台只返回
   useEffect(() => {
@@ -79,7 +83,7 @@ export default memo(function CalendarHotGraph() {
     }
     // 无论数组长度是否为0都要更新状态
     setCalendarData(initAllDaysArr)
-  }, [yearlyData])
+  }, [yearlyData, allDays, endDay])
 
   // 用户鼠标经过颜色格子的时候显示颜色对应的范围
   const handleShowNumScope = (index) => {
@@ -98,17 +102,6 @@ export default memo(function CalendarHotGraph() {
         return '0 min'
     }
   }
-
-  // 该函数用于将每一天对应的date和count，返回的是一年中包含这些数据的新数组；最终是要传递给日历组件的
-  const { allDays, endDay } = getDaysInfoInYear()
-  // 计算年度阅读总时间
-  // const allReadingTime = (() => {
-  //   let sum = 0
-  //   calendarData.forEach(item => {
-  //     sum += item.count
-  //   })
-  //   return sum
-  // })()
 
   return (
     <CalendarWrapper>

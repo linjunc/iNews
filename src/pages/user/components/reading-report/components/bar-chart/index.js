@@ -19,77 +19,6 @@ export default function BarChart() {
   // 使用useRef创造出的实例获取柱状图所对应的dom元素
   const graphRef = useRef()
 
-  // 初始化柱状图的信息以及进行相关配置
-  const initChart = () => {
-    const myChart = eCharts.init(graphRef.current)
-    myChart.clear()
-
-    const option = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-        },
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      xAxis: [
-        {
-          type: 'category',
-          data: [
-            '星期一',
-            '星期二',
-            '星期三',
-            '星期四',
-            '星期五',
-            '星期六',
-            '星期日',
-          ],
-          axisTick: {
-            show: false,
-          },
-          axisLine: {
-            show: false,
-          },
-          axisLabel: {
-            color: 'rgba(96, 92, 86, 1)',
-          },
-        },
-      ],
-      yAxis: [
-        {
-          type: 'value',
-          axisLine: {
-            show: false,
-          },
-          axisTick: {
-            show: false,
-            lineStyle: {
-              color: 'red',
-            },
-          },
-          axisLabel: {
-            color: 'rgba(96, 92, 86, 1)',
-          },
-        },
-      ],
-      series: [
-        {
-          name: '阅读时间（单位: 分钟）',
-          type: 'bar',
-          barWidth: '60%',
-          data: dataArr,
-        },
-      ],
-      color: '#37a2da',
-    }
-    option && myChart.setOption(option)
-  }
-
   // 下方代码主要是得到分析数据的
   // 该函数用于获取当前年份并返回一年中的总天数和结束日期等数据
   const { allDays, endDay: lastDay } = getDaysInfoInYear()
@@ -129,6 +58,77 @@ export default function BarChart() {
 
   // 组件挂载到页面上时执行函数为图表配置相关信息
   useEffect(() => {
+    // 初始化柱状图的信息以及进行相关配置
+    const initChart = () => {
+      const myChart = eCharts.init(graphRef.current)
+      myChart.clear()
+
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+          },
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true,
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: [
+              '星期一',
+              '星期二',
+              '星期三',
+              '星期四',
+              '星期五',
+              '星期六',
+              '星期日',
+            ],
+            axisTick: {
+              show: false,
+            },
+            axisLine: {
+              show: false,
+            },
+            axisLabel: {
+              color: 'rgba(96, 92, 86, 1)',
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLine: {
+              show: false,
+            },
+            axisTick: {
+              show: false,
+              lineStyle: {
+                color: 'red',
+              },
+            },
+            axisLabel: {
+              color: 'rgba(96, 92, 86, 1)',
+            },
+          },
+        ],
+        series: [
+          {
+            name: '阅读时间（单位: 分钟）',
+            type: 'bar',
+            barWidth: '60%',
+            data: dataArr,
+          },
+        ],
+        color: '#37a2da',
+      }
+      option && myChart.setOption(option)
+    }
+
     dataArr.length && initChart()
   }, [dataArr])
 

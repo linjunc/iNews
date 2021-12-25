@@ -5,7 +5,6 @@ import React, {
   useContext,
   memo,
 } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import {
   getLocal,

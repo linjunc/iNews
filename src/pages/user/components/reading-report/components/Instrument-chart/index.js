@@ -13,77 +13,77 @@ export default function InstrumentChart(props) {
   const graphRef = useRef()
   const { calendarData } = useContext(allUserInfoContext)
 
-  const initChart = () => {
-    const myChart = eCharts.init(graphRef.current)
-    myChart.clear()
-    const option = {
-      series: [
-        {
-          type: 'gauge',
-          name: '阅读时间',
-          axisLine: {
-            lineStyle: {
-              width: 30,
-              color: [
-                [0.3, '#67e0e3'],
-                [0.7, '#37a2da'],
-                [1, '#fd666d'],
-              ],
-            },
-          },
-          pointer: {
-            itemStyle: {
-              color: 'auto',
-            },
-            length: '55%',
-            width: 6,
-          },
-          axisTick: {
-            distance: -30,
-            length: 8,
-            lineStyle: {
-              color: '#fff',
-              width: 2,
-            },
-          },
-          splitLine: {
-            distance: -30,
-            length: 30,
-            lineStyle: {
-              color: '#fff',
-              width: 4,
-            },
-          },
-          axisLabel: {
-            color: 'auto',
-            distance: 5,
-            fontSize: 16,
-          },
-          detail: {
-            valueAnimation: true,
-            formatter: '{value} min',
-            color: 'auto',
-            textStyle: {
-              // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-              fontSize: 20,
-            },
-          },
-          data: [
-            {
-              value: readingTimeRank[0]?.value || 0,
-            },
-          ],
-          max: 800,
-        },
-      ],
-    }
-    option && myChart.setOption(option)
-  }
-
   // 组件挂载到页面上时执行函数为图表配置相关信息
   useEffect(() => {
+    const initChart = () => {
+      const myChart = eCharts.init(graphRef.current)
+      myChart.clear()
+      const option = {
+        series: [
+          {
+            type: 'gauge',
+            name: '阅读时间',
+            axisLine: {
+              lineStyle: {
+                width: 30,
+                color: [
+                  [0.3, '#67e0e3'],
+                  [0.7, '#37a2da'],
+                  [1, '#fd666d'],
+                ],
+              },
+            },
+            pointer: {
+              itemStyle: {
+                color: 'auto',
+              },
+              length: '55%',
+              width: 6,
+            },
+            axisTick: {
+              distance: -30,
+              length: 8,
+              lineStyle: {
+                color: '#fff',
+                width: 2,
+              },
+            },
+            splitLine: {
+              distance: -30,
+              length: 30,
+              lineStyle: {
+                color: '#fff',
+                width: 4,
+              },
+            },
+            axisLabel: {
+              color: 'auto',
+              distance: 5,
+              fontSize: 16,
+            },
+            detail: {
+              valueAnimation: true,
+              formatter: '{value} min',
+              color: 'auto',
+              textStyle: {
+                // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                fontSize: 20,
+              },
+            },
+            data: [
+              {
+                value: readingTimeRank[0]?.value || 0,
+              },
+            ],
+            max: 800,
+          },
+        ],
+      }
+      option && myChart.setOption(option)
+    }
+
     readingTimeRank[0] && initChart()
-  }, [readingTimeRank[0]?.value])
+  }, [readingTimeRank])
 
   // 计算用户年度浏览总时长
   let userReadingMaxTime = 0
