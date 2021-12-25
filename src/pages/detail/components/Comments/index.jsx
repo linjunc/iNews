@@ -31,6 +31,7 @@ import Comment_reply from '../Reply'
 import 'moment/locale/zh-cn'
 const { TextArea } = Input
 const Comments = ({ id }) => {
+  const [hasToken, setHasToken] = useState(false)
   const [likes, setLikes] = useState([])
   const [action, setAction] = useState([])
   const [data, setData] = useState([])
@@ -52,8 +53,11 @@ const Comments = ({ id }) => {
   //评论总数
   const [comAll, setComAll] = useState(0)
   //渲染得到评论
+
   useEffect(() => {
     const getCommentlist = async () => {
+      const localToken = JSON.parse(localStorage.getItem('token')) ?? null
+      setHasToken(localToken)
       const res_comment = await get_comments({
         article_id: id,
         n: 5,
@@ -143,6 +147,10 @@ const Comments = ({ id }) => {
 
   //点赞按钮
   async function like(a) {
+    if (!hasToken) {
+      message.info('请先登录')
+      return
+    }
     //获取到标签下标
     const index = a.getAttribute('index')
     //如果点赞了，就加1，如果没有的话，就减-1
@@ -158,6 +166,10 @@ const Comments = ({ id }) => {
   }
   //提交处理
   async function onSubmit() {
+    if (!hasToken) {
+      message.info('请先登录')
+      return
+    }
     if (value === '') {
       setLoding(false)
       message.info('评论内容不能为空')
@@ -253,6 +265,10 @@ const Comments = ({ id }) => {
     })
     //回复区进行渲染
     function getReplyCom() {
+      if (!hasToken) {
+        message.info('请先登录')
+        return
+      }
       console.log('回复区进行渲染')
       const getReplyList = async () => {
         // setIsreply(true)
@@ -262,6 +278,8 @@ const Comments = ({ id }) => {
           skip: replySkip,
         })
         let userInfo = JSON.parse(localStorage.getItem('userInfo')) //进行json解析
+        console.log('userInfo!!!!')
+        console.log(userInfo)
         //评论回复列表
         let replyListContent = res_reply.data.reply_list
         setIsMoreReply(res_reply.data.has_more)
@@ -324,6 +342,10 @@ const Comments = ({ id }) => {
     //点击回复评论
     async function commentReply() {
       console.log(val)
+      if (!hasToken) {
+        message.info('请先登录')
+        return
+      }
       if (val === '') {
         message.info('回复内容不能为空')
         return
