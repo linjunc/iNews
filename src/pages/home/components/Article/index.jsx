@@ -12,12 +12,12 @@ import { useNavigate } from 'react-router-dom'
 dayjs.locale('zh-cn') // use locale
 dayjs.extend(relativeTime)
 
-const Article = ({ data }) => {
+const Article = ({ data, current }) => {
   const navigate = useNavigate()
 
   const toDetail = () => {
     //跳转详情
-    navigate(`/detail/${data.article_id}`) // id
+    navigate(`/detail/${data.article_id}`, { state: { current } }) // id
   }
 
   const hasImg = () => {

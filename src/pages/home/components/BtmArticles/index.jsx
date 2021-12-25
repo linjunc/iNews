@@ -5,11 +5,11 @@ import { Card, Avatar } from 'antd'
 
 import { useNavigate } from 'react-router-dom'
 
-const BtmArticles = ({ newArr }) => {
+const BtmArticles = ({ newArr, current }) => {
   const navigate = useNavigate()
   const toDetail = (data) => {
     //跳转详情
-    navigate(`/detail/${data.article_id}`) // id
+    navigate(`/detail/${data.article_id}`, { state: { current } }) // id
   }
   const toUser = (data) => {
     //跳转主页

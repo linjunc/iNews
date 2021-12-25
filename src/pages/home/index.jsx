@@ -119,7 +119,7 @@ const Home = memo(() => {
             dataSource={articleList}
             renderItem={(item) => (
               <List.Item style={{ padding: 0 }} key={item.article_id}>
-                <Article data={item} />
+                <Article data={item} current={tag} />
               </List.Item>
             )}
           />
@@ -153,7 +153,7 @@ const Home = memo(() => {
       shuffle(newArr)
       newArr = newArr.filter((item) => item?.has_image)
       newArr = newArr.slice(0, 3)
-      return <BtmArticles newArr={newArr} />
+      return <BtmArticles current={tag} newArr={newArr} />
     }
   }
 
