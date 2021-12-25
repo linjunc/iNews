@@ -14,7 +14,7 @@ export const FixedContainer = styled.header`
 `
 export const MenuWrapper = styled.div`
   width: 1300px;
-  height: 64px;
+  height: 62px;
   margin: 0 auto;
   display: flex;
   justify-content: flex-start;

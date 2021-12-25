@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 export const NavContainer = styled.div`
-  position: sticky;
-  top: 0;
+  /* position: sticky; */
+  /* top: 0; */
   width: 700px;
   min-width: 530px;
   margin-left: -18px;
