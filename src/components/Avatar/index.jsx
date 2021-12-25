@@ -1,6 +1,6 @@
 import { Dropdown, Avatar as AntdAvatar, Menu, Modal, message } from 'antd'
 import { LoginButton } from './style.js'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { userContext } from '../../models/context'
 import { DELETE_INFO } from '../../models/constant'
@@ -37,39 +37,53 @@ const Avatar = ({ color }) => {
       },
     })
   }
+  // 下拉菜单
+  const menu = (
+    <Menu
+      style={{ width: '110px', textAlign: 'center', backgroundColor: color }}
+    >
+      <Menu.Item onClick={toUser} key="0">
+        <span>个人中心</span>
+      </Menu.Item>
+      <Menu.Item onClick={toCovid} key="1">
+        <span>肺炎地图</span>
+      </Menu.Item>
+      <Menu.Item onClick={logout} key="2">
+        <span>退出登录</span>
+      </Menu.Item>
+    </Menu>
+  )
 
-  // 已登录
-  if (userInfo) {
-    // 下拉菜单
-    const menu = (
-      <Menu
-        style={{ width: '110px', textAlign: 'center', backgroundColor: color }}
-      >
-        <Menu.Item onClick={toUser} key="0">
-          <span>个人中心</span>
-        </Menu.Item>
-        <Menu.Item onClick={toCovid} key="1">
-          <span>肺炎地图</span>
-        </Menu.Item>
-        <Menu.Item onClick={logout} key="2">
-          <span>退出登录</span>
-        </Menu.Item>
-      </Menu>
-    )
-    return (
-      <Dropdown arrow={true} overlay={menu} placement="bottomCenter">
-        <AntdAvatar style={{ cursor: 'pointer' }} src={userInfo.avatar} />
-      </Dropdown>
-    )
-  }
-  // 未登录
-  else {
-    return (
-      <LoginButton type="primary" onClick={toLogin}>
-        登录
-      </LoginButton>
-    )
-  }
+  return (
+    <>
+      {userInfo && userInfo.avatar ? (
+        <Dropdown arrow={true} overlay={menu} placement="bottomCenter">
+          <AntdAvatar style={{ cursor: 'pointer' }} src={userInfo.avatar} />
+        </Dropdown>
+      ) : (
+        <LoginButton type="primary" onClick={toLogin}>
+          登录
+        </LoginButton>
+      )}
+    </>
+  )
+  // // 已登录
+  // if (userInfo) {
+
+  //   return (
+  //     <Dropdown arrow={true} overlay={menu} placement="bottomCenter">
+  //       <AntdAvatar style={{ cursor: 'pointer' }} src={userInfo.avatar} />
+  //     </Dropdown>
+  //   )
+  // }
+  // // 未登录
+  // else {
+  //   return (
+  //     <LoginButton type="primary" onClick={toLogin}>
+  //       登录
+  //     </LoginButton>
+  //   )
+  // }
 }
 
 export default Avatar
