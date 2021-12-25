@@ -50,24 +50,73 @@ export default memo(function UserProfile() {
   )
 
   // 用户点击修改按钮后向后台发送修改请求
-  const updateUserInfo = async () => {
-    // 如果formData有值则说明用户修改了头像
-    if (formData) {
-      setIsBtnLoading(true)
-      try {
-        const { data, status } = await upLoadAvatarToBed(formData)
-        const { url } = data.data
-        if (status === 200) {
-          message.success('头像修改成功！')
-          const { data } = await uploadAvatar({
-            avatar: url,
-          })
-          const { avatar_url } = data
+  const updateUserInfo = () => {
+    // 原始的用户名和个人简介
+    const originUserName = nickname
+    const originIntroduction = introduction
+    // 现在的用户名和个人简介
+    const nowNickname = getSession('username')
+    const nowIntroduction = getSession('introduction')
+
+    // 只要这三个有一个条件满足，就说明用户有改动他的个人信息，需要发送请求
+    if (
+      formData ||
+      originUserName !== nowNickname ||
+      originIntroduction !== nowIntroduction
+    ) {
+      // 更改后的用户名不能为空
+      if (nowNickname) {
+        setIsBtnLoading(true)
+      } else {
+        message.warn('用户名不能为空！')
+        return
+      }
+
+      // 发送请求对应的promise数组
+      let reqArr = []
+      if (formData) {
+        reqArr[0] = upLoadAvatarToBed(formData)
+      }
+      if (
+        originUserName !== nowNickname ||
+        originIntroduction !== nowIntroduction
+      ) {
+        reqArr[1] = uploadUserInfo({
+          nickname: nowNickname,
+          introduction: nowIntroduction,
+          personal_page,
+        })
+      }
+
+      const upload = async () => {
+        try {
+          const [avatarData, infoData] = await Promise.all(reqArr)
+          console.log(avatarData)
+          console.log(infoData)
+          let avatar = null
+          if (avatarData) {
+            const { data } = await uploadAvatar({
+              avatar: avatarData.data.data.url,
+            })
+            avatar = data?.avatar_url
+          }
+          message.success('个人信息修改成功！')
+
           // 头像更新之后需要更新存储在本地的用户信息
           const localUserInfo = JSON.parse(getLocal('userInfo'))
-          localUserInfo.avatar = url
+          avatarData
+            ? (localUserInfo.avatar = avatar)
+            : (avatar = localUserInfo.avatar)
+          infoData && (localUserInfo.nickname = infoData.data.userInfo.nickname)
           setLocal('userInfo', JSON.stringify(localUserInfo))
-          const newUserInfo = { ...userInfo, avatar: avatar_url }
+
+          // 更新父组件保存的信息状态以及最顶层的userContext信息
+          const newUserInfo = {
+            ...userInfo,
+            avatar,
+            introduction: nowIntroduction,
+            nickname: nowNickname,
+          }
           setUserInfo &&
             setUserInfo({
               userInfo: newUserInfo,
@@ -75,63 +124,20 @@ export default memo(function UserProfile() {
             })
           userDispatch({
             type: EDIT_INFO,
-            userInfo: { ...initUserInfo, avatar: avatar_url },
-          })
-        } else {
-          message.error('头像上传失败,请重试！')
-        }
-      } catch (err) {
-        message.error(err)
-      }
-    }
-
-    // 原始的用户名和个人简介
-    const originUserName = nickname
-    const originIntroduction = introduction
-    // 现在的用户名和个人简介
-    const nowNickname = getSession('username')
-    const nowIntroduction = getSession('introduction')
-    if (!nowNickname) {
-      message.error('用户名不能为空！')
-    } else if (
-      originUserName !== nowNickname ||
-      originIntroduction !== nowIntroduction
-    ) {
-      setIsBtnLoading(true)
-      try {
-        const userInfoRes = await uploadUserInfo({
-          nickname: nowNickname,
-          introduction: nowIntroduction,
-          personal_page,
-        })
-        const { code, msg, userInfo } = userInfoRes.data
-        if (code === 200) {
-          message.success('修改信息成功！')
-          // 头像更新之后需要更新存储在本地的用户信息
-          const localUserInfo = JSON.parse(getLocal('userInfo'))
-          localUserInfo.nickname = userInfo.nickname
-          setLocal('userInfo', JSON.stringify(localUserInfo))
-          // 更新context中的值，使得其他组件中用到个人信息的地方也更新
-          userDispatch({
-            type: EDIT_INFO,
             userInfo: {
               ...initUserInfo,
-              nickname: userInfo.nickname,
-              avatar: localUserInfo.avatar,
+              avatar,
+              nickname: nowNickname,
             },
           })
-          setUserInfo({
-            userInfo,
-            isLoading: false,
-          })
-        } else {
-          message.error(msg)
+        } catch (err) {
+          message.error('信息修改错误，请刷新页面重试！')
+        } finally {
+          setIsBtnLoading(false)
         }
-      } catch (err) {
-        message.error(err)
       }
+      upload()
     }
-    setIsBtnLoading(false)
   }
 
   return (
