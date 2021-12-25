@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
+import { Outlet, useLocation, useParams } from 'react-router'
 import html2canvas from 'html2canvas'
 
 import {
@@ -23,7 +23,6 @@ import {
 
 export default function UserCenter() {
   const { id: user_id } = useParams()
-  const navigate = useNavigate()
   const { pathname } = useLocation()
   // 存储标志变量用于决定还需不需要发请求
   const flag = useRef(true)
@@ -45,14 +44,7 @@ export default function UserCenter() {
     getReportDom,
   })
 
-  // 判断用户本地有无token，看是否需要跳转到登录页
-  useEffect(() => {
-    getLocal('token') ||
-      (() => {
-        flag.current = false
-        navigate('/login')
-      })()
-  }, [])
+  const isSelf = self_id === user_id
 
   // 请求用户信息和日历热图数据，请求完成后取消loading效果
   useEffect(async () => {
@@ -86,22 +78,17 @@ export default function UserCenter() {
     setIsContentShow(false)
   }, [user_id])
 
-  const isSelf = self_id === user_id
-
   // 点击关注按钮后发送请求关注/取消用户;注意：依赖一定要写对，否则可能会因为闭包而造成问题
   const concernUserFn = useCallback(() => {
-    setContextInfo({
-      ...contextInfo,
-      isFollow: !contextInfo.isFollow,
-    })
-    const concernUser = async () => {
-      try {
-        await FocusAuthor({ media_id: user_id })
-      } catch (err) {
-        message.error('请求错误，请重试！')
-      }
+    if (getLocal('token')) {
+      setContextInfo({
+        ...contextInfo,
+        isFollow: !contextInfo.isFollow,
+      })
+      FocusAuthor({ media_id: user_id })
+    } else {
+      message.warn('您还没有登录哦！')
     }
-    concernUser()
   }, [contextInfo, user_id])
 
   // 判断当前是否需要展示年度图片

@@ -102,10 +102,12 @@ export const ArticleItemWrapper = styled.div`
       margin-left: 24px;
       overflow: hidden;
       border-radius: 2px;
+      background-color: #eee;
 
       .news-img {
         width: 120px;
         height: 100%;
+        opacity: 0;
         transition: all 0.3s;
 
         &:hover {

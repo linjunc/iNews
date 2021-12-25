@@ -44,8 +44,19 @@ export const ConcernItemWrapper = styled.div`
     display: flex;
     align-items: center;
 
-    .ant-avatar {
+    .avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
       margin-right: 10px;
+      background-color: #eee;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
     }
 
     .title {

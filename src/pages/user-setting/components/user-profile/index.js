@@ -6,10 +6,16 @@ import React, {
   memo,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 import { getSession, setSession } from '../../../../utils/storage'
-import { uploadAvatar, uploadUserInfo } from '../../../../services/user'
-import { userInfoContext } from '../../../../models/context'
+import {
+  uploadAvatar,
+  upLoadAvatarToBed,
+  uploadUserInfo,
+} from '../../../../services/user'
+import { userContext, userInfoContext } from '../../../../models/context'
+import { EDIT_INFO } from '../../../../models/constant'
 
 import { Button, message } from 'antd'
 import AvatarInput from './components/avatar-input'
@@ -22,10 +28,10 @@ export default memo(function UserProfile() {
   const [formData, setFormData] = useState(null)
   const [isBtnLoading, setIsBtnLoading] = useState(false)
   const navigate = useNavigate()
+  const { userDispatch } = useContext(userContext)
   const { userInfo, setStateFn: setUserInfo } = useContext(userInfoContext)
   // 获取头像、个人介绍、用户名，并存储到本地
   const { avatar, introduction, nickname, personal_page } = userInfo
-
   // 用户名要和简介被修改后修改本地存储的数据
   useEffect(() => {
     setSession('username', nickname)
@@ -40,34 +46,36 @@ export default memo(function UserProfile() {
     [setFormData],
   )
 
-  // token过期之后提示信息并跳转到登录页
-  const tokenExceed = () => {
-    message.error('登录失效！请重新登录!')
-    setTimeout(() => {
-      navigate('/login')
-    }, 1000)
-  }
-
   // 用户点击修改按钮后向后台发送修改请求
   const updateUserInfo = async () => {
     // 如果formData有值则说明用户修改了头像
     if (formData) {
       setIsBtnLoading(true)
       try {
-        const avatarRes = await uploadAvatar(formData)
-        const { code, msg, userInfo } = avatarRes.data
-        if (code === 200) {
-          message.success('头像修改成功！')
-          setUserInfo &&
-            setUserInfo({
-              userInfo,
-              isLoading: false,
-            })
-        } else if (code === 401) {
-          tokenExceed()
-        } else {
-          message.error(msg)
-        }
+        // const { data, status } = await upLoadAvatarToBed(formData)
+        const data = await upLoadAvatarToBed(formData)
+        // const { url } = data.data
+        console.log(data)
+        // console.log(url);
+        // if (status === 200) {
+        //   message.success('头像修改成功！')
+        //   const { data } = await uploadAvatar({
+        //     avatar: url
+        //   })
+        //   const { avatar_url } = data
+        //   const newUserInfo = { ...userInfo, avatar: avatar_url }
+        //   userDispatch({
+        //     type: EDIT_INFO,
+        //     userInfo: newUserInfo
+        //   })
+        //   setUserInfo &&
+        //     setUserInfo({
+        //       userInfo: newUserInfo,
+        //       isLoading: false,
+        //     })
+        // } else {
+        //   message.error('头像上传失败,请重试！')
+        // }
       } catch (err) {
         message.error(err)
       }
@@ -95,12 +103,15 @@ export default memo(function UserProfile() {
         const { code, msg, userInfo } = userInfoRes.data
         if (code === 200) {
           message.success('修改信息成功！')
+          // 更新context中的值，使得其他组件中用到个人信息的地方也更新
+          userDispatch({
+            type: EDIT_INFO,
+            userInfo,
+          })
           setUserInfo({
             userInfo,
             isLoading: false,
           })
-        } else if (code === 401) {
-          tokenExceed()
         } else {
           message.error(msg)
         }

@@ -1,20 +1,25 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useState, useRef, useEffect, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
+import { getLocal } from '../../../../utils/storage'
+import { lazyLoad } from '../../../../utils/optimize-fn'
+import { throttle } from 'lodash'
+
 import { collectArticle, digArticle } from '../../../../services/detail'
 import noImg from '../../../../assets/home/404.svg'
 
 import { ArticleItemWrapper } from './style'
+import { message } from 'antd'
 
 // dayjs 配置
 dayjs.locale('zh-cn') // use locale
 dayjs.extend(relativeTime)
 export default memo(function NewsItem(props) {
   const navigate = useNavigate()
-  const { newsInfo } = props
+  const { newsInfo, index } = props
   const {
     article_id,
     comment_count,
@@ -32,6 +37,8 @@ export default memo(function NewsItem(props) {
     tag_name,
     tag,
   } = newsInfo
+  // 记录图片的dom节点，用于懒加载给src属性赋值
+  const imgRef = useRef()
 
   // 管理用户是否点赞以及点赞数目的状态
   const [likeInfo, setLikeInfo] = useState({
@@ -47,30 +54,70 @@ export default memo(function NewsItem(props) {
   })
   const { collectNum, isCollect } = collectInfo
 
+  useEffect(() => {
+    const imgDom = imgRef.current
+    // 如果该新闻有图片，则需要为其监听滚动事件
+    if (imgDom) {
+      // 一开始的前5张图片为了确保用户一开始就能看见，所以是需要立即渲染的
+      if (index < 5) {
+        imgDom.src = image_url
+        imgDom.onload = () => (imgDom.style.opacity = 1)
+      } else {
+        const imgLazyLoad = throttle(
+          lazyLoad(
+            () => {
+              imgDom.src = image_url
+              imgDom.onload = () => {
+                // 图片加载完毕之后显示图片
+                imgDom.style.opacity = 1
+                window.removeEventListener('scroll', imgLazyLoad)
+              }
+            },
+            imgDom,
+            100,
+          ),
+          200,
+        )
+        window.addEventListener('scroll', imgLazyLoad)
+        return () => {
+          window.removeEventListener('scroll', imgLazyLoad)
+        }
+      }
+    }
+  }, [])
+
   // 用户点击点赞按钮后点赞/取消点赞新闻
   const likeNews = (e) => {
     e.stopPropagation()
-    setLikeInfo({
-      likeNum: isLike ? likeNum - 1 : likeNum + 1,
-      isLike: !isLike,
-    })
-    // 发送点赞/取消点赞请求
-    digArticle({
-      article_id,
-    })
+    if (getLocal('token')) {
+      setLikeInfo({
+        likeNum: isLike ? likeNum - 1 : likeNum + 1,
+        isLike: !isLike,
+      })
+      // 发送点赞/取消点赞请求
+      digArticle({
+        article_id,
+      })
+    } else {
+      message.warn('您还没有登录哦！')
+    }
   }
 
   // 用户点击收藏按钮后收藏/取消收藏新闻
   const collectNews = (e) => {
     e.stopPropagation()
-    setCollectInfo({
-      collectNum: isCollect ? collectNum - 1 : collectNum + 1,
-      isCollect: !isCollect,
-    })
-    // 发送收藏/取消收藏请求
-    collectArticle({
-      article_id,
-    })
+    if (getLocal('token')) {
+      setCollectInfo({
+        collectNum: isCollect ? collectNum - 1 : collectNum + 1,
+        isCollect: !isCollect,
+      })
+      // 发送收藏/取消收藏请求
+      collectArticle({
+        article_id,
+      })
+    } else {
+      message.warn('您还没有登录哦！')
+    }
   }
 
   // 点击标签后去往对应标签下的文章列表页
@@ -134,8 +181,8 @@ export default memo(function NewsItem(props) {
           <div className="img-wrapper">
             <img
               className="news-img"
-              src={image_url}
               alt="新闻图片"
+              ref={imgRef}
               onError={(e) => {
                 e.target.onerror = null
                 e.target.src = noImg

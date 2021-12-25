@@ -6,7 +6,7 @@ export const ListHeaderWrapper = styled.div`
   border-radius: 0.2rem 0.2rem 0 0;
   border-bottom: 1px solid #ebebeb;
   z-index: 100;
-  transition: all 0.3s;
+  transition: all 0.24s;
 
   &.sticky,
   &.stickyTop {

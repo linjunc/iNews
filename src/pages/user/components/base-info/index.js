@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router'
 import { allUserInfoContext } from '../../../../models/context'
 import { getLocal } from '../../../../utils/storage'
 
+import noImg from '../../../../assets/user-center/default-avatar.png'
 import OperateBtn from '../operate-btn'
 
 import { BaseInfoWrapper } from './style'
@@ -11,18 +12,10 @@ import { BaseInfoWrapper } from './style'
 export default memo(function BaseInfo(props) {
   // 从props中获取到传递过来的用户id
   const { id: user_id } = useParams
-  // 使用useContext获取传递过来的用户信息
-  const navigate = useNavigate()
+
   // 从context中获取用户信息
   const { userInfo } = useContext(allUserInfoContext)
   const { isSelf, concernUserFn } = props
-
-  // 判断用户是否已经登录，如果没有登录则需要跳转至登录页面
-  useEffect(() => {
-    if (!getLocal('token')) {
-      navigate('/login')
-    }
-  }, [navigate])
 
   // 获取头像、个人介绍、用户名
   const { avatar, introduction, nickname } = userInfo
@@ -36,6 +29,10 @@ export default memo(function BaseInfo(props) {
           avatar ||
           require('../../../.././assets/user-center/default-avatar.png').default
         }
+        onError={(e) => {
+          e.target.onerror = null
+          e.target.src = noImg
+        }}
       />
       <div className="info-box middle-item">
         <div className="user-name middle-item">

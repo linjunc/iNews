@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react'
+import React, { memo, useState, useEffect, useRef } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
 import { getScrollTop } from '../../../../utils/scrollHeight'
@@ -12,20 +12,32 @@ import { ListHeaderWrapper } from './style'
 export default memo(function ListHeader(props) {
   const { isSelf, concernUserFn, isShowHistory, avatar, type } = props
   const [isFixed, setIsFixed] = useState(null)
+  // 利用useRef来记录上次滚动的距离而不是用一个变量，因为组件更新的时候变量会被重新赋值，从而影响判断
+  const topValue = useRef(0)
   let scrollTop = 0
+  // 记录上一次的滚动距离，用于判断滚动方向
 
   // 监听滚动条滑动到指定位置时，让导航栏固定;脱离指定位置时，让导航栏恢复正常
   const fixNav = throttle(() => {
     scrollTop = getScrollTop()
-    if (scrollTop >= 251 && scrollTop < 700) {
-      setIsFixed(true)
-    }
-    if (scrollTop >= 700) {
-      setIsFixed(false)
-    }
+    setTimeout(() => {
+      topValue.current = scrollTop
+    }, 0)
     if (scrollTop < 251) {
       setIsFixed(null)
     }
+    // 大于一定距离并且下滚了，头部出现
+    if (scrollTop >= 251 && scrollTop < 700 && scrollTop >= topValue.current) {
+      setIsFixed(true)
+    }
+    if (scrollTop <= topValue.current && scrollTop >= 251) {
+      setIsFixed(true)
+    }
+    // 大于一定距离并且下滚了，头部出现
+    if (scrollTop >= 700 && scrollTop >= topValue.current) {
+      setIsFixed(false)
+    }
+    // 上滚
   }, 200)
 
   useEffect(() => {
@@ -42,7 +54,7 @@ export default memo(function ListHeader(props) {
 
   // 通过组件当前的状态来决定给nav栏添加什么样的类名
   const addClassByState = () => {
-    if (isFixed === true) {
+    if (isFixed) {
       return 'sticky'
     } else if (isFixed === false) {
       return 'stickyTop'
