@@ -6,9 +6,13 @@ import React, {
   memo,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
-import { getSession, setSession } from '../../../../utils/storage'
+import {
+  getLocal,
+  getSession,
+  setLocal,
+  setSession,
+} from '../../../../utils/storage'
 import {
   uploadAvatar,
   upLoadAvatarToBed,
@@ -27,8 +31,7 @@ export default memo(function UserProfile() {
   // 用于存储头像所对应的formData对象
   const [formData, setFormData] = useState(null)
   const [isBtnLoading, setIsBtnLoading] = useState(false)
-  const navigate = useNavigate()
-  const { userDispatch } = useContext(userContext)
+  const { userInfo: initUserInfo, userDispatch } = useContext(userContext)
   const { userInfo, setStateFn: setUserInfo } = useContext(userInfoContext)
   // 获取头像、个人介绍、用户名，并存储到本地
   const { avatar, introduction, nickname, personal_page } = userInfo
@@ -52,30 +55,31 @@ export default memo(function UserProfile() {
     if (formData) {
       setIsBtnLoading(true)
       try {
-        // const { data, status } = await upLoadAvatarToBed(formData)
-        const data = await upLoadAvatarToBed(formData)
-        // const { url } = data.data
-        console.log(data)
-        // console.log(url);
-        // if (status === 200) {
-        //   message.success('头像修改成功！')
-        //   const { data } = await uploadAvatar({
-        //     avatar: url
-        //   })
-        //   const { avatar_url } = data
-        //   const newUserInfo = { ...userInfo, avatar: avatar_url }
-        //   userDispatch({
-        //     type: EDIT_INFO,
-        //     userInfo: newUserInfo
-        //   })
-        //   setUserInfo &&
-        //     setUserInfo({
-        //       userInfo: newUserInfo,
-        //       isLoading: false,
-        //     })
-        // } else {
-        //   message.error('头像上传失败,请重试！')
-        // }
+        const { data, status } = await upLoadAvatarToBed(formData)
+        const { url } = data.data
+        if (status === 200) {
+          message.success('头像修改成功！')
+          const { data } = await uploadAvatar({
+            avatar: url,
+          })
+          const { avatar_url } = data
+          // 头像更新之后需要更新存储在本地的用户信息
+          const localUserInfo = JSON.parse(getLocal('userInfo'))
+          localUserInfo.avatar = url
+          setLocal('userInfo', JSON.stringify(localUserInfo))
+          const newUserInfo = { ...userInfo, avatar: avatar_url }
+          setUserInfo &&
+            setUserInfo({
+              userInfo: newUserInfo,
+              isLoading: false,
+            })
+          userDispatch({
+            type: EDIT_INFO,
+            userInfo: { ...initUserInfo, avatar: avatar_url },
+          })
+        } else {
+          message.error('头像上传失败,请重试！')
+        }
       } catch (err) {
         message.error(err)
       }
@@ -103,10 +107,18 @@ export default memo(function UserProfile() {
         const { code, msg, userInfo } = userInfoRes.data
         if (code === 200) {
           message.success('修改信息成功！')
+          // 头像更新之后需要更新存储在本地的用户信息
+          const localUserInfo = JSON.parse(getLocal('userInfo'))
+          localUserInfo.nickname = userInfo.nickname
+          setLocal('userInfo', JSON.stringify(localUserInfo))
           // 更新context中的值，使得其他组件中用到个人信息的地方也更新
           userDispatch({
             type: EDIT_INFO,
-            userInfo,
+            userInfo: {
+              ...initUserInfo,
+              nickname: userInfo.nickname,
+              avatar: localUserInfo.avatar,
+            },
           })
           setUserInfo({
             userInfo,

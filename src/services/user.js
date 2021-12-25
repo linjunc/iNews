@@ -151,17 +151,13 @@ export const getMediaNewsList = (options) => {
 // 上传头像到图床的函数,不知道为什么使用instance会有跨域问题，直接使用axios就没有
 export const upLoadAvatarToBed = (options) => {
   return axios({
-    // URL，这里就是上面文档提到的【API link】
-    // url: 'https://api.imgbb.com/1/upload',
-    url: '/sm/api/v2/upload',
-    // type: 'POST',
+    url: 'https://api.imgbb.com/1/upload',
     // 请求类型
     method: 'POST',
     // 设置请求体，在 params 中设置的参数最后都将变为url参数跟在请求行地址的后面
     data: options,
     headers: {
       'Content-Type': 'multipart/form-data',
-      Authorization: '14ac5499cfdd2bb2859e4476d2e5b1d2bad079bf',
     },
   })
 }
