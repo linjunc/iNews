@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
-import {
-  getLocal,
-  getSession,
-  setSession,
-} from '../../../../../../utils/storage'
+import { getLocal, setSession } from '../../../../../../utils/storage'
 
 import { message, Empty } from 'antd'
-import {
-  focusTags,
-  getAllTags,
-  getTagsList,
-} from '../../../../../../services/user'
+import { getAllTags, getTagsList } from '../../../../../../services/user'
 import { skeletonHandlerHOC } from '../../../../../../utils/high-order-components'
 import TagItem from './components/tag-item'
 
@@ -29,46 +21,47 @@ export default function ConcernTags() {
   const isSelf = self_id === user_id
 
   // 获取该用户所有的关注者列表
-  useEffect(async () => {
-    setIsLoading(true)
-    try {
-      const getListFn = (id) => {
-        return getTagsList({
-          user_id: id,
-          n: 40,
-          skip: 0,
-        })
+  useEffect(() => {
+    const getTags = async () => {
+      setIsLoading(true)
+      try {
+        const getListFn = (id) => {
+          return getTagsList({
+            user_id: id,
+            n: 40,
+            skip: 0,
+          })
+        }
+        let reqArr = []
+        if (getLocal('token')) {
+          reqArr = isSelf
+            ? [getListFn(user_id)]
+            : [getListFn(user_id), getListFn(self_id)]
+        } else {
+          reqArr = [getListFn(user_id)]
+        }
+        const resArr = await Promise.all(reqArr)
+        const { tag_list } = resArr[0].data
+        const { tag_list: myTagList } = resArr[1]?.data || {}
+        const tagArr =
+          (isSelf ? tag_list : myTagList)?.map((item) => item.tag) || []
+        // 在本地存储已关注的标签
+        setSession('concernTagLists', JSON.stringify(tagArr))
+        if (!isAllTagsShow && tag_list) {
+          setTagsList(tag_list)
+        } else if (tag_list) {
+          const { data } = await getAllTags()
+          const { tag_list: allTagList } = data || {}
+          setTagsList(allTagList)
+        }
+      } catch (err) {
+        message.error('请求失败，请重试！')
+      } finally {
+        setIsLoading(false)
       }
-      let reqArr = []
-      if (getLocal('token')) {
-        reqArr = isSelf
-          ? [getListFn(user_id)]
-          : [getListFn(user_id), getListFn(self_id)]
-      } else {
-        reqArr = [getListFn(user_id)]
-      }
-      const resArr = await Promise.all(reqArr)
-      console.log(resArr)
-      const { tag_list } = resArr[0].data
-      const { tag_list: myTagList } = resArr[1]?.data || {}
-      const tagArr =
-        (isSelf ? tag_list : myTagList)?.map((item) => item.tag) || []
-      // 在本地存储已关注的标签
-      setSession('concernTagLists', JSON.stringify(tagArr))
-      if (!isAllTagsShow && tag_list) {
-        setTagsList(tag_list)
-      } else if (tag_list) {
-        const { data } = await getAllTags()
-        const { tag_list: allTagList } = data || {}
-        setTagsList(allTagList)
-      }
-    } catch (err) {
-      console.log(err)
-      message.error('请求失败，请重试！')
-    } finally {
-      setIsLoading(false)
     }
-  }, [isAllTagsShow])
+    getTags()
+  }, [isAllTagsShow, isSelf, self_id, user_id])
 
   return (
     <ConcernTagsWrapper>

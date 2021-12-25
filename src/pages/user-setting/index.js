@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Navigate, Outlet, useNavigate } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
 
 import { getUserInfo } from '../../services/user'
 import { userInfoContext } from '../../models/context'
@@ -32,18 +32,21 @@ export default function UserSetting() {
         flag.current = false
         navigate('/login')
       })()
-  }, [])
+  }, [navigate])
 
   // 获取用户信息
-  useEffect(async () => {
-    if (flag.current) {
-      const { data } = await getUserInfo({ user_id })
-      setContextInfo({
-        isLoading: false,
-        userInfo: data.userInfo,
-      })
+  useEffect(() => {
+    const getInfo = async () => {
+      if (flag.current) {
+        const { data } = await getUserInfo({ user_id })
+        setContextInfo({
+          isLoading: false,
+          userInfo: data.userInfo,
+        })
+      }
     }
-  }, [])
+    getInfo()
+  }, [user_id])
 
   return (
     <userInfoContext.Provider

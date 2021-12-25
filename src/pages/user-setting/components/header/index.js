@@ -11,7 +11,7 @@ export default memo(function SettingHeader() {
 
   useEffect(() => {
     getLocal('token') || navigate('/login')
-  }, [])
+  }, [navigate])
 
   return (
     <SettingHeaderWrapper className="middle-item">

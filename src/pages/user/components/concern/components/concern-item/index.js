@@ -72,7 +72,7 @@ export default function ConcernItem(props) {
               }
             },
             imgDom,
-            100,
+            50,
           ),
           200,
         )
@@ -82,7 +82,7 @@ export default function ConcernItem(props) {
         }
       }
     }
-  }, [])
+  }, [avatar, index])
 
   return (
     <ConcernItemWrapper onClick={itemClick}>

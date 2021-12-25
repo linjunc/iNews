@@ -20,19 +20,22 @@ export default function ReadingReport() {
   // 用户年度总结阅读时间排行榜
   const [readingTimeRank, setReadingTimeRank] = useState([])
 
-  useEffect(async () => {
-    try {
-      const res = await getReadingTimeRank({ user_id })
-      res.data?.data && setReadingTimeRank(res.data.data)
-    } catch (err) {
-      message.error('请求失败，请刷新页面重试！')
+  useEffect(() => {
+    const getReadingTime = async () => {
+      try {
+        const res = await getReadingTimeRank({ user_id })
+        res.data?.data && setReadingTimeRank(res.data.data)
+      } catch (err) {
+        message.error('请求失败，请刷新页面重试！')
+      }
     }
-  }, [])
+    getReadingTime()
+  }, [user_id])
 
   // 因为下载按钮不在组件中，所以必须要把对应的dom元素传递出去进行操作
   useEffect(() => {
     getReportDom && getReportDom(reportRef.current)
-  }, [])
+  }, [getReportDom])
 
   return (
     <TransitionWrapper>

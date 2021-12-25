@@ -1,23 +1,7 @@
 import React, { createElement, useState, useEffect, useCallback } from 'react'
-import {
-  Comment,
-  Tooltip,
-  Avatar,
-  Form,
-  Divider,
-  Button,
-  List,
-  Input,
-  message,
-} from 'antd'
+import { Comment, Tooltip, Form, Button, List, Input, message } from 'antd'
 import moment from 'moment'
-import {
-  DislikeOutlined,
-  LikeOutlined,
-  DislikeFilled,
-  LikeFilled,
-  DownOutlined,
-} from '@ant-design/icons'
+import { LikeOutlined, LikeFilled, DownOutlined } from '@ant-design/icons'
 import {
   get_comments,
   post_comments,
