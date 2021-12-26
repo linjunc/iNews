@@ -1,5 +1,6 @@
 import { PageHeaderWrapper } from './style'
 import Weather from '../Weather'
+import About from '../About'
 import Avatar from '../../../../../../components/Avatar'
 
 const PageHeader = () => {
@@ -7,7 +8,7 @@ const PageHeader = () => {
     <PageHeaderWrapper>
       <div className="page-header">
         <div className="left-box">
-          <div>关于</div>
+          <About></About>
         </div>
         <div className="right-box">
           <Weather></Weather>
