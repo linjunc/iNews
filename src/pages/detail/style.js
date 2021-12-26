@@ -4,7 +4,7 @@ export const DetailWrapper = styled.main`
   position: relative;
   width: 1000px;
   margin: 40px auto 0px;
-  padding: 0 18px 0px 18px;
+  padding: 0 18px 0px 0px;
   display: flex;
   transition: all 0.5s;
   font-size: 16px;
