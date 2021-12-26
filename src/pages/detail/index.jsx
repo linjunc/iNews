@@ -292,7 +292,12 @@ const Detail = memo(() => {
           className="main"
           style={
             isImmerse
-              ? { minWidth: '1200px', fontSize: size, textAlign: 'center' }
+              ? {
+                  minWidth: '1200px',
+                  fontSize: size,
+                  textAlign: 'center',
+                  margin: '0px 20px 0px 20px',
+                }
               : { fontSize: size }
           }
         >
