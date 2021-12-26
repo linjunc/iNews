@@ -1,6 +1,6 @@
 import { Dropdown, Avatar as AntdAvatar, Menu, Modal, message } from 'antd'
 import { LoginButton } from './style.js'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router'
 import { userContext } from '../../models/context'
 import { DELETE_INFO } from '../../models/constant'
@@ -67,23 +67,6 @@ const Avatar = ({ color }) => {
       )}
     </>
   )
-  // // 已登录
-  // if (userInfo) {
-
-  //   return (
-  //     <Dropdown arrow={true} overlay={menu} placement="bottomCenter">
-  //       <AntdAvatar style={{ cursor: 'pointer' }} src={userInfo.avatar} />
-  //     </Dropdown>
-  //   )
-  // }
-  // // 未登录
-  // else {
-  //   return (
-  //     <LoginButton type="primary" onClick={toLogin}>
-  //       登录
-  //     </LoginButton>
-  //   )
-  // }
 }
 
 export default Avatar

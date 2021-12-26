@@ -1,9 +1,12 @@
 //文章列表页的右边部分
 import { RightContentWrapper } from './style'
 import logo from '../../../../assets/logo/logo.png'
+import noImg from '../../../../assets/user-center/default-avatar.png'
 import { Button, List } from 'antd'
 import { useNavigate } from 'react-router'
 import CenterLine from '../../../detail/components/CenterLine'
+import { useContext } from 'react'
+import { userContext } from '../../../../models/context'
 const RightContent = ({ hotArr }) => {
   const isLogin = localStorage.getItem('token') ? true : false
   const navigate = useNavigate()
@@ -21,7 +24,7 @@ const RightContent = ({ hotArr }) => {
     navigate(`/user/${userInfo.user_id}`)
   }
 
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  const { userInfo } = useContext(userContext)
 
   const showSvg = (article) => {
     if (
@@ -70,7 +73,12 @@ const RightContent = ({ hotArr }) => {
         <img className="logo" src={logo} alt="" />
         <div onClick={toUser} className="wrapper">
           <div className="avatar">
-            <img className="avatarImg" src={userInfo.avatar} alt="" />
+            <img
+              className="avatarImg"
+              src={userInfo.avatar}
+              alt="头像"
+              onError={(e) => (e.target.src = noImg)}
+            />
           </div>
           <div className="nickname">{userInfo.nickname || '未命名用户'}</div>
         </div>

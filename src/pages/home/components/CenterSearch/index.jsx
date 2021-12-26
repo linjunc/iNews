@@ -22,7 +22,7 @@ const CenterSearch = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setCarouselNowIndex((carouselNowIndex + 1) % dataArray.length)
-    }, 5000)
+    }, 6000)
     return () => clearTimeout(timer)
   }, [carouselNowIndex, dataArray.length])
 
