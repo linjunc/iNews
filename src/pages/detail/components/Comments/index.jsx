@@ -25,8 +25,6 @@ const Comments = ({ id }) => {
   const [value, setValue] = useState('')
   // 评论区数据
   const [comment_list, setComments] = useState([])
-  // 评论区是否有评论
-  // const [isComment, setisComment] = useState(false)
   const [commentLoding, setLoding] = useState(true)
   // 评论跳过条数
   const [commentSkip, setCommentkip] = useState(0)
@@ -48,21 +46,16 @@ const Comments = ({ id }) => {
       // 评论区状态判断
       setMoreCon(res_comment.data.has_more)
       if (res_comment.data.code === 204) {
-        // setisComment(true)
         setLoding(false)
         return
       }
-      // console.log(res_comment.data.has_more)
-
       setComAll(res_comment.data.comment_count)
       if (commentSkip > 0) {
         let tem_ = [...res_comment.data.comment_list]
         setComments(tem_)
         return
       }
-      // console.log('评论返回的数据')
       let tem = res_comment.data.comment_list
-      // console.log(id)
       //存储评论
       comment_list.push(tem)
       setComments(tem)
@@ -78,21 +71,12 @@ const Comments = ({ id }) => {
       setData([])
       setCommentID([])
       setReplyNum([])
-      // console.log('这里是因为commentlist变化才会进行渲染的')
-      // console.log(comment_list)
-      // console.log('likes')
-      // console.log(likes)
       for (let i = 0; i < comment_list['length']; i++) {
         //设置每一个动作为0
         likes.push(comment_list?.[i].digg_count)
         action.push(comment_list?.[i].is_digg)
         commentId.push(comment_list?.[i].comment_id)
         replyNum.push(comment_list?.[i].reply_count)
-        // console.log('time')
-        // console.log(comment_list)
-        // console.log(comment_list?.[i])
-        // console.log(comment_list?.[i].user_info)
-        // console.log(comment_list?.[i].user_info.user_name)
         let tem = {
           actions: [
             //自定义评论组件
@@ -123,8 +107,6 @@ const Comments = ({ id }) => {
     setData([...data_tem])
     setCommentID([...commentId])
     setReplyNum([...replyNum])
-    // console.log('likes')
-    // console.log(likes)
   }, [comment_list])
 
   //点赞按钮
@@ -163,9 +145,6 @@ const Comments = ({ id }) => {
     setLikes((likes) => [...likes, 0])
     setReplyNum((replyNum) => [...replyNum, 0])
     setAction([...action, false])
-    // console.log('父组件')
-    // console.log('点赞个数')
-    // console.log(likes)
     setLoding(true)
 
     let index = data.length
@@ -196,20 +175,8 @@ const Comments = ({ id }) => {
   //点赞的组件
   //接收父通信
   function Dianzan({ callback, id }) {
-    // const [count, setCount] = useState(() => callback())
-    // const [ID, setID] = useState()
     useEffect(() => {
-      // console.log('子组件')
-      // console.log(callback())
-      // console.log(id.a)
-      // console.log(data)
-      // console.log("点赞个数")
-      // console.log(likes)
-      // console.log(commentId)
-      // console.log(likes[id.a])
-      // setID(id.a)
       setLoding(false)
-      // setCount(callback())
     }, [callback])
     return (
       <>
@@ -228,8 +195,6 @@ const Comments = ({ id }) => {
     const [val, setVal] = useState('')
     //显示回复框
     const [isReply, setIsreply] = useState(false)
-    // 显示回复的加载
-    // const [isReplyLoading, setIsreplyLoding] = useState(true)
     const [count, setCount] = useState(1)
     //显示回复评论内容
     const [isReplyCon, setIsreplyCon] = useState(false)
@@ -251,17 +216,12 @@ const Comments = ({ id }) => {
         message.info('请先登录')
         return
       }
-      // console.log('回复区进行渲染')
       const getReplyList = async () => {
-        // setIsreply(true)
         const res_reply = await get_comments_reply({
           comment_id: commentId[a.a + commentSkip],
           n: 5,
           skip: replySkip,
         })
-        let userInfo = JSON.parse(localStorage.getItem('userInfo')) //进行json解析
-        // console.log('userInfo!!!!')
-        // console.log(userInfo)
         //评论回复列表
         let replyListContent = res_reply.data.reply_list
         setIsMoreReply(res_reply.data.has_more)
@@ -269,17 +229,9 @@ const Comments = ({ id }) => {
           for (let i = 0; i < replyListContent['length']; i++) {
             let tem = {
               //如果需要对评论回复进行回复和点赞等功能，可以在这里进行添加
-              actions: [
-                // <span onClick={(e) => {like(e.currentTarget)}} index = {i}>
-                //   <Dianzan />
-                //   {createElement(action[i] === true ? LikeFilled : LikeOutlined)}
-                //   <span className="comment-action">{likes[i]}</span>
-                //   <span className="comment-action">{i}</span>
-                // </span>,
-                // <span key="comment-list-reply-to-0">回复</span>,
-              ],
-              author: userInfo?.nickname,
-              avatar: userInfo?.avatar,
+              actions: [],
+              author: replyListContent[i].user_info?.nickname,
+              avatar: replyListContent[i].user_info?.avatar_url,
               content: <p>{replyListContent[i].text}</p>,
               datetime: (
                 <Tooltip
@@ -301,19 +253,11 @@ const Comments = ({ id }) => {
           let time = ShiftNum
 
           while (isShift && !res_reply.data.has_more && time) {
-            // console.log("弹出")
-            // console.log(ShiftNum)
-            // while(!time){
             replyList.pop()
             time -= 1
-            // }
           }
-          // setShiftNum(0)
 
           setReplyList([...replyList])
-          // console.log('replyList')
-          // console.log(replyList)
-          // setIsreplyLoding(false)
           setIsreplyCon(true)
         }
       }
@@ -340,15 +284,7 @@ const Comments = ({ id }) => {
         // console.log(val)
         await post_comments_reply({ text: val, comment_id: id })
         let tem = {
-          actions: [
-            // <span onClick={(e) => {like(e.currentTarget)}} index = {i}>
-            //   <Dianzan />
-            //   {createElement(action[i] === true ? LikeFilled : LikeOutlined)}
-            //   <span className="comment-action">{likes[i]}</span>
-            //   <span className="comment-action">{i}</span>
-            // </span>,
-            // <span key="comment-list-reply-to-0">回复</span>,
-          ],
+          actions: [],
           author: userInfo.nickname,
           avatar: userInfo.avatar,
           content: <p>{val}</p>,
@@ -358,13 +294,11 @@ const Comments = ({ id }) => {
             </Tooltip>
           ),
         }
-        // getReplyCom()
         replyList.unshift(tem)
         setReplyList([...replyList])
         setIsreplyCon(false)
         setIsShift(true)
         setShiftNum(ShiftNum + 1)
-        // setIsreplyCon(true)
       }
       setVal('')
       setIsreply(false)
