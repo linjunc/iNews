@@ -49,6 +49,7 @@ export default function UserCenter() {
   // 请求用户信息和日历热图数据，请求完成后取消loading效果
   useEffect(() => {
     if (flag.current) {
+      setIsContentShow(true)
       const getInfo = async () => {
         try {
           const reqArr = [
