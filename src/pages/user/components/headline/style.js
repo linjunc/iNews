@@ -8,6 +8,10 @@ export const ListHeaderWrapper = styled.div`
   z-index: 100;
   transition: all 0.24s;
 
+  .none {
+    display: none;
+  }
+
   &.sticky,
   &.stickyTop {
     position: fixed;

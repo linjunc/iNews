@@ -16,7 +16,7 @@ export default memo(function RightContainer(props) {
   const { id } = useParams()
 
   const navigate = useNavigate()
-  const location = useLocation()
+  const { pathname } = useLocation()
 
   const {
     reply_count,
@@ -119,7 +119,6 @@ export default memo(function RightContainer(props) {
         {isSelf &&
           (() => {
             // 根据路径判断用户当前是否处于年度报告页面，如果在，则不显示图片
-            const pathname = location.pathname
             const flagStr = pathname.substring(pathname.length - 6)
             return flagStr !== 'report' ? (
               <CSSTransition

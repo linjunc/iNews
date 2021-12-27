@@ -9,7 +9,6 @@ import { lazyLoad } from '../../../../utils/optimize-fn'
 import { throttle } from 'lodash'
 
 import { collectArticle, digArticle } from '../../../../services/detail'
-import noImg from '../../../../assets/home/404.svg'
 
 import { ArticleItemWrapper } from './style'
 import { message } from 'antd'
@@ -184,8 +183,7 @@ export default memo(function NewsItem(props) {
               alt="新闻图片"
               ref={imgRef}
               onError={(e) => {
-                e.target.onerror = null
-                e.target.src = noImg
+                e.target.parentNode.style.display = 'none'
               }}
             />
           </div>
