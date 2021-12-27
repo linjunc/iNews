@@ -104,11 +104,13 @@ export default memo(function ListHeader(props) {
       <ListHeaderWrapper className={addClassByState()}>
         <div className="container middle-item">
           <div className="content">
-            {isFixed !== null && (
-              <Link to="" onClick={goTop} className="middle-item">
-                <Avatar size={34} icon={<img src={avatar} alt="头像" />} />
-              </Link>
-            )}
+            <Link
+              to=""
+              onClick={goTop}
+              className={'middle-item' + (isFixed !== null ? '' : ' none')}
+            >
+              <Avatar size={34} icon={<img src={avatar} alt="头像" />} />
+            </Link>
             {linkData.map((item, index) => {
               const { title, pathname } = item
               return !index ? (
@@ -133,9 +135,11 @@ export default memo(function ListHeader(props) {
               )
             })}
           </div>
-          {isFixed !== null && (
-            <OperateBtn isSelf={isSelf} concernUserFn={concernUserFn} />
-          )}
+          <OperateBtn
+            isSelf={isSelf}
+            concernUserFn={concernUserFn}
+            style={{ display: isFixed !== null ? '' : 'none' }}
+          />
         </div>
       </ListHeaderWrapper>
     </>

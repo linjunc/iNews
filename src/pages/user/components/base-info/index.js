@@ -1,5 +1,4 @@
 import React, { useContext, memo } from 'react'
-import { useParams } from 'react-router'
 
 import { allUserInfoContext } from '../../../../models/context'
 
@@ -9,9 +8,6 @@ import OperateBtn from '../operate-btn'
 import { BaseInfoWrapper } from './style'
 
 export default memo(function BaseInfo(props) {
-  // 从props中获取到传递过来的用户id
-  const { id: user_id } = useParams
-
   // 从context中获取用户信息
   const { userInfo } = useContext(allUserInfoContext)
   const { isSelf, concernUserFn } = props
@@ -35,7 +31,7 @@ export default memo(function BaseInfo(props) {
       />
       <div className="info-box middle-item">
         <div className="user-name middle-item">
-          <span className="text-nowrap">{nickname || `用户${user_id}`}</span>
+          <span className="text-nowrap">{nickname}</span>
         </div>
         <div className="brief middle-item">
           <svg width="21" height="18" viewBox="0 0 21 18">

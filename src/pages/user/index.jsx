@@ -23,11 +23,11 @@ import {
 
 export default function UserCenter() {
   const { id: user_id } = useParams()
+  // 从本地获取用户自己的id，用于判断访问的是否为自己的主页
+  const { user_id: self_id } = JSON.parse(getLocal('userInfo') || '{}')
   const { pathname } = useLocation()
   // 存储标志变量用于决定还需不需要发请求
   const flag = useRef(true)
-  // 从本地获取用户自己的id，用于判断访问的是否为自己的主页
-  const { user_id: self_id } = JSON.parse(getLocal('userInfo') || '{}')
   const [isContentShow, setIsContentShow] = useState(true)
   const domRef = useRef()
 
@@ -49,7 +49,6 @@ export default function UserCenter() {
   // 请求用户信息和日历热图数据，请求完成后取消loading效果
   useEffect(() => {
     if (flag.current) {
-      setIsContentShow(true)
       const getInfo = async () => {
         try {
           const reqArr = [
@@ -80,7 +79,7 @@ export default function UserCenter() {
       }
       getInfo()
     }
-  }, [user_id, getReportDom]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user_id, getReportDom])
 
   // 点击关注按钮后发送请求关注/取消用户;注意：依赖一定要写对，否则可能会因为闭包而造成问题
   const concernUserFn = useCallback(() => {

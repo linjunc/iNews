@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useParams } from 'react-router'
 import { throttle } from 'lodash'
 
@@ -25,15 +25,16 @@ export default function NewsList(props) {
   const hasMoreRef = useRef(true)
 
   // 用户滑动到底部的时候请求更多的数据
-  const requestMoreArticle = useMemo(() => {
-    return throttle(
+  const requestMoreArticle = useCallback(
+    throttle(
       lazyLoad(() => {
         isRequestRef.current ||
           setSkipNum((skipNum) => (skipNumRef.current = skipNum + 10))
       }),
       200,
-    )
-  }, [])
+    ),
+    [],
+  )
 
   // 初始化数据
   useEffect(() => {

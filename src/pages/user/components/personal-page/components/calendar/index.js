@@ -17,7 +17,6 @@ const { Option } = Select
 export default memo(function CalendarHotGraph() {
   // 从context中获取到日历热图所需要的数据并将状态保存下来
   const { calendarData: yearlyData } = useContext(allUserInfoContext)
-
   const [calendarData, setCalendarData] = useState(yearlyData)
   // 在日历热图下方要展示的数据状态
   const [showTimeDate, setShowTimeDate] = useState({
