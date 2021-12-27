@@ -29,7 +29,7 @@
 
 ```bash
 $ git clone git@github.com:linjunc/iNews.git
-$ cd semi-design-pro
+$ cd inews
 
 # yarn
 $ yarn install
@@ -56,6 +56,6 @@ $ npm run build
 
 我们非常欢迎您的贡献，您可以通过以下方式与我们共建 😃
 
-- 在你的公司或个人项目中使用 Semi Admin
+- 在你的公司或个人项目中使用 iNews
 - 通过 [GitHub issues](https://github.com/linjunc/iNews/issues) 报告 bug 或进行咨询。
 - 提交 [Pull Request](https://github.com/linjunc/iNews/pulls) 改进代码。
