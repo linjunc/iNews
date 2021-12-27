@@ -1,46 +1,61 @@
-# iNews 新闻门户网站
+<h1 align="center">iNews 新闻门户网站</h1>
 
-🖐 Hi，欢迎来到我们的代码仓库
+<p align="center">🖐 Hi，欢迎来到我们的代码仓库</p>
 
-项目已上线，您可以访问一下网站来获取更多
+📣 React Hooks + create-react-app + Antd + 轻服务 
+
+## ✨ 特性
+
+- 📅 阅读时间日历热图
+- 🎨 主页 markdown 定制
+- ⏰ 单次阅读时长提醒
+- 📜 年度总结，使用报告
+- 📲 视差滚动
+- 📑 稍后再看功能
+- 📖 沉浸式阅读模式
+- 📈 用户阅读数据的可视化
+- 🌍 添加疫情地图，2d 省市切换
+- 📣 新闻详情语音播放
+- 🔧文章字体大小的选择
+- 👓 图片相册预览
+
+
+## ⚡ 预览
 
 线上地址：[https://qctm8y.web.cloudendpoint.cn](https://qctm8.web.cloudendpoint.cn)
 
-众多创新点，提升用户体验
 
-1. 统计用户的阅读天数，输出成类似于 Github contribute 统计的图表
-2. 点赞按钮添加彩蛋，点赞后弹出彩蛋
-3. 个人主页定制功能，嵌入 markdown ，类似于 github 的 README 文件
-4. 单次阅读时长提醒，右下角小猫咪成长，根据用户阅读时间（小猫咪有待考虑）
-5. 年度总结，使用报告
-6. 首页实现视差滚动
-7. 稍后再看功能
-8. 首次进入，出现全屏动画，类似于花呗的那种吉祥物（取消）
-9. 沉浸式阅读模式
-10. 用户阅读数据的可视化
-11. 添加疫情地图，2d，3d 切换
-12. 新闻详情语音播放
-13. 文章字体大小的选择
-14. 图片相册预览
+## 📦 使用
 
-本项目采用技术栈如下
+```bash
+$ git clone git@github.com:linjunc/iNews.git
+$ cd semi-design-pro
 
-前端
+# yarn
+$ yarn install
+$ yarn start
 
-- 主框架：React (全面使用 hooks)、React-Router6、Context
-- 脚手架：create-react-app
-- UI 框架：Ant Design
-- CSS 解决方案：styled-components
-- 动画库：ant-motion，css-transition-group，particles-bg
-- 网络请求: axios
-- 异步解决方案：Promise
-- 协作工具：Git
-- 函数工具库：loadsh
+# npm
+$ npm install
+$ npm run start
+```
 
-后端 Node.js + 轻服务
+## 🔨 构建
+```bash
+# yarn
+$ yarn install
+$ yarn build
 
-如需使用本项目，可 `git clone` 克隆到本地
+# npm
+$ npm install
+$ npm run build
+```
 
-执行 `yarn` 或者 `yarn add` 命令安装依赖
+## 🤝 贡献
+<a href="https://github.com/linjunc/iNews/graphs/contributors"><img src="https://contrib.rocks/image?repo=linjunc/inews" /></a>
 
-执行 `yarn start` 启动项目
+我们非常欢迎您的贡献，您可以通过以下方式与我们共建 😃
+
+- 在你的公司或个人项目中使用 Semi Admin
+- 通过 [GitHub issues](https://github.com/linjunc/iNews/issues) 报告 bug 或进行咨询。
+- 提交 [Pull Request](https://github.com/linjunc/iNews/pulls) 改进代码。
