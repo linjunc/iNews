@@ -82,7 +82,7 @@ export default function InstrumentChart(props) {
       option && myChart.setOption(option)
     }
 
-    readingTimeRank[0] && initChart()
+    readingTimeRank && initChart()
   }, [readingTimeRank])
 
   // 计算用户年度浏览总时长

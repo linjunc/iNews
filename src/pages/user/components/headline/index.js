@@ -6,6 +6,7 @@ import { throttle } from 'lodash'
 
 import { Avatar } from 'antd'
 import OperateBtn from '../operate-btn'
+import noImg from '../../../../assets/user-center/default-avatar.png'
 
 import { ListHeaderWrapper } from './style'
 
@@ -109,7 +110,19 @@ export default memo(function ListHeader(props) {
               onClick={goTop}
               className={'middle-item' + (isFixed !== null ? '' : ' none')}
             >
-              <Avatar size={34} icon={<img src={avatar} alt="头像" />} />
+              <Avatar
+                size={34}
+                src={
+                  <img
+                    src={avatar}
+                    alt="头像"
+                    onError={(e) => {
+                      e.target.onError = null
+                      e.target.src = noImg
+                    }}
+                  />
+                }
+              />
             </Link>
             {linkData.map((item, index) => {
               const { title, pathname } = item

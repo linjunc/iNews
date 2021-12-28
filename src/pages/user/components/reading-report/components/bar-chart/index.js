@@ -60,6 +60,7 @@ export default function BarChart() {
   useEffect(() => {
     // 初始化柱状图的信息以及进行相关配置
     const initChart = () => {
+      console.log(graphRef)
       const myChart = eCharts.init(graphRef.current)
       myChart.clear()
 
@@ -129,7 +130,7 @@ export default function BarChart() {
       option && myChart.setOption(option)
     }
 
-    dataArr.length && initChart()
+    dataArr.length && calendarData.length && initChart()
   }, [dataArr])
 
   return (

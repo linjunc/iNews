@@ -29,6 +29,7 @@ const Avatar = ({ color }) => {
         navigate('/login')
         localStorage.removeItem('token')
         localStorage.removeItem('userInfo')
+        sessionStorage.removeItem('oneOpen')
         message.success('退出成功')
         // 更新context 中的数据
         userDispatch({
