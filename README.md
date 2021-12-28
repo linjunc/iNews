@@ -22,7 +22,7 @@
 
 ## ⚡ 预览
 
-线上地址：[https://qctm8y.web.cloudendpoint.cn](https://qctm8.web.cloudendpoint.cn)
+线上地址：[https://qctm8y.web.cloudendpoint.cn](https://qctm8y.web.cloudendpoint.cn)
 
 
 ## 📦 使用
