@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useParams } from 'react-router'
 import { throttle } from 'lodash'
 import axios from 'axios'
@@ -26,7 +26,7 @@ export default function NewsList(props) {
   const isRequestRef = useRef(false)
   const hasMoreRef = useRef(true)
   // 包含取消请求函数的对象
-  const cancelRef = useRef(CancelToken.source())
+  const cancelFn = useMemo(() => CancelToken.source(), [getNewsFn])
 
   // 用户滑动到底部的时候请求更多的数据
   const requestMoreArticle = useCallback(
@@ -43,7 +43,7 @@ export default function NewsList(props) {
   // 初始化数据
   useEffect(() => {
     // 初始化一个新的含有取消请求函数的对象
-    cancelRef.current = CancelToken.source()
+    // cancelFn.current = CancelToken.source()
     skipNum && setSkipNum(0)
     skipNumRef.current = 0
     isSkeletonLoadingRef.current = true
@@ -64,7 +64,7 @@ export default function NewsList(props) {
             n: 10,
             skip: skipNumRef.current,
           },
-          cancelRef.current.token,
+          cancelFn.token,
         )
         isSkeletonLoadingRef.current = false
         // 如果数据已经没有更多了，则取消监听滚动事件，这样就不会继续发送请求了
@@ -87,18 +87,19 @@ export default function NewsList(props) {
     }
     // 在没接收到响应之前不允许发送第二次请求
     isRequestRef.current || reqMore()
-  }, [skipNumRef.current, getNewsFn])
+  }, [skipNumRef.current, getNewsFn, cancelFn])
 
   // 监听页面滚动事件
   useEffect(() => {
     window.addEventListener('scroll', requestMoreArticle)
     return () => {
       // 如果切换请求函数的时候仍然还在请求，那么就需要取消这个请求
-      isRequestRef.current && cancelRef.current.cancel('请求被取消了')
+      console.log(isRequestRef.current)
+      cancelFn.cancel('请求被取消了')
       // 请求函数改变，将骨架屏加载状态调为false
       window.removeEventListener('scroll', requestMoreArticle)
     }
-  }, [getNewsFn, requestMoreArticle])
+  }, [getNewsFn, requestMoreArticle, cancelFn])
 
   return (
     <div>
