@@ -71,6 +71,11 @@ export default memo(function NewsItem(props) {
                 imgDom.style.opacity = 1
                 window.removeEventListener('scroll', imgLazyLoad)
               }
+              imgDom.onerror = () => {
+                imgDom.onerror = null
+                imgDom.parentNode.style.display = 'none'
+                window.removeEventListener('scroll', imgLazyLoad)
+              }
             },
             imgDom,
             50,
@@ -178,14 +183,7 @@ export default memo(function NewsItem(props) {
         </div>
         {image_url && image_url !== '”“' && (
           <div className="img-wrapper">
-            <img
-              className="news-img"
-              alt="新闻图片"
-              ref={imgRef}
-              onError={(e) => {
-                e.target.parentNode.style.display = 'none'
-              }}
-            />
+            <img className="news-img" alt="新闻图片" ref={imgRef} />
           </div>
         )}
       </div>

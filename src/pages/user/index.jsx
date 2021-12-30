@@ -10,7 +10,7 @@ import {
 import { allUserInfoContext } from '../../models/context'
 import { getLocal } from '../../utils/storage'
 
-import { message, Skeleton } from 'antd'
+import { Button, message, Skeleton } from 'antd'
 import RightContainer from './components/right-container'
 import UserInfo from './components/base-info'
 import ListHeader from './components/headline'
@@ -20,6 +20,8 @@ import {
   LeftContainerWrapper,
   ContentWrapper,
 } from './style'
+import axios from 'axios'
+import instance from '../../utils/request'
 
 export default function UserCenter() {
   const { id: user_id } = useParams()
@@ -30,7 +32,7 @@ export default function UserCenter() {
   const flag = useRef(true)
   const [isContentShow, setIsContentShow] = useState(true)
   const domRef = useRef()
-
+  const [loading, setLoading] = useState(false)
   // 获取dom操作并赋值给domRef
   const getReportDom = useCallback((dom) => {
     domRef.current = dom
