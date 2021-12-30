@@ -49,7 +49,9 @@ instance.interceptors.response.use(
   },
   (error) => {
     if (axios.isCancel(error)) {
-      throw new axios.Cancel('cancel request')
+      console.log('请求被取消了！')
+      //   throw new axios.Cancel('cancel request')
+      // 其实可以不用写这行代码，如果请求错误内部会帮我们封装好，error就是Cancel对象
     } else {
       console.log('请求错误')
     }

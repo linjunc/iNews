@@ -113,29 +113,32 @@ export const focusTags = (options) => {
 }
 
 // 获取用户点赞了的新闻列表
-export const getLikeList = (options) => {
+export const getLikeList = (options, cancelToken) => {
   return instance({
     url: 'article_list_digg',
     method: 'GET',
     params: options,
+    cancelToken,
   })
 }
 
 // 获取用户收藏了的文章列表
-export const getCollectList = (options) => {
+export const getCollectList = (options, cancelToken) => {
   return instance({
     url: '/article_list_like',
     method: 'GET',
     params: options,
+    cancelToken,
   })
 }
 
 // 获取浏览新闻历史记录
-export const getHistoryList = (options) => {
+export const getHistoryList = (options, cancelToken) => {
   return instance({
     url: '/history_list',
     method: 'GET',
     params: options,
+    cancelToken,
   })
 }
 

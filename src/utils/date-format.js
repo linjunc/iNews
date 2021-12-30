@@ -3,12 +3,13 @@ import dayjs from 'dayjs'
 // 该函数主要是用于生成一个新的时间戳
 export const shiftDate = (date, numDays) => {
   const newDate = new Date(date)
-  newDate.setDate(newDate.getDate() + numDays)
+  newDate.setDate(newDate.getDate() + numDays) // setDate方法会改变原变量，用于得到某一天的日期
   return newDate
 }
 
 // 创建一个不同层次但共包含一年总天数的数组，作用是为了处理日历上的日期
 export const getRange = (count) => {
+  // 如果第一个参数是一个对象并且里面有一个length属性的话，可以帮助我们生成一个length长度的数组，第二个参数的返回值就是数组每一项对应的元素值
   return Array.from({ length: count }, (_, i) => i)
 }
 
@@ -21,7 +22,6 @@ export const getAllDays = (allDays, endDay) => {
       count: 0,
     }
   })
-  // allDaysArr.reverse()
   return allDaysArr
 }
 
