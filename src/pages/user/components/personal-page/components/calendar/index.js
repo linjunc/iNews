@@ -106,8 +106,8 @@ export default memo(function CalendarHotGraph() {
     <CalendarWrapper>
       <TitleWrapper>
         <h1 className="title">阅读日历</h1>
-        <Select defaultValue="2021" style={{ width: 120 }}>
-          <Option>2021</Option>
+        <Select defaultValue="2024" style={{ width: 120 }}>
+          <Option>2024</Option>
         </Select>
       </TitleWrapper>
       <CalendarHeatmap

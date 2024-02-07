@@ -51,11 +51,12 @@ export const DetailWrapper = styled.main`
     }
   }
   .main {
-    min-width: 707px;
+    min-width: 900px;
     margin: 0px 20px 0px 60px;
     transition: all 0.5s;
     background-color: white;
     padding: 30px;
+    line-height: 1.5;
     .article-meta {
       display: flex;
       align-items: baseline;
@@ -142,6 +143,7 @@ export const DetailWrapper = styled.main`
         font-size: 14px;
         color: #666666;
         margin-bottom: 10px;
+        line-height: 1.5;
       }
       .author-love {
         color: white;
@@ -186,5 +188,8 @@ export const DetailWrapper = styled.main`
         }
       }
     }
+  }
+  .article-content-inner .pgc-img {
+    text-align: center;
   }
 `

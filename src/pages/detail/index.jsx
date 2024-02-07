@@ -275,7 +275,7 @@ const Detail = memo(() => {
   }, [])
 
   return (
-    <DetailWrapper style={isImmerse ? { minWidth: '1200px' } : {}}>
+    <DetailWrapper style={isImmerse ? { minWidth: '1400px', paddingLeft: '130px' } : {}}>
       {/* 骨架屏加载 */}
       <Skeleton active loading={artLoading} paragraph={{ rows: 16 }} round>
         {/* 左侧交互按钮 */}
@@ -295,7 +295,7 @@ const Detail = memo(() => {
               ? {
                   minWidth: '1200px',
                   fontSize: size,
-                  textAlign: 'center',
+                  // textAlign: 'center',
                   margin: '0px 20px 0px 20px',
                 }
               : { fontSize: size }
@@ -325,6 +325,7 @@ const Detail = memo(() => {
                 onIndexChange={setPhotoIndex}
               />
               <article
+              className={`${isImmerse ? 'article-content-inner' : ''}`}
                 onClick={previewImage}
                 dangerouslySetInnerHTML={{ __html: article.content }}
               />

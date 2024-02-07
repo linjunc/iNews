@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { url } from '../services/baseUrl'
+// import { url } from '../services/baseUrl'
 
 const instance = axios.create({
-  baseURL: url,
+  baseURL: process.env.REACT_APP_BASE_URL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
