@@ -153,8 +153,8 @@ export const getMediaNewsList = (options) => {
 
 // 上传头像到图床的函数,不知道为什么使用instance会有跨域问题，直接使用axios就没有
 export const upLoadAvatarToBed = (options) => {
-  return axios({
-    url: 'https://api.imgbb.com/1/upload',
+  return instance({
+    url: '/save_file_oss',
     // 请求类型
     method: 'POST',
     // 设置请求体，在 params 中设置的参数最后都将变为url参数跟在请求行地址的后面

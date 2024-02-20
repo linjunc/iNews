@@ -93,6 +93,7 @@ export default function AvatarInput(props) {
           <input
             type="file"
             className="real-input"
+            accept="image/*"
             ref={inputRef}
             onChange={uploadAvatar}
           />
