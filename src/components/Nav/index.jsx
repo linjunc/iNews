@@ -18,6 +18,7 @@ const Nav = ({ style }) => {
   // 函数处理
   const handleClick = (e) => {
     setCurrent(e.key)
+    console.log('2!!!!', e.key)
     navigate(`/`, { state: { current: e.key } })
   }
 

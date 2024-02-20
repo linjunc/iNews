@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { shuffle } from '../../../../utils/shuffle'
 const HotArticle = ({ hotArr }) => {
   // 轮播图数据
-  const dataArray = hotArr.slice(0, 5)
+  const dataArray = hotArr?.slice(0, 5)
   const navigate = useNavigate()
   const toDetail = (data) => {
     //跳转详情
@@ -24,7 +24,7 @@ const HotArticle = ({ hotArr }) => {
     hot_carousel.current.prev()
   }
   const showSlider = () => {
-    if (hotArr.length)
+    if (hotArr?.length)
       return <Slider dataArray={dataArray} next={next} prev={prev} />
   }
 

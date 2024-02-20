@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState, useContext, memo } from 'react'
+import React, { useEffect, useMemo, useState, useContext, memo, useRef } from 'react'
 import { List, message } from 'antd'
 
 import { throttle } from 'lodash'
+import {useMemoizedFn} from 'ahooks'
 import { useLocation } from 'react-router-dom'
 import { HomeContainer } from './style'
 
@@ -18,10 +19,8 @@ import HotArticle from './components/HotArticle'
 import { getArticles } from '../../services/home'
 import { shuffle } from '../../utils/shuffle'
 import { userContext } from '../../models/context'
-let num = 0
-let tag = 'app'
+
 let isOnGet = false
-let hasMore = true
 let msgTimer = null
 const Home = memo(() => {
   const [onLoadingBtm, setOnLoadingBtm] = useState(false)
@@ -29,18 +28,13 @@ const Home = memo(() => {
   const [articleList, setArticleList] = useState([])
   const [hotArr, setHotArr] = useState([])
   const { userInfo } = useContext(userContext)
-  //文章存session
-  const setArticles = (tag, newList, num, hasMore) => {
-    let articlesList = JSON.parse(sessionStorage.getItem(`${tag}_articles`))
-    if (!articlesList) articlesList = { hasMore: true, num: 0, list: [] }
+  const [num, setNum] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
 
-    articlesList.num = num
-    articlesList.hasMore = hasMore
-    articlesList.list.push(...newList)
-    sessionStorage.setItem(`${tag}_articles`, JSON.stringify(articlesList))
-  }
+  const [tag, setTag] = useState('app')
+
   //获取文章
-  const getArticleList = async (tag, isBtm) => {
+  const getArticleList = useMemoizedFn(async (tag, isBtm) => {
     if (!hasMore) {
       if (!msgTimer) {
         message.warn('该类新闻都在这里了，看看其他类的吧!')
@@ -62,14 +56,17 @@ const Home = memo(() => {
         n: 8,
         skip: num,
       })
-      num = num + 8 //跳过的条数增加
+      // num = num + 8 //跳过的条数增加
+      setNum(num + 8)
+      setHasMore(data.data.has_more)
 
       const newList = data?.data?.article_list ? data.data.article_list : []
-      hasMore = data.data.has_more
+      // hasMore = data.data.has_more
       shuffle(newList)
       //添加到文章列表
       setArticleList((val) => [...val, ...newList])
-      setArticles(tag, newList, num, hasMore)
+      // setArticles(tag, newList, num, hasMore)
+      
     } catch (error) {
       message.error('数据获取失败,请重试!')
     } finally {
@@ -78,43 +75,35 @@ const Home = memo(() => {
       setOnLoadingBtm(false)
       setOnLoadingTop(false)
     }
-  }
+  })
 
   const location = useLocation()
-  useMemo(() => {
-    tag = location.state?.current ? location.state.current : tag
-
-    let articlesList = JSON.parse(sessionStorage.getItem(`${tag}_articles`))
-    if (articlesList) {
-      hasMore = articlesList.hasMore
-      num = articlesList.num
-      setArticleList(articlesList.list)
-    } else {
-      hasMore = true
-      num = 0 //跳转条数重新置零
-      setArticleList([]) //列表清空
-    }
-
-    if (tag !== 'app') {
-      if (hasMore) getArticleList(tag, false)
-      let timer = setTimeout(() => {
-        document.documentElement.scrollTop =
-          document.getElementsByClassName('content')[0].offsetTop - 55
-        clearTimeout(timer)
-      }, 0)
-    }
-
-    return tag
+  useEffect(() => {
+    setTag(location.state?.current ? location.state.current : tag)
+    setHasMore(true)
+    setNum(0)
+    setArticleList([]) //列表清空
   }, [location.state])
 
-  const showHot = () => {
+  useEffect(() => {
+    if (tag !== 'app') {
+      getArticleList(tag, false)
+     let timer = setTimeout(() => {
+       document.documentElement.scrollTop =
+         document.getElementsByClassName('content')[0].offsetTop - 55
+       clearTimeout(timer)
+     }, 0)
+   }
+  }, [tag])
+
+  const showHot = useMemoizedFn(() => {
     //展示热点页或列表页
     if (tag === 'app') return <HotArticle hotArr={hotArr} />
     return (
       <div className="content">
         <div className="main">
           <Nav style={{ height: 54 }}></Nav>
-          {showLoadTop()}
+          {onLoadingTop ? <Loading/> : null}
           <List
             dataSource={articleList}
             renderItem={(item) => (
@@ -123,29 +112,17 @@ const Home = memo(() => {
               </List.Item>
             )}
           />
-          {showLoadBtm()}
-          {hasNone()}
+          {onLoadingBtm ? <Loading/> : null}
+          {hasMore ? null : <div className="btmLine">
+          <span className="title">已经到最低了噢~</span>
+        </div>}
           {btmAritles(hotArr)}
         </div>
         <RightContent hotArr={hotArr} />
       </div>
     )
-  }
+  })
 
-  const showLoadBtm = () => {
-    if (onLoadingBtm) return <Loading />
-  }
-  const showLoadTop = () => {
-    if (onLoadingTop) return <Loading />
-  }
-  const hasNone = () => {
-    if (!hasMore)
-      return (
-        <div className="btmLine">
-          <span className="title">已经到最低了噢~</span>
-        </div>
-      )
-  }
 
   const btmAritles = (arr) => {
     if (arr?.length && tag !== 'recommend') {
@@ -160,40 +137,26 @@ const Home = memo(() => {
   let topValue = 0
 
   useEffect(() => {
-    let hotArr_sess = JSON.parse(sessionStorage.getItem('hotArr'))
-    if (!hotArr_sess) {
+    // let hotArr_sess = JSON.parse(sessionStorage.getItem('hotArr') ?? '[]')
+    // if (!hotArr_sess || !hotArr_sess.length) {
       getArticles({
         tag: 'hot',
         n: 12,
         skip: 0,
       }).then(
         (res) => {
-          hotArr_sess = res.data.article_list
-          sessionStorage.setItem('hotArr', JSON.stringify(hotArr_sess))
-          setHotArr(hotArr_sess)
+          // hotArr_sess = res.data.article_list
+          const data = res.data.article_list
+          if (data?.length) {
+            // sessionStorage.setItem('hotArr', JSON.stringify(hotArr_sess))
+            setHotArr(data)
+          }
         },
         (err) => message.error('加载失败，请重试!'),
       )
-    } else setHotArr(hotArr_sess)
+    // } else setHotArr(hotArr_sess)
 
-    const handelToBottom = throttle((e) => {
-      const { clientHeight, scrollHeight, scrollTop } =
-        e.target.scrollingElement
-      //clientHeight 元素内部的高度(单位像素)，包含内边距，但不包括水平滚动条、边框和外边距
-      //scrollHeight 元素内容高度的度量，包括由于溢出导致的视图中不可见内容
-      //scrollTop 元素的内容垂直滚动的像素数
-      const isBottom = scrollTop + clientHeight + 10 > scrollHeight //是否到达底部
-
-      // 下滚
-      if (scrollTop > topValue) {
-        if (isBottom && tag !== 'app') {
-          getArticleList(tag, isBottom)
-        }
-      }
-      setTimeout(function () {
-        topValue = scrollTop
-      }, 0)
-    }, 100)
+    const handelToBottom = throttle(handleBo, 100)
 
     window.addEventListener('scroll', handelToBottom)
 
@@ -201,6 +164,25 @@ const Home = memo(() => {
       window.removeEventListener('scroll', handelToBottom)
     }
   }, [])
+
+  const handleBo = useMemoizedFn((e) => {
+    const { clientHeight, scrollHeight, scrollTop } =
+      e.target.scrollingElement
+    //clientHeight 元素内部的高度(单位像素)，包含内边距，但不包括水平滚动条、边框和外边距
+    //scrollHeight 元素内容高度的度量，包括由于溢出导致的视图中不可见内容
+    //scrollTop 元素的内容垂直滚动的像素数
+    const isBottom = scrollTop + clientHeight + 10 > scrollHeight //是否到达底部
+
+    // 下滚
+    if (scrollTop > topValue) {
+      if (isBottom && tag !== 'app') {
+        getArticleList(tag, isBottom)
+      }
+    }
+    setTimeout(function () {
+      topValue = scrollTop
+    }, 0)
+  })
 
   return (
     <HomeContainer>
