@@ -12,18 +12,24 @@ const AfterLook = ({ article }) => {
       : true
 
   const handleAfter = () => {
-    Modal.confirm({
-      title: hasItem
-        ? '要从稍后再看中移除吗'
-        : '文章将会被收起到右侧噢，你可以点击浅色区域，查看稍后再看列表噢',
-      maskClosable: true,
-      onOk: () => {
-        hasItem
-          ? dispatch({ type: DELETE_ARTICLE, id: article.item_id })
-          : dispatch({ type: ADD_ARTICLE, article })
-        message.success(hasItem ? '移除成功' : '添加成功')
-      },
-    })
+    // () => {
+      hasItem
+        ? dispatch({ type: DELETE_ARTICLE, id: article.item_id })
+        : dispatch({ type: ADD_ARTICLE, article })
+      message.success(hasItem ? '移除成功' : '添加成功')
+    // }
+    // Modal.confirm({
+    //   title: hasItem
+    //     ? '要从稍后再看中移除吗'
+    //     : '文章将会被收起到右侧噢，你可以点击浅色区域，查看稍后再看列表噢',
+    //   maskClosable: true,
+    //   onOk: () => {
+    //     hasItem
+    //       ? dispatch({ type: DELETE_ARTICLE, id: article.item_id })
+    //       : dispatch({ type: ADD_ARTICLE, article })
+    //     message.success(hasItem ? '移除成功' : '添加成功')
+    //   },
+    // })
   }
 
   return (

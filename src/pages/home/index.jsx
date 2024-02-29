@@ -15,6 +15,7 @@ import HomeToTop from '../../components/HomeToTop'
 import TagFirst from './components/TagFirst'
 import BtmArticles from './components/BtmArticles'
 import HotArticle from './components/HotArticle'
+import Feedback from '../../components/Feedback'
 
 import { getArticles } from '../../services/home'
 import { shuffle } from '../../utils/shuffle'
@@ -192,6 +193,9 @@ const Home = memo(() => {
         <HomeToTop />
       </div>
       <TagFirst userTag={userInfo?.userTag ?? []} />
+      <div style={{position: 'fixed', bottom: '100px', right: '100px'}}>
+        <Feedback done={true} />
+      </div>
     </HomeContainer>
   )
 })

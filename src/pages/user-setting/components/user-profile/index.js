@@ -93,7 +93,7 @@ export default memo(function UserProfile() {
           console.log(avatarData)
           console.log(infoData)
           let avatar = null
-          if (avatarData) {
+          if (avatarData && avatarData.data.data.url) {
             const { data } = await uploadAvatar({
               avatar: avatarData.data.data.url,
             })

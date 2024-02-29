@@ -9,7 +9,8 @@ import {
     CrownFilled,
     CaretUpFilled,
     ShareAltOutlined,
-    TagFilled
+    TagFilled,
+    ExclamationCircleOutlined
 } from '@ant-design/icons';
 
 // 这个组件封装的太愚蠢了
@@ -31,7 +32,8 @@ const LoveButton = ({ size, done, type, number, handleClick, content }) => {
         <CaretUpFilled style={{ ...defaultProps }} />,
         <ShareAltOutlined style={{ ...defaultProps }} />,
         <SoundFilled style={{ ...defaultProps }} />,
-        <TagFilled style={{ ...defaultProps }} />
+        <TagFilled style={{ ...defaultProps }} />,
+        <ExclamationCircleOutlined style={{...defaultProps}} />
     ]
 
     return (

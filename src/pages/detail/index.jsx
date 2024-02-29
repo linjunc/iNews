@@ -29,6 +29,7 @@ import SpeakArticle from './components/SpeakArticle'
 import BannerCard from './components/BannerCard'
 import LeftSide from './components/LeftSide'
 import LoveButton from '../../components/LoveButton'
+import Feedback from '../../components/Feedback'
 import { DetailWrapper } from './style'
 import { FocusAuthor } from '../../services/user'
 import RenderIfVisible from 'react-render-if-visible'
@@ -449,6 +450,8 @@ const Detail = memo(() => {
                 type={3}
               />
               <BackToTop />
+
+              <Feedback />
             </div>
           </div>
         </div>
