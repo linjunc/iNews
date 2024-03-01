@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const UserSettingWrapper = styled.div`
-  width: 1000px;
+  max-width: 1000px;
   min-height: 626px;
   margin: 24px auto;
   overflow: hidden;
@@ -16,6 +16,9 @@ export const UserSettingWrapper = styled.div`
 export const SettingContainerWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  @media screen and ((max-width: 767px)) {
+    flex-direction: column;
+  }
 `
 export const RightContainerWrapper = styled.div`
   background-color: #fff;
@@ -25,4 +28,8 @@ export const RightContainerWrapper = styled.div`
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+
+  @media screen and ((max-width: 767px)) {
+    width: 100%;
+  }
 `

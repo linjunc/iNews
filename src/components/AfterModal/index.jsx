@@ -31,7 +31,7 @@ const AfterModal = () => {
       <Popover placement="left" content="点我试试">
         <ModalContainer onClick={showDrawer} />
       </Popover>
-      <Drawer title="稍后再看新闻列表" onClose={onClose} visible={visible}>
+      <Drawer title="稍后再看新闻列表" onClose={onClose} visible={visible} >
         <List
           itemLayout="vertical"
           dataSource={articleData}

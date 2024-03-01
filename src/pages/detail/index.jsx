@@ -310,7 +310,9 @@ const Detail = memo(() => {
             >
               <div className="article-type">原创</div>
               <div className="article-time">{article.publish_time}</div>
-              <div className="article-author">
+              <div className="article-author" onClick={() => {
+                navigate(`/user/${article.media_id}`)
+              }}>
                 {article?.media_user?.media_name}{' '}
               </div>
             </div>

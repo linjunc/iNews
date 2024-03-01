@@ -38,6 +38,10 @@ export const ListHeaderWrapper = styled.div`
       background-color: #fff;
       height: 50px;
 
+      @media screen and ((max-width: 767px)) {
+        max-width: 100%;
+      }
+
       & > a,
       & > img {
         width: 98px;

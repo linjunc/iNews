@@ -26,7 +26,7 @@ const BtmArticles = ({ newArr, current }) => {
         {newArr.map((item) => (
           <Card
             key={item.article_id}
-            style={{ width: 200 }}
+            style={{ width: 180 }}
             cover={
               <div className="btm_aritles_top">
                 <img

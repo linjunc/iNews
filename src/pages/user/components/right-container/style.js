@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 
 export const RightContainerWrapper = styled.div`
+  @media screen and ((max-width: 767px)) {
+    display: none;
+  }
   flex: 0 0 auto;
   margin-left: 12px;
   width: 240px;

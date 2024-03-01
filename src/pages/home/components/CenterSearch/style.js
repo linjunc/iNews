@@ -3,6 +3,10 @@ import LogoText from '../../../../assets/logo/logo_text.png'
 // import LogoWhiteText from '../../../../assets/logo/logo_white_text.png'
 
 export const SearchContainer = styled.main`
+  @media screen and ((max-width: 767px)) {
+    height: 30vh !important;
+    /* min-width: 100%; */
+  }
   position: relative;
   width: 100%;
   height: 70vh;
@@ -15,6 +19,10 @@ export const SearchContainer = styled.main`
     width: 100%;
     height: 100%;
     .search-wrapper {
+      @media screen and ((max-width: 767px)) {
+        width: 70vw !important;
+        /* min-width: 100%; */
+      }
       width: 560px;
       place-self: center;
       text-align: center;
@@ -44,6 +52,10 @@ export const SearchContainer = styled.main`
             -3px -2px / contain url(${LogoText}) no-repeat;
           filter: blur(5px);
           /* 方案四，黑字+模糊白字底 方案三的颜色互换 */
+        }
+        img {
+          width: 100%;
+          height: 100%;
         }
       }
       .logo {

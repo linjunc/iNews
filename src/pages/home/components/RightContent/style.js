@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 
 export const RightContentWrapper = styled.div`
+  @media screen and ((max-width: 767px)) {
+    display: none;
+  }
   width: 280px;
   .right_content {
     position: sticky;

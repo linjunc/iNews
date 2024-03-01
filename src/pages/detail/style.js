@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 
 export const DetailWrapper = styled.main`
+  @media screen and ((max-width: 767px)) {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
   position: relative;
   width: 1000px;
   margin: 40px auto 0px;
@@ -51,12 +55,17 @@ export const DetailWrapper = styled.main`
     }
   }
   .main {
+    @media screen and ((max-width: 767px)) {
+      width: 100% !important;
+      min-width: 100% !important;
+    }
     min-width: 900px;
     margin: 0px 20px 0px 60px;
     transition: all 0.5s;
     background-color: white;
     padding: 30px;
     line-height: 1.5;
+
     .article-meta {
       display: flex;
       align-items: baseline;
@@ -64,13 +73,15 @@ export const DetailWrapper = styled.main`
       font-size: 12px;
       color: #707070;
       margin: 20px 0 0px 0px;
+      gap: 10px;
+
       .article-type {
         padding: 3px;
         background-color: #f2f2f2;
         user-select: none;
       }
-      div {
-        margin: 0 10px;
+      .article-author {
+        color: #1890ff;
       }
     }
     .article-container {
@@ -118,6 +129,9 @@ export const DetailWrapper = styled.main`
     padding-left: 0;
   }
   .right-sidebar {
+    @media screen and ((max-width: 767px)) {
+      display: none;
+    }
     position: relative;
     min-width: 278px;
     /* background-color: pink; */
@@ -191,5 +205,8 @@ export const DetailWrapper = styled.main`
   }
   .article-content-inner .pgc-img {
     text-align: center;
+  }
+  .article-container .pgc-img img {
+    max-width: 100%;
   }
 `

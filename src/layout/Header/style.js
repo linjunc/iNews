@@ -13,6 +13,18 @@ export const FixedContainer = styled.header`
   z-index: 300;
 `
 export const MenuWrapper = styled.div`
+  @media screen and ((max-width: 767px)) {
+    width: 100% !important;
+    .layout-header-nav {
+      display: none;
+    }
+    .test {
+      padding-right: 10px !important;
+    }
+    .layout-logo {
+      padding: 0 10px !important;
+    }
+  }
   width: 1300px;
   height: 62px;
   margin: 0 auto;
@@ -33,6 +45,7 @@ export const MenuWrapper = styled.div`
       cursor: pointer;
     }
   }
+
   .layout-search-box {
     position: relative;
     width: 200px;
@@ -76,6 +89,9 @@ export const MenuWrapper = styled.div`
     }
   }
   .search-focus {
+    @media screen and ((max-width: 767px)) {
+      width: 200px !important;
+    }
     width: 320px !important;
   }
   .hide {

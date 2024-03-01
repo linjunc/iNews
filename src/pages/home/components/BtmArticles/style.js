@@ -10,6 +10,8 @@ export const BtmArticlescontainer = styled.div`
   .btm_aritles {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 4px;
     padding-bottom: 20px;
     padding-top: 10px;
     .btm_aritles_top {
@@ -17,7 +19,7 @@ export const BtmArticlescontainer = styled.div`
       flex-direction: column;
       justify-content: center;
       .btm_aritles_img {
-        width: 200px;
+        width: 180px;
         height: 140px;
         cursor: pointer;
         object-fit: cover;

@@ -4,6 +4,9 @@ export const FormInputWrapper = styled.div`
   position: relative;
 
   textarea {
+    @media screen and ((max-width: 767px)) {
+      width: 300px;
+    }
     width: 440px;
     padding: 0 48px 0 12px;
     resize: none;

@@ -3,12 +3,18 @@ import styled from 'styled-components'
 export const HomeContainer = styled.div`
   margin-top: -64px; // 减去头部的64px
   .content {
+    @media screen and ((max-width: 767px)) {
+      width: 100% !important;
+    }
     position: relative;
     margin: 0 auto;
     width: 1000px;
     display: flex;
     justify-content: space-between;
     .main {
+      @media screen and ((max-width: 767px)) {
+        width: 100% !important;
+      }
       min-height: 620px;
       width: 700px;
       margin: 20px 0;
@@ -43,6 +49,9 @@ export const HomeContainer = styled.div`
       }
     }
     .home_right {
+      @media screen and ((max-width: 767px)) {
+        display: none;
+      }
       width: 280px;
     }
   }
@@ -52,8 +61,25 @@ export const HomeContainer = styled.div`
     right: 50px;
     width: 88px;
     height: 123px;
+    z-index: 10000;
+    @media screen and ((max-width: 767px)) {
+      /* transform: translateX(100px); */
+      right: -30px;
+    }
     img {
       transition: all 0.2s;
+    }
+  }
+  .feedback-bottom {
+    position: fixed;
+    right: 100px;
+    bottom: 100px;
+    z-index: 10000;
+
+    @media screen and ((max-width: 767px)) {
+      /* transform: translateX(100px); */
+      right: 30px;
+      bottom: 80px;
     }
   }
 `

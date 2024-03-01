@@ -1,8 +1,13 @@
 import styled from 'styled-components'
 
 export const SettingNavWrapper = styled.div`
+  @media screen and ((max-width: 767px)) {
+    flex-direction: row;
+    width: 100%;
+  }
   display: flex;
   flex-direction: column;
+
   width: 230px;
   padding: 8px;
   background-color: #fff;

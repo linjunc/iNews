@@ -12,6 +12,9 @@ export const UserProfileWrapper = styled.div`
     .item {
       display: inline-flex;
       justify-content: center;
+      @media screen and ((max-width: 767px)) {
+        justify-content: left;
+      }
       width: 556px;
       padding: 20px 0;
       border-bottom: 1px solid #f1f1f1;

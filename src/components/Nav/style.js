@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 
 export const NavContainer = styled.div`
+  @media screen and ((max-width: 767px)) {
+    width: 100% !important;
+    min-width: 100%;
+  }
   /* position: sticky; */
   /* top: 0; */
   width: 700px;

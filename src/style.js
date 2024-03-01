@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components'
 // 初始化样式
 export const GlobalStyle = createGlobalStyle`
 
@@ -29,7 +29,7 @@ export const GlobalStyle = createGlobalStyle`
     }
     body {
         line-height: 1;
-        min-width: 1200px;
+        /* min-width: 1200px; */
         margin: 0 auto;
         background-color: #f4f5f5;
     }

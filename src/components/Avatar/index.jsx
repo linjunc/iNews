@@ -46,9 +46,9 @@ const Avatar = ({ color }) => {
       <Menu.Item onClick={toUser} key="0">
         <span>个人中心</span>
       </Menu.Item>
-      <Menu.Item onClick={toCovid} key="1">
+      {/* <Menu.Item onClick={toCovid} key="1">
         <span>肺炎地图</span>
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item onClick={logout} key="2">
         <span>退出登录</span>
       </Menu.Item>

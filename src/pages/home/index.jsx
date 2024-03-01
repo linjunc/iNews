@@ -193,7 +193,7 @@ const Home = memo(() => {
         <HomeToTop />
       </div>
       <TagFirst userTag={userInfo?.userTag ?? []} />
-      <div style={{position: 'fixed', bottom: '100px', right: '100px'}}>
+      <div className='feedback-bottom'>
         <Feedback done={true} />
       </div>
     </HomeContainer>

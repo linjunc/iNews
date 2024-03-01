@@ -50,7 +50,9 @@ export default function ConcernTags() {
         if (!isAllTagsShow && tag_list) {
           setTagsList(tag_list)
         } else if (tag_list) {
-          const { data } = await getAllTags()
+          const { data } = await getAllTags({
+            user_id: user_id,
+          })
           const { tag_list: allTagList } = data || {}
           setTagsList(allTagList)
         }

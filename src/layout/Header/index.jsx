@@ -66,7 +66,9 @@ const Header = () => {
               <div className="layout-logo">
                 <img src={logoSrc} onClick={toHome} alt="logo" />
               </div>
+              <div className="layout-header-nav">
               <Nav></Nav>
+              </div>
             </div>
             <div className="test">
               <div
@@ -83,9 +85,9 @@ const Header = () => {
                   placeholder="请输入搜索的内容"
                 ></Search>
               </div>
-              <div className={`covid ${focus ? 'hide' : ''}`} onClick={toCovid}>
+              {/* <div className={`covid ${focus ? 'hide' : ''}`} onClick={toCovid}>
                 肺炎地图
-              </div>
+              </div> */}
             </div>
             <Avatar></Avatar>
           </MenuWrapper>
