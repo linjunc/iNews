@@ -1,9 +1,11 @@
-import { Menu } from 'antd'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { Menu, Modal } from 'antd'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { articleSearch } from '../../services/home'
+import {getSearchData} from '../../services/search'
 import { SearchWrapper } from './style'
 import { SearchOutlined } from '@ant-design/icons'
 import { headerShowContext } from '../../models/context'
+import {ResultModal} from './Result'
 
 const Search = ({ placeholder, style, setFocus }) => {
   const [data, setData] = useState([])
@@ -20,22 +22,25 @@ const Search = ({ placeholder, style, setFocus }) => {
   }, [headerShow])
 
   const onChange = ({ target: { value } }) => {
-    // 受控组件
     setValue(value)
+  }
+
+  const onEnter = useCallback(async () => {
+    // 受控组件
+    // setValue(value)
     // 手动防抖
-    clearTimeout(timer)
-    setTimer(
-      setTimeout(async () => {
-        const {
-          data: { article_list },
-        } = await articleSearch({
-          search: value,
-          n: 7,
-          skip: 0,
-        })
-        setData(article_list)
-      }, 500),
-    )
+    const {
+      data,
+    } = await getSearchData({
+      keyword: value,
+    })
+    
+    setData(data.data)
+    setIsShow(true)
+  }, [value])
+
+  const onClose = () => {
+    setIsShow(false)
   }
 
   // 关键词高亮
@@ -51,6 +56,7 @@ const Search = ({ placeholder, style, setFocus }) => {
       </span>
     )
   }
+
 
   return (
     <SearchWrapper
@@ -74,43 +80,48 @@ const Search = ({ placeholder, style, setFocus }) => {
         autoFocus
         value={value}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') buttonRef.current?.click()
+          if (e.key === 'Enter') {
+            onEnter(e)
+          }
         }}
         onChange={onChange}
         onFocus={() => {
-          setIsShow(true)
           setFocus?.(true)
         }}
         onBlur={(e) => {
-          setIsShow(false)
           setFocus?.(false)
           e.relatedTarget?.click()
         }}
       />
-      <a
+      <div
         ref={buttonRef}
         className="button"
         target="_blank"
         rel="noreferrer"
-        href={`https://so.toutiao.com/search?dvpf=pc&source=input&keyword=${value}`}
-        onClick={(e) => (value === '' ? e.preventDefault() : '')}
+        onClick={(e) => {
+          if(!value) {
+            return;
+          }
+          onEnter(e)
+        }}
       >
         <SearchOutlined className="icon" />
-      </a>
+      </div>
+     {isShow ? <ResultModal data={data} onClose={onClose} /> : null}
       {
-        <Menu className="results" style={{ display: isShow ? '' : 'none' }}>
-          {data?.map((item, index) => (
-            <Menu.Item key={index} className="result">
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href={`https://so.toutiao.com/search?dvpf=pc&source=input&keyword=${item.title}`}
-              >
-                {hightlight(item.title, value)}
-              </a>
-            </Menu.Item>
-          ))}
-        </Menu>
+        // <Menu className="results" style={{ display: isShow ? '' : 'none' }}>
+        //   {data?.map((item, index) => (
+        //     <Menu.Item key={index} className="result">
+        //       <a
+        //         target="_blank"
+        //         rel="noreferrer"
+        //         href={`https://so.toutiao.com/search?dvpf=pc&source=input&keyword=${item.title}`}
+        //       >
+        //         {hightlight(item.title, value)}
+        //       </a>
+        //     </Menu.Item>
+        //   ))}
+        // </Menu>
       }
     </SearchWrapper>
   )
