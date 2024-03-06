@@ -4,7 +4,8 @@ import LogoText from '../../../../assets/logo/logo_text.png'
 
 export const SearchContainer = styled.main`
   @media screen and ((max-width: 767px)) {
-    height: 30vh !important;
+    height: 35vh !important;
+    margin-top: -30px;
     /* min-width: 100%; */
   }
   position: relative;
@@ -21,7 +22,11 @@ export const SearchContainer = styled.main`
     .search-wrapper {
       @media screen and ((max-width: 767px)) {
         width: 70vw !important;
+        margin-top: -10px !important;
         /* min-width: 100%; */
+        .logo-box {
+          margin-bottom: 0px !important;
+        }
       }
       width: 560px;
       place-self: center;

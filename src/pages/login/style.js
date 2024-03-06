@@ -21,6 +21,10 @@ export const Title = styled.h2`
 export const LoginForm = styled.div`
   display: grid;
   grid-template-columns: 50% 50%;
+  @media screen and ((max-width: 767px)) {
+    grid-template-columns: 0% 100%;
+    margin-bottom: 0px !important;
+  }
   height: 65vh;
   /* width: 1500px; */
   width: 90%;
@@ -96,6 +100,9 @@ export const AboutUs = styled.div`
   width: 90%;
   margin-bottom: 30px;
   .carousel-container {
+    @media screen and ((max-width: 767px)) {
+      padding: 0 10px !important;
+    }
     padding: 0 50px;
     height: 20vh;
     .carouselContent {

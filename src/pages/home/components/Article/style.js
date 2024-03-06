@@ -3,6 +3,20 @@ import styled from 'styled-components'
 export const Artilecontainer = styled.div`
   width: 100%;
   .article-node {
+    @media screen and ((max-width: 767px)) {
+      /* max-height: 150px; */
+      .left {
+        .article-title {
+          font-size: 16px !important;
+        }
+        .article-abstract {
+          font-size: 12px !important;
+        }
+      }
+      .right {
+        width: 130px !important;
+      }
+    }
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -14,6 +14,7 @@ export const HomeContainer = styled.div`
     .main {
       @media screen and ((max-width: 767px)) {
         width: 100% !important;
+        min-height: unset;
       }
       min-height: 620px;
       width: 700px;

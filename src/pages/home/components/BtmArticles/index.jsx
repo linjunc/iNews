@@ -26,7 +26,7 @@ const BtmArticles = ({ newArr, current }) => {
         {newArr.map((item) => (
           <Card
             key={item.article_id}
-            style={{ width: 180 }}
+            // style={{ width: 180 }}
             cover={
               <div className="btm_aritles_top">
                 <img
@@ -40,7 +40,7 @@ const BtmArticles = ({ newArr, current }) => {
             }
           >
             <div className="media_user" onClick={() => toUser(item)}>
-              <Avatar src={item.media_user.avatar_url} />
+              <Avatar className='media_avatar' src={item.media_user.avatar_url} />
               <div className="mediaDetail">
                 <h4 className="mediaName">{item.media_user.media_name}</h4>
                 <p className="description">{item.media_user.media_info}</p>

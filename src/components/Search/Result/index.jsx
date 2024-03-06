@@ -1,10 +1,19 @@
 import { Modal } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
+import { useNavigate } from 'react-router-dom'
+
 
 import './index.css'
 
 export const ResultModal = ({ onClose, data }) => {
+
+    const navigate = useNavigate()
+
+    const toDetail = (id) => {
+      //跳转详情
+      navigate(`/detail/${id}`) // id
+    }
     return (
         <>
             <Modal
@@ -34,7 +43,9 @@ export const ResultModal = ({ onClose, data }) => {
                 <div className="article-result">
                     {data.articles.map((article) => {
                         return (
-                            <div className="article-item" key={article.id}>
+                            <div className="article-item" key={article._id} onClick={() => {
+                                toDetail(article._id)
+                            }}>
                                 {article.image_url ? (
                                     <div className="article-img">
                                         <img src={article.image_url} alt={article.title} />

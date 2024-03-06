@@ -58,6 +58,11 @@ export const DetailWrapper = styled.main`
     @media screen and ((max-width: 767px)) {
       width: 100% !important;
       min-width: 100% !important;
+      .article-container {
+        h1 {
+          font-size: 20px !important;
+        }
+      }
     }
     min-width: 900px;
     margin: 0px 20px 0px 60px;

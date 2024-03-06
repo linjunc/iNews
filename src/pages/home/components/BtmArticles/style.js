@@ -1,6 +1,14 @@
 import styled from 'styled-components'
 
 export const BtmArticlescontainer = styled.div`
+  @media screen and ((max-width: 767px)) {
+    .btm_aritles_top {
+      width: 170px !important;
+    }
+    .ant-card-body {
+      width: 170px !important;
+    }
+  }
   .btm_bar {
     width: calc(100% + 36px);
     margin-left: -18px;
@@ -18,8 +26,9 @@ export const BtmArticlescontainer = styled.div`
       display: flex;
       flex-direction: column;
       justify-content: center;
+      width: 200px;
       .btm_aritles_img {
-        width: 180px;
+        width: 100%;
         height: 140px;
         cursor: pointer;
         object-fit: cover;
@@ -42,12 +51,16 @@ export const BtmArticlescontainer = styled.div`
       justify-content: left;
       align-items: center;
       cursor: pointer;
+      .media_avatar {
+        flex-shrink: 0;
+      }
       .mediaDetail {
-        padding-left: 20px;
+        padding-left: 5px;
         display: flex;
         max-width: 120px;
         flex-direction: column;
         justify-content: space-around;
+
         .mediaName {
           display: -webkit-box;
           overflow: hidden;

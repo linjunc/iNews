@@ -149,8 +149,9 @@ const Home = memo(() => {
           // hotArr_sess = res.data.article_list
           const data = res.data.article_list
           if (data?.length) {
+            const dealData = data.filter(item => item.has_image && !!item.image_url)
             // sessionStorage.setItem('hotArr', JSON.stringify(hotArr_sess))
-            setHotArr(data)
+            setHotArr(dealData)
           }
         },
         (err) => message.error('加载失败，请重试!'),

@@ -5,10 +5,31 @@ export const HotArticlecontainer = styled.div`
     .content {
       .main {
         width: 700px;
+        @media screen and ((max-width: 767px)) {
+          .Carousel_node {
+            padding: 10px 0 !important;
+            .hot_img {
+              height: 300px !important;
+            }
+            .vague {
+              height: 300px !important;
+              top: 10px !important;
+            }
+            .title {
+              font-size: 20px !important;
+              line-height: 1.5 !important;
+            }
+            .abstract {
+              padding-top: 10px !important;
+              line-height: 1.5 !important;
+            }
+          }
+        }
         .Carousel_node {
           position: relative;
           padding: 20px 0;
           cursor: pointer;
+
           .hot_img {
             width: 100%;
             height: 464px;
