@@ -18,7 +18,10 @@ export const CommentReply = styled.div`
     color: #222;
   }
   .reply {
-    width: 600px;
+    max-width: 600px;
+    @media screen and ((max-width: 767px)) {
+      width: 280px !important;
+    }
   }
   .dianzan {
     width: 30px;

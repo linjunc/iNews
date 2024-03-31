@@ -124,7 +124,7 @@ const Detail = memo(() => {
         const readLongTime = sessionStorage.getItem('timing')
         // 一个小时
         if (readLongTime > 3600000) {
-          message.warn('您本次阅读时间已经持续了一个小时，请稍作休息噢~')
+          message.warning('您本次阅读时间已经持续了一个小时，请稍作休息噢~')
         }
         // 成功获取文章后，记录当前的时间戳，以及文章的标签
         timeRef.current = dayjs().valueOf()

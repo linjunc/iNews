@@ -93,7 +93,7 @@ export default function UserCenter() {
       })
       FocusAuthor({ media_id: user_id })
     } else {
-      message.warn('您还没有登录哦！')
+      message.warning('您还没有登录哦！')
     }
   }, [contextInfo, user_id])
 

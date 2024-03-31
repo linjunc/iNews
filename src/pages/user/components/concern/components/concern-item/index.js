@@ -41,7 +41,7 @@ export default function ConcernItem(props) {
           })
         : FocusAuthor({ media_id })
     } else {
-      message.warn('您还没有登录哦！')
+      message.warning('您还没有登录哦！')
     }
   }
 

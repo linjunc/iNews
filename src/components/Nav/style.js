@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const NavContainer = styled.div`
   @media screen and ((max-width: 767px)) {
-    width: 100% !important;
+    width: 100vw !important;
     min-width: 100%;
   }
   /* position: sticky; */

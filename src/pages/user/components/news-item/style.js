@@ -117,8 +117,9 @@ export const ArticleItemWrapper = styled.div`
     }
 
     .action-list {
+      white-space: nowrap;
       .item {
-        margin-right: 20px;
+        margin-right: 15px;
 
         .read-num {
           color: #4e5969 !important;

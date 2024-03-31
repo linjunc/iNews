@@ -1,6 +1,6 @@
 import React, { createElement, useState, useEffect, useCallback } from 'react'
-import { Comment, Tooltip, Form, Button, List, Input, message } from 'antd'
-import moment from 'moment'
+import { Tooltip, Form, Button, List, Input, message } from 'antd'
+import { Comment } from '@ant-design/compatible';
 import { LikeOutlined, LikeFilled, DownOutlined } from '@ant-design/icons'
 import {
   get_comments,
@@ -10,8 +10,12 @@ import {
   get_comments_reply,
 } from '../../../../services/comment'
 import { CommentReply } from './style'
-import 'moment/locale/zh-cn'
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+
 const { TextArea } = Input
+
 const Comments = ({ id }) => {
   const [hasToken, setHasToken] = useState(false)
   const [likes, setLikes] = useState([])
@@ -87,12 +91,12 @@ const Comments = ({ id }) => {
           content: <p>{comment_list?.[i].text}</p>,
           datetime: (
             <Tooltip
-              title={moment(
+              title={dayjs(
                 parseInt(comment_list?.[i].create_time + '000'),
               ).format('YYYY-MM-DD HH:mm:ss')}
             >
               <span>
-                {moment(
+                {dayjs(
                   parseInt(comment_list?.[i].create_time + '000'),
                 ).fromNow()}
               </span>
@@ -164,8 +168,8 @@ const Comments = ({ id }) => {
       avatar: userInfo?.avatar,
       content: <p>{value}</p>,
       datetime: (
-        <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-          <span>{moment().fromNow()}</span>
+        <Tooltip title={dayjs().format('YYYY-MM-DD HH:mm:ss')}>
+          <span>{dayjs().fromNow()}</span>
         </Tooltip>
       ),
     }
@@ -235,12 +239,12 @@ const Comments = ({ id }) => {
               content: <p>{replyListContent[i].text}</p>,
               datetime: (
                 <Tooltip
-                  title={moment(
+                  title={dayjs(
                     parseInt(replyListContent[i].create_time + '000'),
                   ).format('YYYY-MM-DD HH:mm:ss')}
                 >
                   <span>
-                    {moment(
+                    {dayjs(
                       parseInt(replyListContent[i].create_time + '000'),
                     ).fromNow()}
                   </span>
@@ -289,8 +293,8 @@ const Comments = ({ id }) => {
           avatar: userInfo.avatar,
           content: <p>{val}</p>,
           datetime: (
-            <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-              <span>{moment().fromNow()}</span>
+            <Tooltip title={dayjs().format('YYYY-MM-DD HH:mm:ss')}>
+              <span>{dayjs().fromNow()}</span>
             </Tooltip>
           ),
         }

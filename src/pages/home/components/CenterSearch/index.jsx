@@ -10,12 +10,12 @@ import Search from '../../../../components/Search'
 const CenterSearch = () => {
   // 轮播图数据
   const dataArray = [
-    'https://www.bing.com/th?id=OHR.GlowWormBMNP_ROW6135196064_1920x1080.jpg&rf=LaDigue_1920x1080.jpg',
-    'https://www.bing.com/th?id=OHR.Koenigsbourg_EN-CN0469158461_1920x1080.jpg&rf=LaDigue_1920x1080.jpg',
-    'https://www.bing.com/th?id=OHR.ElPanecilloHill_ROW0950584812_1920x1080.jpg&rf=LaDigue_1920x1080.jpg',
-    'https://cn.bing.com/th?id=OHR.SalzburgKrampus_EN-CN4908289673_1920x1080.jpg&rf=LaDigue_1920x1080.jpg',
-    'https://www.bing.com/th?id=OHR.PFNPAZ_EN-CN5967095773_1920x1080.jpg&rf=LaDigue_1920x1080.jpg',
-    'https://www.bing.com/th?id=OHR.FoxDovrefjell_EN-CN7339664323_1920x1080.jpg&rf=LaDigue_1920x1080.jpg',
+    'https://ljcimg.oss-cn-beijing.aliyuncs.com/photo/windows-11-windows-theme-7-hd.jpg',
+    'https://ljcimg.oss-cn-beijing.aliyuncs.com/photo/windows-11-bloom-q2-1920x1200.jpg',
+    'https://ljcimg.oss-cn-beijing.aliyuncs.com/photo/wallpaper2you_57812.jpg',
+    'https://ljcimg.oss-cn-beijing.aliyuncs.com/photo/Tumblr-1080p-HD-Wallpapers-1_thumb.jpg',
+    'https://ljcimg.oss-cn-beijing.aliyuncs.com/photo/Ci1x9D.jpg',
+    'https://ljcimg.oss-cn-beijing.aliyuncs.com/photo/1081747-widescreen-shipwreck-wallpaper-2048x1152-for-iphone-5s.jpg'
   ]
   // 轮播图索引
   const [carouselNowIndex, setCarouselNowIndex] = useState(0)

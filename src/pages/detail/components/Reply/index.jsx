@@ -1,5 +1,5 @@
 import { Comment, Avatar, Form, Button, List, Input } from 'antd'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import React from 'react'
 const { TextArea } = Input
 
@@ -56,7 +56,7 @@ class Comment_reply extends React.Component {
             author: 'Han Solo',
             avatar: 'https://joeschmoe.io/api/v1/random',
             content: <p>{this.state.value}</p>,
-            datetime: moment().fromNow(),
+            datetime: dayjs().fromNow(),
           },
         ],
       })

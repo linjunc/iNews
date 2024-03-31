@@ -67,7 +67,7 @@ export default memo(function UserProfile() {
       if (nowNickname) {
         setIsBtnLoading(true)
       } else {
-        message.warn('用户名不能为空！')
+        message.warning('用户名不能为空！')
         return
       }
 

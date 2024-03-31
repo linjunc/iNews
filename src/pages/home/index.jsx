@@ -38,7 +38,7 @@ const Home = memo(() => {
   const getArticleList = useMemoizedFn(async (tag, isBtm) => {
     if (!hasMore) {
       if (!msgTimer) {
-        message.warn('该类新闻都在这里了，看看其他类的吧!')
+        message.warning('该类新闻都在这里了，看看其他类的吧!')
         msgTimer = setTimeout(() => {
           clearTimeout(msgTimer)
           msgTimer = null

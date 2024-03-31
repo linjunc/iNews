@@ -22,7 +22,7 @@ export const MenuWrapper = styled.div`
       padding-right: 10px !important;
     }
     .layout-logo {
-      padding: 0 10px !important;
+      padding: 0 5px !important;
     }
   }
   width: 1300px;
