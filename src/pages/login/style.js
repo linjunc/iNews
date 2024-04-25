@@ -42,7 +42,7 @@ export const LoginLeft = styled.div`
   justify-content: center;
   align-items: center;
   /* 粉 247, 143, 179 */
-  background-color: rgba(255, 175, 64, 0.6);
+  background-color: rgba(255, 125, 64, 0.6);
   backdrop-filter: blur(2px);
 `
 export const LoginRight = styled.div`

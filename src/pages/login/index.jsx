@@ -167,6 +167,7 @@ const Login = () => {
           </div>
         </Carousel>
       </AboutUs>
+      <div style={{marginBottom: 20, fontSize: 18}}>@2024 广东工业大学 信息工程学院 电子信息工程 林俊丞出品</div>
     </LoginContainer>
   )
 }
